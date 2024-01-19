@@ -11,6 +11,6 @@ public enum ApiStatus implements ApiStatusIfs {
   ;
 
   private final Integer httpStatusCode;
-  private final Integer errorCode;
+  private final Integer apiStatusCode;
   private final String statusInfo;
 }

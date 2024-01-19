@@ -1,6 +1,7 @@
 package com.gamemoonchul.common.api;
 
 import com.gamemoonchul.common.error.ApiStatus;
+import com.gamemoonchul.common.error.ApiStatusIfs;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +11,12 @@ import lombok.Setter;
 public class ApiResult<T> {
   private final boolean success;
   private final T body;
-  private final ApiStatusIfs errorCodeInfo;
+  private final ApiStatusInfo statusInfo;
 
-  public ApiResult(boolean success, T body, com.gamemoonchul.common.error.ApiStatusIfs errorCodeIfs) {
+  public ApiResult(boolean success, T body, ApiStatusIfs errorCodeIfs) {
     this.success = success;
     this.body = body;
-    this.errorCodeInfo = new ApiStatusIfs(errorCodeIfs);
+    this.statusInfo = new ApiStatusInfo(errorCodeIfs);
   }
 
   public static ApiResult OK() {
@@ -36,14 +37,14 @@ public class ApiResult<T> {
 
   @Getter
   @AllArgsConstructor
-  public static class ApiStatusIfs {
+  public static class ApiStatusInfo {
     private final Integer httpStatusCode;
-    private final Integer errorCode;
+    private final Integer apiStatusCode;
     private final String message;
 
-    public ApiStatusIfs(com.gamemoonchul.common.error.ApiStatusIfs errorCodeIfs) {
+    public ApiStatusInfo(ApiStatusIfs errorCodeIfs) {
       this.httpStatusCode = errorCodeIfs.getHttpStatusCode();
-      this.errorCode = errorCodeIfs.getErrorCode();
+      this.apiStatusCode = errorCodeIfs.getApiStatusCode();
       this.message = errorCodeIfs.getStatusInfo();
     }
   }
