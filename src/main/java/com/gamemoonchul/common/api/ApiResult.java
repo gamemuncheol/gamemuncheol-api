@@ -1,7 +1,6 @@
 package com.gamemoonchul.common.api;
 
-import com.gamemoonchul.common.error.ErrorCode;
-import com.gamemoonchul.common.error.ErrorCodeIfs;
+import com.gamemoonchul.common.error.ApiStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,23 +10,23 @@ import lombok.Setter;
 public class ApiResult<T> {
   private final boolean success;
   private final T body;
-  private final ErrorCodeInfo errorCodeInfo;
+  private final ApiStatusIfs errorCodeInfo;
 
-  public ApiResult(boolean success, T body, ErrorCodeIfs errorCodeIfs) {
+  public ApiResult(boolean success, T body, com.gamemoonchul.common.error.ApiStatusIfs errorCodeIfs) {
     this.success = success;
     this.body = body;
-    this.errorCodeInfo = new ErrorCodeInfo(errorCodeIfs);
+    this.errorCodeInfo = new ApiStatusIfs(errorCodeIfs);
   }
 
   public static ApiResult OK() {
     return new ApiResult(
         true,
         null,
-        ErrorCode.OK
+        ApiStatus.OK
     );
   }
 
-  public static ApiResult ERROR(ErrorCodeIfs errorCode) {
+  public static ApiResult ERROR(com.gamemoonchul.common.error.ApiStatusIfs errorCode) {
     return new ApiResult(
         false,
         null,
@@ -37,15 +36,15 @@ public class ApiResult<T> {
 
   @Getter
   @AllArgsConstructor
-  public static class ErrorCodeInfo {
+  public static class ApiStatusIfs {
     private final Integer httpStatusCode;
     private final Integer errorCode;
     private final String message;
 
-    public ErrorCodeInfo(ErrorCodeIfs errorCodeIfs) {
+    public ApiStatusIfs(com.gamemoonchul.common.error.ApiStatusIfs errorCodeIfs) {
       this.httpStatusCode = errorCodeIfs.getHttpStatusCode();
       this.errorCode = errorCodeIfs.getErrorCode();
-      this.message = errorCodeIfs.getMessage();
+      this.message = errorCodeIfs.getStatusInfo();
     }
   }
 }

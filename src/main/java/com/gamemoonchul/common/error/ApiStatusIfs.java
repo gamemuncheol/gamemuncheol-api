@@ -1,7 +1,7 @@
 package com.gamemoonchul.common.error;
 
-public interface ErrorCodeIfs {
+public interface ApiStatusIfs {
   public Integer getHttpStatusCode();
   public Integer getErrorCode();
-  public String getMessage();
+  public String getStatusInfo();
 }

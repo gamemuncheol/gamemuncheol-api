@@ -5,14 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorCode implements ErrorCodeIfs {
+public enum ApiStatus implements ApiStatusIfs {
   OK(200,200, "OK"),
   BAD_REQUEST(400,400, "Wrong Request"),
   ;
 
-
   private final Integer httpStatusCode;
   private final Integer errorCode;
-  private final String message;
-
+  private final String statusInfo;
 }
