@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ErrorCode implements ErrorCodeIfs {
   OK(200,200, "OK"),
   BAD_REQUEST(400,400, "Wrong Request"),
-    ;
+  ;
 
 
   private final Integer httpStatusCode;
