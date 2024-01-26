@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html

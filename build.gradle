@@ -23,11 +23,29 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	implementation 'org.springframework.restdocs:spring-restdocs-core:3.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.2'
+	testImplementation 'org.projectlombok:lombok:1.18.26'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+
+	//Querydsl
+	implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta"
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+
 }
 
 tasks.named('test') {
