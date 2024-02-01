@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.oauth.user;
+package com.gamemoonchul.config.oauth.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

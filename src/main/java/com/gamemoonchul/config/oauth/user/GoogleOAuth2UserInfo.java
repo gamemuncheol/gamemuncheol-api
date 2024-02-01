@@ -1,5 +1,6 @@
-package com.gamemoonchul.infrastructure.oauth.user;
+package com.gamemoonchul.config.oauth.user;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
@@ -8,6 +9,7 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
     private final String accessToken;
     private final String id;
     private final String email;
+    private final LocalDateTime birth;
     private final String name;
     private final String firstName;
     private final String lastName;
@@ -19,6 +21,7 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
         this.attributes = attributes;
         this.id = (String) attributes.get("sub");
         this.email = (String) attributes.get("email");
+        this.birth = attributes.get("birthdays") == null ? null : (LocalDateTime) attributes.get("birthdays");
         this.name = (String) attributes.get("name");
         this.firstName = (String) attributes.get("given_name");
         this.lastName = (String) attributes.get("family_name");
@@ -49,6 +52,11 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
     @Override
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public LocalDateTime getBirth() {
+        return birth;
     }
 
     @Override

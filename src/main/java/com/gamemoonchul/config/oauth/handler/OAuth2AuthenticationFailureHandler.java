@@ -1,7 +1,7 @@
-package com.gamemoonchul.infrastructure.oauth.handler;
+package com.gamemoonchul.config.oauth.handler;
 
 import com.gamemoonchul.common.util.CookieUtils;
-import com.gamemoonchul.infrastructure.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,8 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
-import static com.gamemoonchul.infrastructure.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-
 @RequiredArgsConstructor
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
@@ -24,7 +22,7 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                       AuthenticationException exception) throws IOException {
-    String targetUrl = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+    String targetUrl = CookieUtils.getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
         .map(Cookie::getValue)
         .orElse(("/"));
 

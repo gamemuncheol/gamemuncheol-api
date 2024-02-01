@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.oauth.user;
+package com.gamemoonchul.config.oauth.user;
 
 public interface OAuth2UserUnlink {
     void unlink(String accessToken);

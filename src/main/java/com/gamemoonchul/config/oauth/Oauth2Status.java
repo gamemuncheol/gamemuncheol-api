@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.oauth;
+package com.gamemoonchul.config.oauth;
 
 import com.gamemoonchul.common.status.ApiStatusIfs;
 import lombok.AllArgsConstructor;

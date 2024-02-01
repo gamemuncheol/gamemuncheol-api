@@ -1,10 +1,10 @@
-package com.gamemoonchul.common.config;
+package com.gamemoonchul.config;
 
-import com.gamemoonchul.infrastructure.jwt.JwtAuthorizationFilter;
-import com.gamemoonchul.infrastructure.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.gamemoonchul.infrastructure.oauth.handler.OAuth2AuthenticationFailureHandler;
-import com.gamemoonchul.infrastructure.oauth.handler.OAuth2AuthenticationSuccessHandler;
-import com.gamemoonchul.infrastructure.oauth.service.CustomOAuth2UserService;
+import com.gamemoonchul.config.jwt.JwtAuthorizationFilter;
+import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
+import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
+import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
   private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
-  private List<String> EXCEPTION = List.of("/test/**");
+  //private List<String> EXCEPTION = List.of("/test/**");
+  private List<String> EXCEPTION = List.of();
 
   private final CustomOAuth2UserService customOauth;
   private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;

@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.jwt;
+package com.gamemoonchul.config.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,5 +1,6 @@
-package com.gamemoonchul.infrastructure.oauth.user;
+package com.gamemoonchul.config.oauth.user;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public interface OAuth2UserInfo {
@@ -13,6 +14,8 @@ public interface OAuth2UserInfo {
     String getId();
 
     String getEmail();
+
+    LocalDateTime getBirth();
 
     String getName();
 

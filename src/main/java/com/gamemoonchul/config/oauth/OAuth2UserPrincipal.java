@@ -1,6 +1,6 @@
-package com.gamemoonchul.infrastructure.oauth;
+package com.gamemoonchul.config.oauth;
 
-import com.gamemoonchul.infrastructure.oauth.user.OAuth2UserInfo;
+import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

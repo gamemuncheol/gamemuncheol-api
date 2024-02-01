@@ -18,20 +18,18 @@ public class MemberEntity extends BaseTimeEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 12)
+  @Column(nullable = false, length = 30)
   private String name;
 
-  @Column(nullable = false, length = 12)
+  @Column(nullable = false, length = 30)
   private String nickname;
 
-  @Column(nullable = false, length = 30)
+  @Column(nullable = false, length = 50)
   private String email;
-
-  @Setter @Column(nullable = false, length = 50)
-  private String password;
 
   private String picture;
 
+  @Column(nullable = false)
   private Double score;
 
   private LocalDateTime birth;
@@ -40,7 +38,7 @@ public class MemberEntity extends BaseTimeEntity {
   @Column(nullable = false, columnDefinition = "varchar(255)")
   private MemberRole role;
 
-    public MemberEntity update(String name, String nickname) {
+  public MemberEntity update(String name, String nickname) {
     this.name = name;
     this.picture = picture;
     return this;
