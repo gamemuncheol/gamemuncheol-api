@@ -31,10 +31,10 @@ public enum AppleTokenStatus implements ApiStatusIfs {
     UNSUPPORTED_ID_TOKEN(50400, "Unsupported exception in Apple ID Token validation"),
 
     // Apple specific errors
-    PROXY_SETUP_ERROR(60100, "Invalid proxy host and/or port"),
-    APPLE_PUBLIC_KEY_NOT_INITIALIZED(60200, "Apple public key not initialized"),
-    APPLE_PUBLIC_KEY_UNAVAILABLE(60300, "Invalid response from Apple during public key initialization"),
-    APPLE_SIGNIN_PUBLIC_KEY_ERROR(60400,"Error during initializing public key");
+    PROXY_SETUP_ERROR(50500, "Invalid proxy host and/or port"),
+    APPLE_PUBLIC_KEY_NOT_INITIALIZED(50600, "Apple public key not initialized"),
+    APPLE_PUBLIC_KEY_UNAVAILABLE(50700, "Invalid response from Apple during public key initialization"),
+    APPLE_SIGNIN_PUBLIC_KEY_ERROR(50800,"Error during initializing public key");
 
 
     private String message;
