@@ -41,6 +41,10 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 	// JPA end
 
+	// Apple Oauth 관련 라이브러리 Start
+	implementation 'com.google.code.gson:gson:2.10.1'
+	// Apple Oauth 관련 라이브러리 End
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
