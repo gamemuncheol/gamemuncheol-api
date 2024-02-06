@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @AllArgsConstructor
-@RestControllerWithEnvelopPattern
 @RequestMapping("/test")
+@RestControllerWithEnvelopPattern
 public class ApiTestController {
 
   private final ApiTestService apiTestService;

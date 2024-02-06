@@ -1,6 +1,8 @@
 package com.gamemoonchul.config.apple.entities;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
+import lombok.Setter;
 
 /************************************************************************
  Copyright 2020 eBay Inc.
@@ -30,6 +32,9 @@ public class AppleUserInfo {
      */
     @SerializedName("iss")
     private String issuer;
+
+    @Getter @Setter
+    private String name;
 
 
     /**

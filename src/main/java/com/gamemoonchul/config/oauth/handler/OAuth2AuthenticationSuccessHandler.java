@@ -4,7 +4,7 @@ import com.gamemoonchul.application.MemberService;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.common.util.CookieUtils;
 import com.gamemoonchul.config.jwt.TokenDto;
-import com.gamemoonchul.config.jwt.TokenProvider;
+import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.Oauth2Status;
@@ -44,7 +44,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
-    private final TokenProvider tokenProvider;
+    private final TokenHelper tokenProvider;
     private final MemberService memberService;
 
     private final String TOKEN_DTO = "tokenDto";
