@@ -22,7 +22,7 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class TokenProvider {
+public class TokenHelper {
 
   private static final long ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 120; // 2h
   private static final long REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 24 * 7; // 7d
@@ -73,6 +73,32 @@ public class TokenProvider {
         .refreshToken(
             Jwts.builder()
                 .setSubject(authentication.getName())
+                .setIssuedAt(new Date())
+                .setExpiration(
+                    new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
+                )
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact()
+        )
+        .build();
+    return tokenDto;
+  }
+
+  public TokenDto createToken(String email) {
+    TokenDto tokenDto = TokenDto.builder()
+        .accessToken(
+            Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(
+                    new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
+                )
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact()
+        )
+        .refreshToken(
+            Jwts.builder()
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(
                     new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
