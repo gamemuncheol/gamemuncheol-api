@@ -41,6 +41,11 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 	// JPA end
 
+	// Test를 위한 H2database
+	runtimeOnly 'com.h2database:h2'
+	// Test를 위한 H2database
+
+
 	// Apple Oauth 관련 라이브러리 Start
 	implementation 'com.google.code.gson:gson:2.10.1'
 	// Apple Oauth 관련 라이브러리 End

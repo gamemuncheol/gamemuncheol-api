@@ -1,8 +1,7 @@
 package com.gamemoonchul.config.apple.entities;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /************************************************************************
  Copyright 2020 eBay Inc.
@@ -21,6 +20,9 @@ import lombok.Setter;
  limitations under the License.
  **************************************************************************/
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AppleUserInfo {
 
     /**

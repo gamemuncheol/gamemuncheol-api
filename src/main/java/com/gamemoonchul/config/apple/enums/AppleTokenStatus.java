@@ -26,6 +26,7 @@ public enum AppleTokenStatus implements ApiStatusIfs {
 
     // ID Token related errors
     INVALID_ID_TOKEN_SIGNATURE(50100, "ID Token signature verification failed"),
+    INVALID_SIGNUP_FORM(50105, "회원가입에 실패했습니다. 최초 회원 가입이 아니거나 이름을 제공하지 않았습니다."),
     INVALID_ID_TOKEN(50200,"Invalid ID Token"),
     EXPIRED_ID_TOKEN(50300, "Expired ID Token"),
     UNSUPPORTED_ID_TOKEN(50400, "Unsupported exception in Apple ID Token validation"),

@@ -12,12 +12,15 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
   private final MemberRepository memberRepository;
 
   public void signInOrUp(MemberEntity member) {
     Optional<MemberEntity> alreadyExistMember = memberRepository.findTop1ByEmail(member.getEmail());
     if (alreadyExistMember.isEmpty()) {
       memberRepository.save(member);
+    } else {
+      member = alreadyExistMember.get();
     }
   }
 
