@@ -20,12 +20,16 @@ public class AppleService {
   private final MemberService memberService;
   private final TokenHelper tokenHelper;
 
-  public TokenDto signUp(AppleSignUpRequestDto signUpRequest) {
+  public AppleUserInfo validateRequest(AppleSignUpRequestDto signUpRequest) {
     AppleUserInfo appleUserInfo = appleIDTokenValidator.extractAppleUserinfoFromIDToken(signUpRequest.getIdentityToken());
     if(signUpRequest.getName() == null || signUpRequest.getName().isEmpty()) {
       throw new ApiException(AppleTokenStatus.INVALID_SIGNUP_FORM);
     }
     appleUserInfo.setName(signUpRequest.getName());
+    return appleUserInfo;
+  }
+
+  public TokenDto signInOrUp(AppleUserInfo appleUserInfo) {
     MemberEntity member = MemberConverter.toEntity(appleUserInfo);
     memberService.signInOrUp(member);
     TokenDto token  = tokenHelper.createToken(member.getEmail());
