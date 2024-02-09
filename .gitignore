@@ -39,3 +39,5 @@ out/
 ### Security ###
 /src/main/resources/application.yaml
 AuthKey_P2J7JVJRGF.p8
+/src/main/resources/keystore.p12
+/src/test/resources/application.yaml
