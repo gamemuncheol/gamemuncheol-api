@@ -25,7 +25,7 @@ dependencies {
 	// Swagger start
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	implementation 'javax.xml.bind:jaxb-api:2.3.1' // xml 에러 방지
-	// Swagger end
+	// Swagger ent d
 
 	// spring security start
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -35,6 +35,11 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	// spring security end
+
+	// Process Executor
+	implementation 'org.zeroturnaround:zt-exec:1.12'
+	// Process Executor
+
 
 	// JPA start
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
