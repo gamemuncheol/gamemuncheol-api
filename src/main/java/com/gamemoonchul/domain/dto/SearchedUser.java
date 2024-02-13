@@ -1,4 +1,4 @@
-package com.gamemoonchul.domain.vo;
+package com.gamemoonchul.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
