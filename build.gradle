@@ -50,6 +50,10 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	// Test를 위한 H2database
 
+	// youtube
+	implementation 'com.google.apis:google-api-services-youtube:v3-rev222-1.25.0'
+	implementation 'com.google.oauth-client:google-oauth-client-jetty:1.35.0'
+	// youtube
 
 	// Apple Oauth 관련 라이브러리 Start
 	implementation 'com.google.code.gson:gson:2.10.1'
