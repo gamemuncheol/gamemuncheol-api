@@ -4,6 +4,10 @@ import com.gamemoonchul.common.status.ApiStatusIfs;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 비디오 업로드 관련 상태코드
+ * 4000 ~ 4999
+ */
 @Getter
 @AllArgsConstructor
 public enum VideoStatus implements ApiStatusIfs {

@@ -2,6 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.status.VideoStatus;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +17,11 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class VideoService {
     private static final long MAX_FILE_SIZE = 1024L * 1024L * 1024L * 10L; // 10GB
+
+    private final YoutubeService youtubeService;
 
     public String upload(MultipartFile file) {
 
@@ -25,15 +29,26 @@ public class VideoService {
         checkFileSizeOrThrow(file);
 
         String fileName = UUID.randomUUID() + ".mp4";
-        //
         String directoryPath = getDirectoryPath();
         Path filePath = Paths.get(directoryPath, fileName);
         try (OutputStream os = Files.newOutputStream(filePath)) {
             os.write(file.getBytes());
-            return fileName;
+            String youtubeUrl = youtubeService.upload(filePath);
+            deleteFile(filePath);
+            return youtubeUrl;
         } catch (IOException e) {
             log.error("file upload failed", e);
             throw new ApiException(VideoStatus.FILE_UPLOAD_FAILED);
+        }
+    }
+
+    private void deleteFile(Path path) {
+        if (Files.exists(path)) {
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                log.error("file delete failed", e);
+            }
         }
     }
 

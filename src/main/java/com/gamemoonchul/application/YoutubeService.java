@@ -1,6 +1,8 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.youtube.YoutubeAuth;
+import com.gamemoonchul.domain.status.YoutubeStatus;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
@@ -15,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -34,14 +38,12 @@ public class YoutubeService {
      */
     private static final String VIDEO_FILE_FORMAT = "video/*";
 
-    private static final String SAMPLE_VIDEO_FILENAME = "sample-video.mp4";
-
     /**
      * Upload the user-selected video to the user's YouTube channel. The code
      * looks for the video in the application's project folder and uses OAuth
      * 2.0 to authorize the API request.
      */
-    public void upload() {
+    public String upload(Path filePath) {
 
         // This OAuth 2.0 access scope allows an application to upload files
         // to the authenticated user's YouTube channel, but doesn't allow
@@ -54,9 +56,9 @@ public class YoutubeService {
 
             // This object is used to make YouTube Data API requests.
             youtube = new YouTube.Builder(YoutubeAuth.HTTP_TRANSPORT, YoutubeAuth.JSON_FACTORY, credential).setApplicationName(
-                    "youtube-cmdline-uploadvideo-sample").build();
+                    "gamemuncheol").build();
 
-            System.out.println("Uploading: " + SAMPLE_VIDEO_FILENAME);
+            System.out.println("Uploading: " + filePath);
 
             // Add extra information to the video before uploading.
             Video videoObjectDefiningMetadata = new Video();
@@ -92,7 +94,7 @@ public class YoutubeService {
             videoObjectDefiningMetadata.setSnippet(snippet);
 
             InputStreamContent mediaContent = new InputStreamContent(VIDEO_FILE_FORMAT,
-                    YoutubeService.class.getResourceAsStream("/sample-video.mp4"));
+                    Files.newInputStream(filePath));
 
             // Insert the video. The command sends three arguments. The first
             // specifies which information the API request is setting and which
@@ -148,22 +150,21 @@ public class YoutubeService {
 
             // Print data about the newly inserted video from the API response.
             System.out.println("\n================== Returned Video ==================\n");
-            System.out.println("  - Id: " + returnedVideo.getId());
-            System.out.println("  - Title: " + returnedVideo.getSnippet().getTitle());
-            System.out.println("  - Tags: " + returnedVideo.getSnippet().getTags());
-            System.out.println("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
-            System.out.println("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
-
+            log.info("\n================== Returned Video ==================\n");
+            log.info("  - Id: {}", returnedVideo.getId());
+            log.info("  - Title: {}", returnedVideo.getSnippet().getTitle());
+            log.info("  - Tags: {}", returnedVideo.getSnippet().getTags());
+            log.info("  - Privacy Status: {}", returnedVideo.getStatus().getPrivacyStatus());
+            log.info("  - Video Count: {}", returnedVideo.getStatistics().getViewCount());
+            return "https://www.youtube.com/watch?v=" + returnedVideo.getId();
         } catch (GoogleJsonResponseException e) {
-            System.err.println("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : "
-                    + e.getDetails().getMessage());
-            e.printStackTrace();
+            log.error("GoogleJsonResponseException: ", e);
+            throw new ApiException(YoutubeStatus.JSON_PARSE_ERROR);
         } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-            e.printStackTrace();
+            throw new ApiException(YoutubeStatus.UNKNOWN_ERROR);
         } catch (Throwable t) {
-            System.err.println("Throwable: " + t.getMessage());
-            t.printStackTrace();
+            log.error("Throwable: ", t);
+            throw new ApiException(YoutubeStatus.UNKNOWN_ERROR);
         }
     }
 }
