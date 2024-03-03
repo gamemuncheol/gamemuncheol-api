@@ -20,6 +20,11 @@ import lombok.Getter;
  limitations under the License.
  **************************************************************************/
 
+/**
+ * Apple Token 에러
+ * 50000~51000
+ */
+
 // Modified by rookedsysc
     @Getter
 public enum AppleTokenStatus implements ApiStatusIfs {
