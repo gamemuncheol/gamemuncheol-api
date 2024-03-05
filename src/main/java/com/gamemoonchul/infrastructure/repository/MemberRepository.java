@@ -1,7 +1,7 @@
 package com.gamemoonchul.infrastructure.repository;
 
 
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

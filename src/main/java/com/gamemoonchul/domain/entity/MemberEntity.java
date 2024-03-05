@@ -1,4 +1,4 @@
-package com.gamemoonchul.domain;
+package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.domain.enums.MemberRole;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.MemberEntity;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.gamemoonchul.domain.converter;
 
 import com.gamemoonchul.config.apple.entities.AppleUserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.MemberEntity;
 import com.gamemoonchul.domain.enums.MemberRole;
 
 import java.util.Optional;
