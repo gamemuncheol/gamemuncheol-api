@@ -1,4 +1,4 @@
-package com.gamemoonchul.application;
+package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.domain.model.vo.riot.AccountVO;
 import com.gamemoonchul.domain.model.vo.riot.MatchVO;
@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class LolSearchService {
+public class LolSearchAdapter {
     @Value("${lol.api.key}")
     private String apiKey;
     private final RestTemplate restTemplate;
 
     @Autowired
-    LolSearchService(RestTemplate restTemplate) {
+    LolSearchAdapter(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

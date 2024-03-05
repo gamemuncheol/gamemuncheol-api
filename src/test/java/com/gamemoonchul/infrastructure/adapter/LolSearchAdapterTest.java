@@ -1,4 +1,4 @@
-package com.gamemoonchul.application;
+package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.domain.model.vo.riot.AccountVO;
 import com.gamemoonchul.domain.model.vo.riot.MatchVO;
@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class LolSearchServiceTest {
+class LolSearchAdapterTest {
     @Autowired
-    LolSearchService lolSearchService;
+    LolSearchAdapter lolSearchService;
 
     @Test
     @DisplayName("롤 유저 검색 테스트")
