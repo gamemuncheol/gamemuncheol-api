@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.converter.RedisCachedGameConverter;
-import com.gamemoonchul.domain.dto.SearchedGame;
+import com.gamemoonchul.domain.model.dto.SearchedGame;
 import com.gamemoonchul.domain.redisEntity.RedisCachedGame;
 import com.gamemoonchul.domain.status.SearchStatus;
 import com.gamemoonchul.infrastructure.repository.redis.RedisCachedGameRepository;

@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.converter;
 
-import com.gamemoonchul.domain.dto.SearchedGame;
+import com.gamemoonchul.domain.model.dto.SearchedGame;
 import com.gamemoonchul.domain.redisEntity.RedisCachedGame;
 import org.springframework.stereotype.Component;
 
