@@ -38,6 +38,7 @@ public class LolSearchAdapter {
                 MatchVO.class
         );
 
+
         return result;
     }
 }
