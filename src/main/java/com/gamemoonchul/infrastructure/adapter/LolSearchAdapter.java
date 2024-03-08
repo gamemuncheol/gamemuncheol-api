@@ -1,7 +1,9 @@
 package com.gamemoonchul.infrastructure.adapter;
 
+import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.model.vo.riot.AccountVO;
 import com.gamemoonchul.domain.model.vo.riot.MatchVO;
+import com.gamemoonchul.domain.status.SearchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,17 @@ public class LolSearchAdapter {
      * @return
      */
      public MatchVO searchMatch(String matchId) {
-        MatchVO result =  restTemplate.getForObject(
-                "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey,
-                MatchVO.class
-        );
+         try {
+
+             MatchVO result =  restTemplate.getForObject(
+                     "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey,
+                     MatchVO.class
+             );
 
 
-        return result;
+             return result;
+         } catch (Exception e) {
+             throw new ApiException(SearchStatus.SEARCH_RESULT_NOT_FOUND);
+         }
     }
 }

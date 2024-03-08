@@ -1,7 +1,9 @@
 package com.gamemoonchul.infrastructure.adapter;
 
+import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.model.vo.riot.AccountVO;
 import com.gamemoonchul.domain.model.vo.riot.MatchVO;
+import com.gamemoonchul.domain.status.SearchStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +41,18 @@ class LolSearchAdapterTest {
 
         // then
         assertEquals(matchId, result.getMetadata().getMatchId());
+    }
+
+
+    @Test
+    @DisplayName("찾을 수 없는 전적정보 요청시 NotFoundException 발생")
+    void searchNotMatched() {
+        // given
+        String matchId = "132132313";
+
+        // when // then
+        assertThrows(ApiException.class, () -> {
+            lolSearchService.searchMatch(matchId);
+        }, SearchStatus.SEARCH_RESULT_NOT_FOUND.getMessage());
     }
 }
