@@ -113,4 +113,52 @@ public class ParticipantVO {
 //    private final int wardsKilled;
 //    private final int wardsPlaced;
 //    private final boolean teamEarlySurrendered;
+
+    public static class Dummy {
+        public static ParticipantVO createDummy() {
+            return ParticipantVO.builder()
+                    .kills(1)
+                    .deaths(1)
+                    .assists(1)
+                    .champLevel(1)
+                    .championId(1)
+                    .championName("1")
+                    .damageDealtToBuildings(1)
+                    .damageDealtToObjectives(1)
+                    .damageDealtToTurrets(1)
+                    .damageSelfMitigated(1)
+                    .item0(1)
+                    .item1(1)
+                    .item2(1)
+                    .item3(1)
+                    .item4(1)
+                    .item5(1)
+                    .item6(1)
+                    .neutralMinionsKilled(1)
+                    .participantId(1)
+                    .physicalDamageDealtToChampions(1)
+                    .magicDamageDealtToChampions(1)
+                    .totalDamageDealtToChampions(1)
+                    .puuid("1")
+                    .riotIdName("1")
+                    .riotIdTagline("1")
+                    .role("1")
+                    .sightWardsBoughtInGame(1)
+                    .spell1Casts(1)
+                    .spell2Casts(1)
+                    .spell3Casts(1)
+                    .spell4Casts(1)
+                    .summoner1Casts(1)
+                    .summoner1Id(1)
+                    .summoner2Casts(1)
+                    .summoner2Id(1)
+                    .summonerId("1")
+                    .summonerLevel(1)
+                    .summonerName("1")
+                    .teamId(1)
+                    .teamPosition("1")
+                    .win(true)
+                    .build();
+        }
+    }
 }

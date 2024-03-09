@@ -9,4 +9,13 @@ import lombok.Getter;
 public class TeamVO {
     private final int teamId;
     private final boolean win;
+
+    public static class Dummy {
+        public static TeamVO createDummy() {
+            return TeamVO.builder()
+                    .teamId(1)
+                    .win(true)
+                    .build();
+        }
+    }
 }
