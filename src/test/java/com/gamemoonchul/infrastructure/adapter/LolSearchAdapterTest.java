@@ -34,7 +34,7 @@ class LolSearchAdapterTest {
     @DisplayName("게임 아이디로 게임 검색 테스트")
     void searchMatche() {
         // given
-        String matchId = "KR_6862565824";
+        String matchId = "6862565824";
 
         // when
         MatchVO result = lolSearchService.searchMatch(matchId);

@@ -36,7 +36,7 @@ public class LolSearchAdapter {
      */
      public MatchVO searchMatch(String matchId) {
          try {
-
+             matchId = "KR_" + matchId; // "KR_" + "6862565824
              MatchVO result =  restTemplate.getForObject(
                      "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey,
                      MatchVO.class
