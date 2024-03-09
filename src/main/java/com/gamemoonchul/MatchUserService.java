@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,10 +19,14 @@ public class MatchUserService {
     private final MatchUserRepository matchUserRepository;
     private final MatchUserConverter matchUserConverter;
 
-    public void saveAll(List<ParticipantVO> participants, MatchGame matchGame) {
+    public List<MatchUser> saveAll(List<ParticipantVO> participants, MatchGame matchGame) {
+        List<MatchUser> matchUsers = new ArrayList<>();
         participants.stream().map(
                 participant -> matchUserConverter.toEntities(participant, matchGame)
-        ).forEach(matchUserRepository::save);
+        ).forEach(matchUser -> {
+            matchUsers.add(matchUserRepository.save(matchUser));
+        });
+        return matchUsers;
     }
 
     public List<MatchUser> findByMatchGameId(String gameId) {

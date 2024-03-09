@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -15,7 +17,11 @@ public class MatchGameService {
     private final MatchGameRepository matchGameRepository;
     private final MatchGameConverter matchConverter;
 
-    private MatchGame save(MatchVO vo) {
+    public Optional<MatchGame> findById(String gameId) {
+        return matchGameRepository.findById(gameId);
+    }
+
+    public MatchGame save(MatchVO vo) {
         MatchGame matchGame = matchConverter.toMatchGame(vo);
         return matchGameRepository.save(matchGame);
     }
