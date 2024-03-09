@@ -27,7 +27,7 @@ public class MatchUser {
             this.matchGame.getMatchUsers().remove(this);
         }
         this.matchGame = matchGame;
-        matchGame.getMatchUsers().add(this);
+        matchGame.addMatchUser(this);
     }
 
     public static class Dummy {

@@ -24,6 +24,13 @@ public class MatchGame {
     @OneToMany(mappedBy = "matchGame", fetch = FetchType.EAGER)
     private List<MatchUser> matchUsers;
 
+    public void addMatchUser(MatchUser matchUser) {
+        if(matchUsers == null) {
+            matchUsers = new ArrayList<>();
+        }
+        matchUsers.add(matchUser);
+    }
+
     public static class Dummy {
         public static MatchGame createDummy() {
             List<MatchUser> matchUsers = new ArrayList<>();
