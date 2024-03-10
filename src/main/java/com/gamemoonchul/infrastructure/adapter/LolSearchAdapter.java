@@ -1,8 +1,8 @@
 package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.domain.model.vo.riot.AccountVO;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
+import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +20,10 @@ public class LolSearchAdapter {
         this.restTemplate = restTemplate;
     }
 
-    public AccountVO searchUser(String gameName, String tagLine) {
-        AccountVO result =  restTemplate.getForObject(
+    public AccountRecord searchUser(String gameName, String tagLine) {
+        AccountRecord result =  restTemplate.getForObject(
                 "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + gameName + "/" + tagLine + "?api_key=" + apiKey,
-                AccountVO.class
+                AccountRecord.class
         );
 
         return result;
@@ -34,15 +34,13 @@ public class LolSearchAdapter {
      * @param matchId
      * @return
      */
-     public MatchVO searchMatch(String matchId) {
+     public MatchRecord searchMatch(String matchId) {
          try {
              matchId = "KR_" + matchId; // "KR_" + "6862565824
-             MatchVO result =  restTemplate.getForObject(
+             MatchRecord result =  restTemplate.getForObject(
                      "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey,
-                     MatchVO.class
+                     MatchRecord.class
              );
-
-
              return result;
          } catch (Exception e) {
              throw new ApiException(SearchStatus.SEARCH_RESULT_NOT_FOUND);

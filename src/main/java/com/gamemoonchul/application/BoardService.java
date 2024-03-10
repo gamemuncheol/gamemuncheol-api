@@ -2,15 +2,12 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.MatchUserService;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
-import com.gamemoonchul.domain.model.vo.riot.ParticipantVO;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.adapter.LolSearchAdapter;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,9 +25,9 @@ public class BoardService {
         if (optionalEntity.isPresent()) {
             matchGame = optionalEntity.get();
         } else {
-            MatchVO vo = lolSearchAdapter.searchMatch(gameId);
+            MatchRecord vo = lolSearchAdapter.searchMatch(gameId);
             matchGame = matchGameService.save(vo);
-            matchUserService.saveAll(vo.getInfo().getParticipants(), matchGame);
+            matchUserService.saveAll(vo.info().participants(), matchGame);
         }
         MatchGameResponse response = MatchGameResponse.toResponse(matchGame);
         return response;

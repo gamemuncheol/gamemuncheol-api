@@ -2,8 +2,9 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.MatchUserService;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
-import com.gamemoonchul.domain.model.vo.riot.ParticipantVO;
+import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
+import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import com.gamemoonchul.infrastructure.adapter.LolSearchAdapter;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
 import jakarta.transaction.Transactional;
@@ -37,10 +38,10 @@ class BoardServiceTest {
     @DisplayName("이미 저장된 게임이 있을 때 lolSearchAdapter를 통해서 검색하지 않는다")
     void searchAlreadySavedGame() {
         // given
-        MatchVO vo = MatchVO.Dummy.createDummy();
+        MatchRecord vo = MatchDummy.create();
         MatchGame game = matchGameService.save(vo);
         boardService = new BoardService(matchGameService, matchUserService, mockLolSearch);
-        List<ParticipantVO> participantVO = vo.getInfo().getParticipants();
+        List<ParticipantRecord> participantVO = vo.info().participants();
         matchUserService.saveAll(participantVO, game);
 
         // when

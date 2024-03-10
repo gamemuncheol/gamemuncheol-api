@@ -1,8 +1,8 @@
 package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.domain.model.vo.riot.AccountVO;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
+import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,10 +24,10 @@ class LolSearchAdapterTest {
         String tagLine = "kr1";
 
         // when
-        AccountVO accountVO = lolSearchService.searchUser(gameName, tagLine);
+        AccountRecord accountVO = lolSearchService.searchUser(gameName, tagLine);
 
         // then
-        assertEquals("2u_YSGly2rGy9LwxQ-uAjZ0gRg6WWfIzRxDXW2OALJJIyaWusYh8JpybeSCPZVddQUTE9w2JMh-bXQ", accountVO.getPuuid());
+        assertEquals("2u_YSGly2rGy9LwxQ-uAjZ0gRg6WWfIzRxDXW2OALJJIyaWusYh8JpybeSCPZVddQUTE9w2JMh-bXQ", accountVO.puuid());
     }
 
     @Test
@@ -37,10 +37,10 @@ class LolSearchAdapterTest {
         String matchId = "6862565824";
 
         // when
-        MatchVO result = lolSearchService.searchMatch(matchId);
+        MatchRecord result = lolSearchService.searchMatch(matchId);
 
         // then
-        assertEquals(matchId, result.getMetadata().getMatchId());
+        assertEquals("KR_" + matchId, result.metadata().matchId());
     }
 
 

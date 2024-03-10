@@ -1,8 +1,7 @@
 package com.gamemoonchul.domain.converter.riot;
 
 import com.gamemoonchul.domain.entity.riot.MatchGame;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
-import com.google.api.client.util.DateTime;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,12 +11,13 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class MatchGameConverter {
 
-    public MatchGame toMatchGame(MatchVO matchVO) {
+    public MatchGame toMatchGame(MatchRecord matchVO) {
         MatchGame entity = MatchGame.builder()
-                .id(matchVO.getMetadata().getMatchId())
-                .gameDuration(matchVO.getInfo().getGameDuration())
-                .gameMode(matchVO.getInfo().getGameMode())
-                .gameCreation(convertUnixToUtcTime(matchVO.getInfo().getGameCreation())).build();
+                .id(matchVO.metadata().matchId())
+                .gameDuration(matchVO.info().gameDuration())
+                .gameMode(matchVO.info().gameMode())
+                .gameCreation(convertUnixToUtcTime(matchVO.info().gameCreation()))
+                .build();
 
         return entity;
     }

@@ -2,7 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.domain.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.repository.MatchGameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class MatchGameService {
         return matchGameRepository.findById(gameId);
     }
 
-    public MatchGame save(MatchVO vo) {
+    public MatchGame save(MatchRecord vo) {
         MatchGame matchGame = matchConverter.toMatchGame(vo);
         return matchGameRepository.save(matchGame);
     }

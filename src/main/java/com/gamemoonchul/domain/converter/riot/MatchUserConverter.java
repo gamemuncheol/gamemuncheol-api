@@ -2,25 +2,25 @@ package com.gamemoonchul.domain.converter.riot;
 
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
-import com.gamemoonchul.domain.model.vo.riot.ParticipantVO;
+import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class MatchUserConverter {
-    public MatchUser toEntities(ParticipantVO participant, MatchGame matchGame) {
+    public MatchUser toEntities(ParticipantRecord participant, MatchGame matchGame) {
         MatchUser entity = MatchUser.builder()
-                .puuid(participant.getPuuid())
-                .win(participant.isWin())
+                .puuid(participant.puuid())
+                .win(participant.win())
                 .nickname(getNickname(participant))
-                .championThumbnail(getChampionThumbnail(participant.getChampionName()))
+                .championThumbnail(getChampionThumbnail(participant.championName()))
                 .build();
         entity.setMatchGame(matchGame);
         return entity;
     }
 
-    private String getNickname(ParticipantVO participantVO) {
-        return participantVO.getSummonerName() + " #" + participantVO.getRiotIdTagline();
+    private String getNickname(ParticipantRecord participantVO) {
+        return participantVO.summonerName() + " #" + participantVO.riotIdTagline();
     }
 
     private String getChampionThumbnail(String championName) {

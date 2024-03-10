@@ -3,8 +3,9 @@ package com.gamemoonchul;
 import com.gamemoonchul.application.MatchGameService;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
-import com.gamemoonchul.domain.model.vo.riot.MatchVO;
-import com.gamemoonchul.domain.model.vo.riot.ParticipantVO;
+import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
+import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
+import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,9 +27,9 @@ class MatchUserServiceTest {
     @DisplayName("MatchUser 생성 테스트, MatchGame Eager Loading 테스트")
     void createMatchUser() {
         // given
-        MatchVO gameVO = MatchVO.Dummy.createDummy();
+        MatchRecord gameVO = MatchDummy.create();
         MatchGame gameEntity = matchGameService.save(gameVO);
-        List<ParticipantVO> participants = gameVO.getInfo().getParticipants();
+        List<ParticipantRecord> participants = gameVO.info().participants();
 
 
         // when
