@@ -12,13 +12,15 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class MatchGameResponse {
-    public DateTime gameCreation;
+    private String gameId;
+    private DateTime gameCreation;
     private long gameDuration;
     private String gameMode;
     private List<MatchUserResponse> matchUsers;
 
     public static MatchGameResponse toResponse(MatchGame matchGame) {
         return MatchGameResponse.builder()
+                .gameId(matchGame.getId())
                 .gameCreation(matchGame.getGameCreation())
                 .gameDuration(matchGame.getGameDuration())
                 .gameMode(matchGame.getGameMode())
