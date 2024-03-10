@@ -10,7 +10,7 @@ import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.MemberEntity;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

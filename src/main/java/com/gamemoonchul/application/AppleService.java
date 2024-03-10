@@ -6,7 +6,7 @@ import com.gamemoonchul.config.apple.entities.AppleUserInfo;
 import com.gamemoonchul.config.apple.enums.AppleTokenStatus;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.MemberEntity;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
 import lombok.RequiredArgsConstructor;

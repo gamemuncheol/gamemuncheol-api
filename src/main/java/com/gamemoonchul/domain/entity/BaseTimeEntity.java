@@ -1,4 +1,4 @@
-package com.gamemoonchul.domain;
+package com.gamemoonchul.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

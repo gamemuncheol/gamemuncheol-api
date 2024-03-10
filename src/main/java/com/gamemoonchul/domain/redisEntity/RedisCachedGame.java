@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.redisEntity;
 
-import com.gamemoonchul.domain.dto.SearchedUser;
+import com.gamemoonchul.domain.model.dto.SearchedUser;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import lombok.*;

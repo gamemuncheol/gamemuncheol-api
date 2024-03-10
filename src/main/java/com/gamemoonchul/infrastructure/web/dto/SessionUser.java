@@ -1,10 +1,9 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.MemberEntity;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.lang.reflect.Member;
 
 @Getter
 public class SessionUser implements Serializable {
