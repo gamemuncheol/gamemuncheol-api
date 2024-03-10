@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MatchGameResponse {
     private String gameId;
-    private DateTime gameCreation;
+    private String gameCreation;
     private long gameDuration;
     private String gameMode;
     private List<MatchUserResponse> matchUsers;

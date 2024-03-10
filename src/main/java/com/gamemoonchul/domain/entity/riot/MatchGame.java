@@ -15,7 +15,7 @@ public class MatchGame {
     @Id
     private String id;
 
-    private DateTime gameCreation;
+    private String gameCreation;
 
     private long gameDuration;
 
@@ -39,7 +39,7 @@ public class MatchGame {
             }
             return MatchGame.builder()
                     .id("1")
-                    .gameCreation(new DateTime(1))
+                    .gameCreation("2022-01-01 00:00:00")
                     .gameDuration(1)
                     .matchUsers(matchUsers)
                     .gameMode("1")
