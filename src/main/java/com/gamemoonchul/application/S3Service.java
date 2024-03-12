@@ -1,6 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.status.VideoStatus;
@@ -26,7 +27,6 @@ public class S3Service {
     private String bucket;
 
     public String upload(MultipartFile file) {
-//        checkFileSizeOrThrow(file);
         checkFileTypeOrThrow(file);
 
         try {
@@ -44,6 +44,28 @@ public class S3Service {
     }
 
     /**
+     * 파일이 유효한지 확인
+     * @param fileName
+     * @return 유효한 파일이면 true, 아니면 false
+     */
+    public boolean isValidFile(
+            String fileName) {
+        boolean isValidFile = true;
+        try {
+            ObjectMetadata objectMetadata = amazonS3Client.getObjectMetadata(bucket, fileName);
+        } catch (AmazonS3Exception s3e) {
+            if (s3e.getStatusCode() == 404) {
+                // i.e. 404: NoSuchKey - The specified key does not exist
+                isValidFile = false;
+            } else {
+                throw s3e;    // rethrow all S3 exceptions other than 404
+            }
+        }
+
+        return isValidFile;
+    }
+
+    /**
      * 파일 타입이 MP4인지 확인
      */
     private void checkFileTypeOrThrow(MultipartFile file) {
@@ -52,23 +74,5 @@ public class S3Service {
             throw new ApiException(VideoStatus.INVALID_FILETYPE);
         }
     }
-
-
-    /**
-     * 파일 사이즈가 500MB 이상인지 확인
-     */
-//    private void checkFileSizeOrThrow(MultipartFile file) {
-//        byte[] bytes;
-//        try {
-//            bytes = file.getBytes();
-//        } catch (IOException e) {
-//            throw new ApiException(VideoStatus.UNKOWN_ERROR);
-//        }
-//
-//        BigInteger fileSize = BigInteger.valueOf(bytes.length);
-//        if (fileSize >= MAX_FILE_SIZE) {
-//            throw new ApiException(VideoStatus.FILE_SIZE_EXCEEDED);
-//        }
-//    }
 
 }

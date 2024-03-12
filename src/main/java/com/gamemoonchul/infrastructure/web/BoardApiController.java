@@ -22,7 +22,7 @@ public class BoardApiController {
 
     @PostMapping("/video-upload")
     public String uploadVideo(@RequestParam("file") MultipartFile file) {
-        String fileName = videoService.upload(file);
-        return fileName;
+        String fileUrl = videoService.upload(file);
+        return fileUrl;
     }
 }
