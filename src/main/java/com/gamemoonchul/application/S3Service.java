@@ -43,6 +43,10 @@ public class S3Service {
         }
     }
 
+    public void delete(String fileName) {
+        amazonS3Client.deleteObject(bucket, fileName);
+    }
+
     /**
      * 파일이 유효한지 확인
      * @param fileName
