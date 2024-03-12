@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,17 +14,23 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class S3ServiceTest {
     @Autowired
     private S3Service s3Service;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private String fileName = "test.mp4";
+
     @Test
+    @Order(1)
     @DisplayName("S3에 파일 업로드 테스트")
     void upload() {
         // given
-        String fileName = "test.mp4";
         MultipartFile file;
         try {
-            byte[] content = Files.readAllBytes(Paths.get("src/test/resources/test.mp4"));
+            byte[] content = Files.readAllBytes(Paths.get("src/test/resources/" + fileName));
             file = new MockMultipartFile(fileName, fileName, "video/mp4", content);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -33,13 +38,28 @@ class S3ServiceTest {
 
 
         // when
-        String result = s3Service.upload(file);
+        fileName = s3Service.upload(file);
+
 
         //then
-        assertNotNull(result);
+        assertNotNull(fileName);
     }
 
     @Test
+    @Order(2)
+    @DisplayName("S3에 파일 삭제 테스트")
+    void delete() {
+        // given
+
+        // when
+        s3Service.delete(fileName);
+
+        //then
+        assertFalse(s3Service.isValidFile(fileName));
+    }
+
+    @Test
+    @Order(3)
     @DisplayName("S3에 파일 존재하는지 확인")
     void isValidFile() {
         // given
