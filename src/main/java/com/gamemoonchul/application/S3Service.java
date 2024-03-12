@@ -43,6 +43,7 @@ public class S3Service {
         }
     }
 
+
     public void delete(String fileName) {
         amazonS3Client.deleteObject(bucket, fileName);
     }
@@ -69,6 +70,7 @@ public class S3Service {
         return isValidFile;
     }
 
+
     /**
      * 파일 타입이 MP4인지 확인
      */
@@ -78,5 +80,4 @@ public class S3Service {
             throw new ApiException(VideoStatus.INVALID_FILETYPE);
         }
     }
-
 }
