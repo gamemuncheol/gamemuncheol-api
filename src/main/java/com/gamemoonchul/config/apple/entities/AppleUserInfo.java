@@ -20,7 +20,7 @@ import lombok.*;
  limitations under the License.
  **************************************************************************/
 
-@Builder
+@Builder @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppleUserInfo {
@@ -40,10 +40,10 @@ public class AppleUserInfo {
 
 
     /**
-     * The unique identifier for the user.
+     * 애플 고유 식별자
      */
     @SerializedName("sub")
-    private String uniqueIdentifier;
+    private String sub;
 
 
     /**
@@ -88,36 +88,4 @@ public class AppleUserInfo {
      */
     @SerializedName("email_verified")
     private boolean emailVerified;
-
-    public String getIssuer() {
-        return issuer;
-    }
-
-    public String getUniqueIdentifier() {
-        return uniqueIdentifier;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public String getExpiryTime() {
-        return expiryTime;
-    }
-
-    public String getIssuingTime() {
-        return issuingTime;
-    }
-
-    public String getNonce() {
-        return nonce;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
 }
