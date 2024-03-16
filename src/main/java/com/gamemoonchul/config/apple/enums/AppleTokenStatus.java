@@ -35,6 +35,9 @@ public enum AppleTokenStatus implements ApiStatusIfs {
     INVALID_ID_TOKEN(50200,"Invalid ID Token"),
     EXPIRED_ID_TOKEN(50300, "Expired ID Token"),
     UNSUPPORTED_ID_TOKEN(50400, "Unsupported exception in Apple ID Token validation"),
+    INVALID_NONCE(50450, "Invalid nonce in ID Token"),
+    INVALID_ISSUER(50451, "Invalid issuer in ID Token"),
+    INVALID_AUDIENCE(50452, "Invalid audience in ID Token"),
 
     // Apple specific errors
     PROXY_SETUP_ERROR(50500, "Invalid proxy host and/or port"),

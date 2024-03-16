@@ -39,7 +39,10 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	implementation 'com.auth0:jwks-rsa:0.22.1' // apple oauth
+	implementation 'com.auth0:java-jwt:4.4.0' // apple oauth
 	// spring security end
+
 
 	// Process Executor
 	implementation 'org.zeroturnaround:zt-exec:1.12'
