@@ -17,7 +17,7 @@ public class BoardApiController {
 
     @GetMapping("/search-match/{gameId}")
     public MatchGameResponse searchMatch(@PathVariable String gameId) {
-        return boardService.searchMatch(gameId);
+        return boardService.searchMatch("KR_" + gameId);
     }
 
     @PostMapping("/video-upload")

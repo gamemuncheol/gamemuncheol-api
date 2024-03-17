@@ -47,7 +47,7 @@ class MatchGameServiceTest {
         List<MatchUser> matchUsers = matchUserService.saveAll(dummyVO.info().participants(), matchGame);
 
         // when
-        Optional<MatchGame> optionalMatchGame = matchGameService.findById(matchGame.getGameId());
+        Optional<MatchGame> optionalMatchGame = matchGameService.findByGameId(matchGame.getGameId());
         MatchGame result = optionalMatchGame.get();
 
         // then

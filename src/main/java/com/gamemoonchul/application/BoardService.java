@@ -18,12 +18,12 @@ public class BoardService {
     private final LolSearchAdapter lolSearchAdapter;
 
     public MatchGameResponse searchMatch(String gameId) {
-        Optional<MatchGame> optionalEntity = matchGameService.findById(gameId);
+        Optional<MatchGame> savedEntity = matchGameService.findByGameId(gameId);
         MatchGame matchGame;
 
 
-        if (optionalEntity.isPresent()) {
-            matchGame = optionalEntity.get();
+        if (savedEntity != null && savedEntity.isPresent()) {
+            matchGame = savedEntity.get();
         } else {
             MatchRecord vo = lolSearchAdapter.searchMatch(gameId);
             matchGame = matchGameService.save(vo);

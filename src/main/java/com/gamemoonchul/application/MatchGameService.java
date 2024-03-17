@@ -17,7 +17,7 @@ public class MatchGameService {
     private final MatchGameRepository matchGameRepository;
     private final MatchGameConverter matchConverter;
 
-    public Optional<MatchGame> findById(String gameId) {
+    public Optional<MatchGame> findByGameId(String gameId) {
         return matchGameRepository.findByGameId(gameId);
     }
 
