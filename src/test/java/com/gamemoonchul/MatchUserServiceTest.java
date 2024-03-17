@@ -34,10 +34,10 @@ class MatchUserServiceTest {
 
         // when
         matchUserService.saveAll(participants, gameEntity);
-        List<MatchUser> matchUsers = matchUserService.findByMatchGameId(gameEntity.getId());
+        List<MatchUser> matchUsers = matchUserService.findByMatchGameId(gameEntity);
 
         // then
         assertEquals(participants.size(), matchUsers.size());
-        assertEquals(matchUsers.get(0).getMatchGame().getId(), gameEntity.getId());
+        assertEquals(matchUsers.get(0).getMatchGame().getGameId(), gameEntity.getGameId());
     }
 }

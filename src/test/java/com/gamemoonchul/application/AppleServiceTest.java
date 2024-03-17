@@ -3,7 +3,7 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.apple.AppleIDTokenValidator;
 import com.gamemoonchul.config.apple.entities.AppleUserInfo;
-import com.gamemoonchul.domain.entity.MemberEntity;
+import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +96,7 @@ public class AppleServiceTest {
     // when
     appleService.signInOrUp(appleUserInfo);
     appleService.signInOrUp(appleUserInfo);
-    List<MemberEntity> members = memberRepository.findByEmail(appleUserInfo.getEmail());
+    List<Member> members = memberRepository.findByEmail(appleUserInfo.getEmail());
 
     // then
     assertEquals(members.size(), 1);

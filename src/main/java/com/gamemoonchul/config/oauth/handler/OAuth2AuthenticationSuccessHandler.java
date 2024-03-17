@@ -10,7 +10,7 @@ import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
-import com.gamemoonchul.domain.entity.MemberEntity;
+import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -123,7 +123,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 principal.getUserInfo().getNickname(),
                 principal.getUserInfo().getAccessToken()
         );
-        MemberEntity member = MemberConverter.toEntity(principal.getUserInfo());
+        Member member = MemberConverter.toEntity(principal.getUserInfo());
         memberService.signInOrUp(member);
 
         TokenDto tokenDto = tokenProvider.createToken(authentication);

@@ -6,7 +6,7 @@ import com.gamemoonchul.config.apple.entities.AppleUserInfo;
 import com.gamemoonchul.config.apple.enums.AppleTokenStatus;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
-import com.gamemoonchul.domain.entity.MemberEntity;
+import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class AppleService {
   }
 
   public TokenDto signInOrUp(AppleUserInfo appleUserInfo) {
-    MemberEntity member = MemberConverter.toEntity(appleUserInfo);
+    Member member = MemberConverter.toEntity(appleUserInfo);
     memberService.signInOrUp(member);
     TokenDto token  = tokenHelper.createToken(member.getEmail());
     return token;

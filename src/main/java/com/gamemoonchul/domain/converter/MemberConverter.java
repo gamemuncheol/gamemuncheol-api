@@ -2,20 +2,20 @@ package com.gamemoonchul.domain.converter;
 
 import com.gamemoonchul.config.apple.entities.AppleUserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
-import com.gamemoonchul.domain.entity.MemberEntity;
+import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.enums.MemberRole;
 
 import java.util.Optional;
 
 public class MemberConverter {
-  public static MemberEntity toEntity(OAuth2UserInfo userInfo) {
+  public static Member toEntity(OAuth2UserInfo userInfo) {
     Optional<String> nickname = Optional.ofNullable(userInfo
         .getNickname());
     if (nickname.isEmpty()) {
       nickname = Optional.ofNullable(userInfo
           .getId());
     }
-    MemberEntity member = MemberEntity.builder()
+    Member member = Member.builder()
         .role(MemberRole.USER)
         .name(userInfo.getName())
         .nickname(
@@ -31,8 +31,8 @@ public class MemberConverter {
     return member;
   }
 
-  public static MemberEntity toEntity(AppleUserInfo userInfo) {
-    MemberEntity member = MemberEntity.builder()
+  public static Member toEntity(AppleUserInfo userInfo) {
+    Member member = Member.builder()
         .role(MemberRole.USER)
         .name(userInfo.getName())
         .nickname(userInfo.getClientId())

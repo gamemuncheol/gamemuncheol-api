@@ -13,7 +13,7 @@ public class MatchGameConverter {
 
     public MatchGame toMatchGame(MatchRecord matchVO) {
         MatchGame entity = MatchGame.builder()
-                .id(matchVO.metadata().matchId())
+                .gameId(matchVO.metadata().matchId())
                 .gameDuration(matchVO.info().gameDuration())
                 .gameMode(matchVO.info().gameMode())
                 .gameCreation(convertUnixToUtcTime(matchVO.info().gameCreation()))

@@ -1,6 +1,7 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
 import com.gamemoonchul.domain.entity.riot.MatchGame;
+import com.gamemoonchul.domain.entity.riot.MatchGameDummy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,7 @@ class MatchGameResponseTest {
     @Test
     void createMatchGameResponse() {
         // given
-        MatchGame matchGame = MatchGame.Dummy.createDummy();
+        MatchGame matchGame = MatchGameDummy.create();
 
         // when
         MatchGameResponse matchGameResponse = MatchGameResponse.toResponse(matchGame);
