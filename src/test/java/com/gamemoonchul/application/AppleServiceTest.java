@@ -84,7 +84,7 @@ public class AppleServiceTest {
     AppleUserInfo appleUserInfo = AppleUserInfo.builder()
         .issuer("yourIssuer")
         .name("yourName")
-        .uniqueIdentifier("yourUniqueIdentifier")
+        .sub("yourUniqueIdentifier")
         .clientId("yourClientId")
         .expiryTime("yourExpiryTime")
         .issuingTime("yourIssuingTime")
