@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.entity;
 
-import com.gamemoonchul.domain.enums.Issuer;
+import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +28,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30, columnDefinition = "varchar(255)")
-    private Issuer issuer;
+    private OAuth2Provider provider;
 
     @Column(nullable = false, length = 30)
     private String identifier;

@@ -1,6 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
@@ -16,7 +17,7 @@ public class MemberService {
   private final MemberRepository memberRepository;
 
   public void signInOrUp(Member member) {
-    Optional<Member> alreadyExistMember = memberRepository.findTop1ByEmail(member.getEmail());
+    Optional<Member> alreadyExistMember = memberRepository.findTop1ByEmailAndProvider(member.getEmail(), member.getProvider());
     if (alreadyExistMember.isEmpty()) {
       memberRepository.save(member);
     } else {
@@ -24,8 +25,8 @@ public class MemberService {
     }
   }
 
-  public void unlink(String email) {
-    Optional<Member> member = memberRepository.findTop1ByEmail(email);
+  public void unlink(String email, OAuth2Provider provider) {
+    Optional<Member> member = memberRepository.findTop1ByEmailAndProvider(email, provider);
     if (member.isEmpty()) {
       throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
     }

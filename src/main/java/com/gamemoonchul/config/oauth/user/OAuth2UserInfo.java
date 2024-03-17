@@ -11,7 +11,7 @@ public interface OAuth2UserInfo {
 
     Map<String, Object> getAttributes();
 
-    String getId();
+    String getIdentifier();
 
     String getEmail();
 
