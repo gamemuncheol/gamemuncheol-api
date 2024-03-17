@@ -57,6 +57,11 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
+    public Member updateNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
     public String getRoleKey() {
         return this.role.getKey();
     }

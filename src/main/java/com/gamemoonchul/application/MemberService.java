@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
@@ -33,10 +34,12 @@ public class MemberService {
     memberRepository.delete(member.get());
   }
 
-  public void updateNickNameOrThrow(String nickname) {
-    Optional<Member> savedMember = memberRepository.findByNickname(nickname);
+  public void updateNickNameOrThrow(Member member, String nickName) {
+    Optional<Member> savedMember = memberRepository.findByNickname(nickName);
     if(savedMember.isPresent()) {
       throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);
     }
+    Member updatedMember = member.updateNickname(nickName);
+    memberRepository.save(updatedMember);
   }
 }
