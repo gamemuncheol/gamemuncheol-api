@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.converter;
 
-import com.gamemoonchul.config.apple.entities.AppleUserInfo;
+import com.gamemoonchul.config.apple.entities.AppleCredential;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
@@ -34,7 +34,7 @@ public class MemberConverter {
         return member;
     }
 
-    public static Member toEntity(AppleUserInfo userInfo) {
+    public static Member toEntity(AppleCredential userInfo) {
         Member member = Member.builder()
                 .role(MemberRole.USER)
                 .name(userInfo.getName())

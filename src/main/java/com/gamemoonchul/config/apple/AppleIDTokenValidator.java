@@ -10,7 +10,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.config.apple.entities.AppleUserInfo;
+import com.gamemoonchul.config.apple.entities.AppleCredential;
 import com.gamemoonchul.config.apple.enums.AppleTokenStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -44,13 +44,13 @@ public class AppleIDTokenValidator {
         verifyExpiration(decodedJWT.getExpiresAt());
     }
 
-    public AppleUserInfo extractAppleUserinfoFromIDToken(String idToken) {
-        AppleUserInfo appleUserInfo = null;
+    public AppleCredential extractAppleUserinfoFromIDToken(String idToken) {
+        AppleCredential appleUserInfo = null;
         verify(idToken);
 
         try {
             String payload = new String(Base64.decodeBase64(idToken.split("\\.")[1]));
-            appleUserInfo = new Gson().fromJson(payload, AppleUserInfo.class);
+            appleUserInfo = new Gson().fromJson(payload, AppleCredential.class);
         } catch (JsonSyntaxException e) {
             throw new ApiException(AppleTokenStatus.INVALID_ID_TOKEN);
         }

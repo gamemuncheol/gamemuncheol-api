@@ -32,4 +32,11 @@ public class MemberService {
     }
     memberRepository.delete(member.get());
   }
+
+  public void updateNickNameOrThrow(String nickname) {
+    Optional<Member> savedMember = memberRepository.findByNickname(nickname);
+    if(savedMember.isPresent()) {
+      throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);
+    }
+  }
 }

@@ -126,7 +126,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Member member = MemberConverter.toEntity(principal.getUserInfo());
         memberService.signInOrUp(member);
 
-        TokenDto tokenDto = tokenProvider.createToken(authentication);
+        TokenDto tokenDto = tokenProvider.createToken(principal.getUserInfo());
         return tokenDto;
     }
 

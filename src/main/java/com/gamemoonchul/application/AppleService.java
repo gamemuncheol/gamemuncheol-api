@@ -2,10 +2,11 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.apple.AppleIDTokenValidator;
-import com.gamemoonchul.config.apple.entities.AppleUserInfo;
+import com.gamemoonchul.config.apple.entities.AppleCredential;
 import com.gamemoonchul.config.apple.enums.AppleTokenStatus;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
+import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
@@ -20,8 +21,8 @@ public class AppleService {
   private final MemberService memberService;
   private final TokenHelper tokenHelper;
 
-  public AppleUserInfo validateRequest(AppleSignUpRequestDto signUpRequest) {
-    AppleUserInfo appleUserInfo = appleIDTokenValidator.extractAppleUserinfoFromIDToken(signUpRequest.getIdentityToken());
+  public AppleCredential validateRequest(AppleSignUpRequestDto signUpRequest) {
+    AppleCredential appleUserInfo = appleIDTokenValidator.extractAppleUserinfoFromIDToken(signUpRequest.getIdentityToken());
     if(signUpRequest.getName() == null || signUpRequest.getName().isEmpty()) {
       throw new ApiException(AppleTokenStatus.INVALID_SIGNUP_FORM);
     }
@@ -29,10 +30,11 @@ public class AppleService {
     return appleUserInfo;
   }
 
-  public TokenDto signInOrUp(AppleUserInfo appleUserInfo) {
-    Member member = MemberConverter.toEntity(appleUserInfo);
+  public TokenDto signInOrUp(AppleCredential credential) {
+    Member member = MemberConverter.toEntity(credential);
+    AppleOAuth2UserInfo userInfo = new AppleOAuth2UserInfo(credential);
     memberService.signInOrUp(member);
-    TokenDto token  = tokenHelper.createToken(member.getEmail());
+    TokenDto token  = tokenHelper.createToken(userInfo);
     return token;
   }
 }

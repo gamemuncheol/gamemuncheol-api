@@ -2,7 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.apple.AppleIDTokenValidator;
-import com.gamemoonchul.config.apple.entities.AppleUserInfo;
+import com.gamemoonchul.config.apple.entities.AppleCredential;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
@@ -41,14 +41,14 @@ public class AppleServiceTest {
   private AppleService mockAppleService;
 
 
-    private AppleUserInfo mockAppleUserInfo;
+    private AppleCredential mockAppleUserInfo;
     private AppleSignUpRequestDto validSignUpRequest;
     private AppleSignUpRequestDto invalidNameSignUpRequest;
 
       @BeforeEach
     void setUp() {
         // 테스트 실행 전 필요한 객체를 초기화
-        mockAppleUserInfo = new AppleUserInfo();
+        mockAppleUserInfo = new AppleCredential();
 
         validSignUpRequest = new AppleSignUpRequestDto("validToken", "John Doe"); // 유효한 가입 요청 객체
         invalidNameSignUpRequest = new AppleSignUpRequestDto("validToken", null); // 이름이 유효하지 않은 가입 요청 객체
@@ -61,7 +61,7 @@ public class AppleServiceTest {
     @DisplayName("유효한 토큰으로 Apple User Info 받아올 수 있는지를 검증한다.")
     void validateRequestWithValidTokenReturnsUserInfo() {
         // 유효한 토큰과 이름으로 validateRequest 메서드를 호출하고 결과를 검증
-        AppleUserInfo result = mockAppleService.validateRequest(validSignUpRequest);
+        AppleCredential result = mockAppleService.validateRequest(validSignUpRequest);
 
         // 반환된 AppleUserInfo 객체가 기대한 이름과 이메일을 가지고 있는지 확인
         assertEquals("John Doe", result.getName());
@@ -81,7 +81,7 @@ public class AppleServiceTest {
   @DisplayName("signInOrUp 메서드를 통해서 생성될 수 있는 회원의 이메일은 중복되지 않아야 한다.")
   public void signInOrUp() {
     // given
-    AppleUserInfo appleUserInfo = AppleUserInfo.builder()
+    AppleCredential appleUserInfo = AppleCredential.builder()
         .issuer("yourIssuer")
         .name("yourName")
         .sub("yourUniqueIdentifier")
