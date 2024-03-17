@@ -45,7 +45,7 @@ class BoardServiceTest {
         matchUserService.saveAll(participantVO, game);
 
         // when
-        boardService.searchMatch(game.getId());
+        boardService.searchMatch(game.getGameId());
 
         // then
         verify(mockLolSearch, never()).searchMatch(anyString());

@@ -2,7 +2,6 @@ package com.gamemoonchul.infrastructure.web.dto;
 
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
-import com.google.api.client.util.DateTime;
 import lombok.*;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class MatchGameResponse {
 
     public static MatchGameResponse toResponse(MatchGame matchGame) {
         return MatchGameResponse.builder()
-                .gameId(matchGame.getId())
+                .gameId(matchGame.getGameId())
                 .gameCreation(matchGame.getGameCreation())
                 .gameDuration(matchGame.getGameDuration())
                 .gameMode(matchGame.getGameMode())

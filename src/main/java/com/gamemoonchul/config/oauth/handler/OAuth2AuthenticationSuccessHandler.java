@@ -10,7 +10,7 @@ import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
-import com.gamemoonchul.domain.entity.MemberEntity;
+import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,12 +29,11 @@ import static com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequest
 import static com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 
-
 /**
  * 인증에 성공했을 경우를 담당
- *
+ * <p>
  * 로그인 플로우: onAuthenticationSuccess -> handleLoginOrSignUp -> signInOrUp -> determineTargetUrl -> clearAuthenticationAttributes -> sendRedirect
- *
+ * <p>
  * unlink 플로우: onAuthenticationSuccess -> handleLoginOrSignUp -> unlink -> determineTargetUrl -> clearAuthenticationAttributes -> sendRedirect
  */
 @Slf4j
@@ -49,7 +48,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final String TOKEN_DTO = "tokenDto";
 
-@Override
+    @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
@@ -107,13 +106,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         return targetUrl;
     }
+
     private void unlink(OAuth2UserPrincipal principal) {
         String accessToken = principal.getUserInfo().getAccessToken();
         OAuth2Provider provider = principal.getUserInfo().getProvider();
 
         // TODO: Redis 리프레시 토큰 삭제
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberService.unlink(principal.getUserInfo().getEmail());
+        memberService.unlink(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
     }
 
     private TokenDto signInOrUp(Authentication authentication, OAuth2UserPrincipal principal) {
@@ -123,7 +123,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 principal.getUserInfo().getNickname(),
                 principal.getUserInfo().getAccessToken()
         );
-        MemberEntity member = MemberConverter.toEntity(principal.getUserInfo());
+        Member member = MemberConverter.toEntity(principal.getUserInfo());
         memberService.signInOrUp(member);
 
         TokenDto tokenDto = tokenProvider.createToken(authentication);
@@ -141,6 +141,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     /**
      * 사용자의 인증과정에서 생성된 임시데이터나 쿠키를 정리하는 역할을 수행
+     *
      * @param request
      * @param response
      */

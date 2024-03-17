@@ -18,7 +18,7 @@ public class MatchGameService {
     private final MatchGameConverter matchConverter;
 
     public Optional<MatchGame> findById(String gameId) {
-        return matchGameRepository.findById(gameId);
+        return matchGameRepository.findByGameId(gameId);
     }
 
     public MatchGame save(MatchRecord vo) {

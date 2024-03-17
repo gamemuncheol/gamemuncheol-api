@@ -24,7 +24,7 @@ class MatchConverterTest {
         MatchGame matchGame = matchConverter.toMatchGame(matchVO);
 
         // then
-        assertEquals(matchVO.metadata().matchId(), matchGame.getId());
+        assertEquals(matchVO.metadata().matchId(), matchGame.getGameId());
         assertEquals(matchVO.info().gameDuration(), matchGame.getGameDuration());
         assertEquals(matchVO.info().gameMode(), matchGame.getGameMode());
     }

@@ -35,7 +35,7 @@ class MatchGameServiceTest {
         MatchGame matchGame = matchGameService.save(dummyVO);
 
         // when
-        assertEquals(dummyVO.metadata().matchId(), matchGame.getId());
+        assertEquals(dummyVO.metadata().matchId(), matchGame.getGameId());
     }
 
     @DisplayName("조회테스트, matchUsers Loading Eager")
@@ -47,11 +47,11 @@ class MatchGameServiceTest {
         List<MatchUser> matchUsers = matchUserService.saveAll(dummyVO.info().participants(), matchGame);
 
         // when
-        Optional<MatchGame> optionalMatchGame = matchGameService.findById(matchGame.getId());
+        Optional<MatchGame> optionalMatchGame = matchGameService.findById(matchGame.getGameId());
         MatchGame result = optionalMatchGame.get();
 
         // then
-        assertEquals(matchGame.getId(), result.getId());
+        assertEquals(matchGame.getGameId(), result.getGameId());
         assertEquals(matchGame.getMatchUsers().size(), result.getMatchUsers().size());
     }
 }

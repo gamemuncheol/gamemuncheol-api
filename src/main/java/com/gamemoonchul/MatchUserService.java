@@ -29,7 +29,7 @@ public class MatchUserService {
         return matchUsers;
     }
 
-    public List<MatchUser> findByMatchGameId(String gameId) {
-        return matchUserRepository.findByMatchGame_Id(gameId);
+    public List<MatchUser> findByMatchGameId(MatchGame matchGame) {
+        return matchUserRepository.findByMatchGame(matchGame);
     }
 }

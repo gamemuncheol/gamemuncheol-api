@@ -13,7 +13,7 @@ public class MatchUser {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "gameId")
+    @JoinColumn(name = "gameId", referencedColumnName = "gameId")
     private MatchGame matchGame;
     private String puuid;
     /**
@@ -22,22 +22,12 @@ public class MatchUser {
     private String nickname;
     private String championThumbnail;
     private boolean win;
+
     public void setMatchGame(MatchGame matchGame) {
-        if(this.matchGame != null) {
+        if (this.matchGame != null) {
             this.matchGame.getMatchUsers().remove(this);
         }
         this.matchGame = matchGame;
         matchGame.addMatchUser(this);
-    }
-
-    public static class Dummy {
-        public static MatchUser createDummy(String puuid) {
-            return MatchUser.builder()
-                    .puuid(puuid)
-                    .nickname(puuid)
-                    .championThumbnail(puuid)
-                    .win(true)
-                    .build();
-        }
     }
 }
