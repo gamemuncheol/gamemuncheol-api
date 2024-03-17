@@ -15,7 +15,7 @@ public class BoardApiController {
     private final BoardService boardService;
     private final S3Service videoService;
 
-    @GetMapping("/searchMatch/{gameId}")
+    @GetMapping("/search-match/{gameId}")
     public MatchGameResponse searchMatch(@PathVariable String gameId) {
         return boardService.searchMatch(gameId);
     }
