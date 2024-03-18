@@ -23,8 +23,7 @@ import lombok.*;
 @Builder @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppleUserInfo {
-
+public class AppleCredential {
     /**
      * https://developer.apple.com/documentation/signinwithapplerestapi/authenticating_users_with_sign_in_with_apple
      */

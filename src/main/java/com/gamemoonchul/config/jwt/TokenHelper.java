@@ -1,6 +1,7 @@
 package com.gamemoonchul.config.jwt;
 
 import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -18,99 +19,79 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class TokenHelper {
 
-  private static final long ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 120; // 2h
-  private static final long REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 24 * 7; // 7d
+    private static final long ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 120; // 2h
+    private static final long REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 24 * 7; // 7d
 
-  @Value("${jwt.secret}")
-  private String secret;
-  private Key key;
+    @Value("${jwt.secret}")
+    private String secret;
+    private Key key;
 
-  @PostConstruct
-  public void init() {
-    byte[] key = Decoders.BASE64URL.decode(secret);
-    this.key = Keys.hmacShaKeyFor(key);
-  }
-
-  public boolean validateToken(String token) {
-    try {
-      Jwts.parserBuilder()
-          .setSigningKey(key)
-          .build()
-          .parseClaimsJws(token);
-
-      return true;
-    } catch (UnsupportedJwtException | MalformedJwtException exception) {
-      throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
-    } catch (SignatureException exception) {
-      throw new ApiException(JwtStatus.SIGNATURE_NOT_MATCH);
-    } catch (ExpiredJwtException exception) {
-      throw new ApiException(JwtStatus.EXPIRED_TOKEN);
-    } catch (IllegalArgumentException exception) {
-      throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
-    } catch (Exception exception) {
-      throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
+    @PostConstruct
+    public void init() {
+        byte[] key = Decoders.BASE64URL.decode(secret);
+        this.key = Keys.hmacShaKeyFor(key);
     }
-  }
 
-  public TokenDto createToken(Authentication authentication) {
-    TokenDto tokenDto = TokenDto.builder()
-        .accessToken(
-            Jwts.builder()
-                .setSubject(authentication.getName())
-                .setIssuedAt(new Date())
-                .setExpiration(
-                    new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
-                )
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact()
-        )
-        .refreshToken(
-            Jwts.builder()
-                .setSubject(authentication.getName())
-                .setIssuedAt(new Date())
-                .setExpiration(
-                    new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
-                )
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact()
-        )
-        .build();
-    return tokenDto;
-  }
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
 
-  public TokenDto createToken(String email) {
-    TokenDto tokenDto = TokenDto.builder()
-        .accessToken(
-            Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(
-                    new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
-                )
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact()
-        )
-        .refreshToken(
-            Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(
-                    new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
-                )
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact()
-        )
-        .build();
-    return tokenDto;
-  }
+            return true;
+        } catch (UnsupportedJwtException | MalformedJwtException exception) {
+            throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
+        } catch (SignatureException exception) {
+            throw new ApiException(JwtStatus.SIGNATURE_NOT_MATCH);
+        } catch (ExpiredJwtException exception) {
+            throw new ApiException(JwtStatus.EXPIRED_TOKEN);
+        } catch (IllegalArgumentException exception) {
+            throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
+        } catch (Exception exception) {
+            throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
+        }
+    }
 
-   public Authentication getAuthentication(String token) {
+    public TokenDto createToken(OAuth2UserInfo oAuth2UserInfo) {
+        Map<String, String> claims = Map.of(
+                "email", oAuth2UserInfo.getEmail(),
+                "identifier", oAuth2UserInfo.getIdentifier(),
+                "provider", oAuth2UserInfo.getProvider().toString()
+        );
+        TokenDto tokenDto = TokenDto.builder()
+                .accessToken(
+                        Jwts.builder()
+                                .setClaims(claims)
+                                .setIssuedAt(new Date())
+                                .setExpiration(
+                                        new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
+                                )
+                                .signWith(key, SignatureAlgorithm.HS512)
+                                .compact()
+                )
+                .refreshToken(
+                        Jwts.builder()
+                                .setClaims(claims)
+                                .setIssuedAt(new Date())
+                                .setExpiration(
+                                        new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
+                                )
+                                .signWith(key, SignatureAlgorithm.HS512)
+                                .compact()
+                )
+                .build();
+        return tokenDto;
+    }
+
+    public Authentication getAuthentication(String token) {
         // 토큰을 파싱해서 클레임을 뽑아냄
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -118,12 +99,18 @@ public class TokenHelper {
                 .parseClaimsJws(token)
                 .getBody();
         // Claim에서 User 정보를 뽑아냄
-        UserDetails user = new User(claims.getSubject(), "", Collections.emptyList());
+        TokenInfo tokenInfo = new TokenInfo(
+                claims.get("email", String.class),
+                claims.get("provider", String.class),
+                claims.get("identifier", String.class),
+                claims.getIssuedAt(),
+                claims.getExpiration()
+        );
 
         // UserDetails를 이용해서 UsernamePasswordAuthenticationToken 객체를 생성해서 리턴
         // pricipal : 사용자의 세부 정보
         // credentials : 사용자의 비밀번호
         // authorities : 사용자의 권한 정보
-        return new UsernamePasswordAuthenticationToken(user, "", Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(tokenInfo, "", Collections.emptyList());
     }
 }

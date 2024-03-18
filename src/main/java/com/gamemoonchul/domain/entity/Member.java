@@ -33,6 +33,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private String identifier;
 
+    @Setter
     @Column(nullable = false, length = 30)
     private String nickname;
 
@@ -53,6 +54,11 @@ public class Member extends BaseTimeEntity {
     public Member update(String name, String nickname) {
         this.name = name;
         this.picture = picture;
+        return this;
+    }
+
+    public Member updateNickname(String nickname) {
+        this.nickname = nickname;
         return this;
     }
 

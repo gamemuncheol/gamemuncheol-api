@@ -1,7 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.AppleService;
-import com.gamemoonchul.config.apple.entities.AppleUserInfo;
+import com.gamemoonchul.config.apple.entities.AppleCredential;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
@@ -18,7 +18,7 @@ public class AppleOpenApiController {
 
   @PostMapping("/sign-up")
   public TokenDto signInOrUp(@RequestBody AppleSignUpRequestDto signUpRequest) {
-    AppleUserInfo userInfo = appleService.validateRequest(signUpRequest);
+    AppleCredential userInfo = appleService.validateRequest(signUpRequest);
     TokenDto token = appleService.signInOrUp(userInfo);
     return token;
   }

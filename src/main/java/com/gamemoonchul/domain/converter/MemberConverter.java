@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.converter;
 
-import com.gamemoonchul.config.apple.entities.AppleUserInfo;
+import com.gamemoonchul.config.apple.entities.AppleCredential;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
@@ -10,11 +10,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class MemberConverter {
+    private static String randomNickname() {
+        return UUID.randomUUID().toString().substring(0, 30);
+    }
     public static Member toEntity(OAuth2UserInfo userInfo) {
         Optional<String> nickname = Optional.ofNullable(userInfo
                 .getNickname());
         if (nickname.isEmpty()) {
-            nickname = Optional.ofNullable(UUID.randomUUID().toString());
+            nickname = Optional.of(randomNickname());
         }
         Member member = Member.builder()
                 .role(MemberRole.USER)
@@ -34,12 +37,12 @@ public class MemberConverter {
         return member;
     }
 
-    public static Member toEntity(AppleUserInfo userInfo) {
+    public static Member toEntity(AppleCredential userInfo) {
         Member member = Member.builder()
                 .role(MemberRole.USER)
                 .name(userInfo.getName())
                 .identifier(userInfo.getSub()).provider(OAuth2Provider.APPLE)
-                .nickname(UUID.randomUUID().toString())
+                .nickname(randomNickname())
                 .score(0.0)
                 .email(userInfo.getEmail())
                 .picture(null)

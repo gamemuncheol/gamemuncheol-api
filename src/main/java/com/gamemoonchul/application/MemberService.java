@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
@@ -8,6 +9,7 @@ import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +33,14 @@ public class MemberService {
       throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
     }
     memberRepository.delete(member.get());
+  }
+
+  public void updateNickNameOrThrow(Member member, String nickName) {
+    List<Member> savedMember = memberRepository.findByNickname(nickName);
+    if(!savedMember.isEmpty()) {
+      throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);
+    }
+    Member updatedMember = member.updateNickname(nickName);
+    memberRepository.save(updatedMember);
   }
 }
