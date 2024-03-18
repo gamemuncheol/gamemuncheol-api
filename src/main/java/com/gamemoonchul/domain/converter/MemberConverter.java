@@ -10,11 +10,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class MemberConverter {
+    private static String randomNickname() {
+        return UUID.randomUUID().toString().substring(0, 30);
+    }
     public static Member toEntity(OAuth2UserInfo userInfo) {
         Optional<String> nickname = Optional.ofNullable(userInfo
                 .getNickname());
         if (nickname.isEmpty()) {
-            nickname = Optional.ofNullable(UUID.randomUUID().toString());
+            nickname = Optional.of(randomNickname());
         }
         Member member = Member.builder()
                 .role(MemberRole.USER)
@@ -39,7 +42,7 @@ public class MemberConverter {
                 .role(MemberRole.USER)
                 .name(userInfo.getName())
                 .identifier(userInfo.getSub()).provider(OAuth2Provider.APPLE)
-                .nickname(UUID.randomUUID().toString())
+                .nickname(randomNickname())
                 .score(0.0)
                 .email(userInfo.getEmail())
                 .picture(null)
