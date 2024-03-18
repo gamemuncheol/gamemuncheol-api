@@ -3,9 +3,11 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.apple.AppleIDTokenValidator;
 import com.gamemoonchul.config.apple.entities.AppleCredential;
+import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+@Transactional
 @SpringBootTest
 public class AppleServiceTest {
 
@@ -45,7 +48,7 @@ public class AppleServiceTest {
     private AppleSignUpRequestDto validSignUpRequest;
     private AppleSignUpRequestDto invalidNameSignUpRequest;
 
-      @BeforeEach
+    @BeforeEach
     void setUp() {
         // 테스트 실행 전 필요한 객체를 초기화
         mockAppleUserInfo = new AppleCredential();
@@ -78,7 +81,7 @@ public class AppleServiceTest {
 
 
   @Test
-  @DisplayName("signInOrUp 메서드를 통해서 생성될 수 있는 회원의 이메일은 중복되지 않아야 한다.")
+  @DisplayName("동일한 이메일, provider, identifier를 가진 회원이 이미 존재하는 경우 회원이 중복 생성되지 않는지 검증한다.")
   public void signInOrUp() {
     // given
     AppleCredential appleUserInfo = AppleCredential.builder()
@@ -96,7 +99,7 @@ public class AppleServiceTest {
     // when
     appleService.signInOrUp(appleUserInfo);
     appleService.signInOrUp(appleUserInfo);
-    List<Member> members = memberRepository.findByEmail(appleUserInfo.getEmail());
+    List<Member> members = memberRepository.findAllByEmailAndProviderAndIdentifier(appleUserInfo.getEmail(), OAuth2Provider.APPLE, appleUserInfo.getSub());
 
     // then
     assertEquals(members.size(), 1);
