@@ -9,6 +9,7 @@ import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,8 +36,8 @@ public class MemberService {
   }
 
   public void updateNickNameOrThrow(Member member, String nickName) {
-    Optional<Member> savedMember = memberRepository.findByNickname(nickName);
-    if(savedMember.isPresent()) {
+    List<Member> savedMember = memberRepository.findByNickname(nickName);
+    if(!savedMember.isEmpty()) {
       throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);
     }
     Member updatedMember = member.updateNickname(nickName);
