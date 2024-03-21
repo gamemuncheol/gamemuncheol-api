@@ -34,13 +34,13 @@ class LolSearchAdapterTest {
     @DisplayName("게임 아이디로 게임 검색 테스트")
     void searchMatche() {
         // given
-        String matchId = "6862565824";
+        String matchId = "KR_6995213153";
 
         // when
         MatchRecord result = lolSearchService.searchMatch(matchId);
 
         // then
-        assertEquals("KR_" + matchId, result.metadata().matchId());
+        assertEquals(matchId, result.metadata().matchId());
     }
 
 

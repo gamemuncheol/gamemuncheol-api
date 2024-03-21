@@ -36,7 +36,6 @@ public class LolSearchAdapter {
      */
      public MatchRecord searchMatch(String matchId) {
          try {
-             matchId = "KR_" + matchId; // "KR_" + "6862565824
              MatchRecord result =  restTemplate.getForObject(
                      "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey,
                      MatchRecord.class

@@ -56,13 +56,13 @@ class BoardServiceTest {
     void searchNotSavedGame() {
         // given
         boardService = new BoardService(matchGameService, matchUserService, lolSearchAdapter);
-        String gameId = "6980800844";
+        String gameId = "KR_6980800844";
 
         // when
         MatchGameResponse response = boardService.searchMatch(gameId);
 
         // then
-        assertEquals(response.getGameId(), "KR_" + gameId);
+        assertEquals(response.getGameId(), gameId);
         assertEquals(response.getMatchUsers().size(), 10);
     }
 }
