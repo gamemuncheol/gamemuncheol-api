@@ -12,13 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -39,78 +38,90 @@ public class TokenHelper {
         this.key = Keys.hmacShaKeyFor(key);
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, TokenType type) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-
+            TokenInfo tokenInfo = getTokenInfo(token);
+            if(tokenInfo.tokenType() != type) {
+                throw new ApiException(JwtStatus.TOKEN_TYPE_NOT_MATCH);
+            }
             return true;
-        } catch (UnsupportedJwtException | MalformedJwtException exception) {
-            throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
         } catch (SignatureException exception) {
+            log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
             throw new ApiException(JwtStatus.SIGNATURE_NOT_MATCH);
         } catch (ExpiredJwtException exception) {
+            log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
             throw new ApiException(JwtStatus.EXPIRED_TOKEN);
-        } catch (IllegalArgumentException exception) {
-            throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
         } catch (Exception exception) {
+            log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
             throw new ApiException(JwtStatus.NOT_VALID_TOKEN);
         }
     }
 
-    public TokenDto createToken(OAuth2UserInfo oAuth2UserInfo) {
+    public TokenDto generateToken(OAuth2UserInfo oAuth2UserInfo) {
         Map<String, String> claims = Map.of(
                 "email", oAuth2UserInfo.getEmail(),
                 "identifier", oAuth2UserInfo.getIdentifier(),
                 "provider", oAuth2UserInfo.getProvider().toString()
         );
-        TokenDto tokenDto = TokenDto.builder()
-                .accessToken(
-                        Jwts.builder()
-                                .setClaims(claims)
-                                .setIssuedAt(new Date())
-                                .setExpiration(
-                                        new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
-                                )
-                                .signWith(key, SignatureAlgorithm.HS512)
-                                .compact()
-                )
-                .refreshToken(
-                        Jwts.builder()
-                                .setClaims(claims)
-                                .setIssuedAt(new Date())
-                                .setExpiration(
-                                        new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS)
-                                )
-                                .signWith(key, SignatureAlgorithm.HS512)
-                                .compact()
-                )
+        return createTokenDto(claims);
+    }
+
+    public TokenDto generateToken(TokenInfo tokenInfo) {
+        Map<String, String> claims = Map.of(
+                "email", tokenInfo.email(),
+                "identifier", tokenInfo.identifier(),
+                "provider", tokenInfo.provider()
+        );
+        return createTokenDto(claims);
+    }
+
+    private TokenDto createTokenDto(Map<String, String> claims) {
+        Map<String, String> accessClaims = new HashMap<>(claims);
+        Map<String, String> refreshClaims = new HashMap<>(claims);
+        accessClaims.put("type", TokenType.ACCESS.toString());
+        refreshClaims.put("type", TokenType.REFRESH.toString());
+
+        return TokenDto.builder()
+                .accessToken(createToken(accessClaims, ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS))
+                .refreshToken(createToken(refreshClaims, REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS))
                 .build();
-        return tokenDto;
+    }
+
+    private String createToken(Map<String, String> claims, long expirationTimeInMilliseconds) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + expirationTimeInMilliseconds))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
     }
 
     public Authentication getAuthentication(String token) {
+        // UserDetails를 이용해서 UsernamePasswordAuthenticationToken 객체를 생성해서 리턴
+        // pricipal : 사용자의 세부 정보
+        // credentials : 사용자의 비밀번호
+        // authorities : 사용자의 권한 정보
+        return new UsernamePasswordAuthenticationToken(getTokenInfo(token), "", Collections.emptyList());
+    }
+
+    public TokenInfo getTokenInfo(String token) {
         // 토큰을 파싱해서 클레임을 뽑아냄
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        // Claim에서 User 정보를 뽑아냄
-        TokenInfo tokenInfo = new TokenInfo(
-                claims.get("email", String.class),
-                claims.get("provider", String.class),
-                claims.get("identifier", String.class),
-                claims.getIssuedAt(),
-                claims.getExpiration()
-        );
-
-        // UserDetails를 이용해서 UsernamePasswordAuthenticationToken 객체를 생성해서 리턴
-        // pricipal : 사용자의 세부 정보
-        // credentials : 사용자의 비밀번호
-        // authorities : 사용자의 권한 정보
-        return new UsernamePasswordAuthenticationToken(tokenInfo, "", Collections.emptyList());
+        TokenInfo tokenInfo = TokenInfo.builder().
+                email(claims.get("email", String.class)).
+                provider(claims.get("provider", String.class)).
+                identifier(claims.get("identifier", String.class)).
+                tokenType(TokenType.valueOf(claims.get("type", String.class)))
+                .iat(claims.getIssuedAt())
+                .exp(claims.getExpiration()).build();
+        return tokenInfo;
     }
 }
