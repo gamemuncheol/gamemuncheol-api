@@ -34,7 +34,7 @@ public class AppleService {
     Member member = MemberConverter.toEntity(credential);
     AppleOAuth2UserInfo userInfo = new AppleOAuth2UserInfo(credential);
     memberService.signInOrUp(member);
-    TokenDto token  = tokenHelper.createToken(userInfo);
+    TokenDto token  = tokenHelper.generateToken(userInfo);
     return token;
   }
 }
