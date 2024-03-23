@@ -4,9 +4,9 @@ name: CD with Gradle
 # main 브랜치로 push되거나 pull request가 발생했을 때 워크플로우를 실행
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "develop" ]
 
 # 워크플로우에서는 저장소 내용을 읽을 수 있는 권한만 설정
 permissions:
@@ -30,37 +30,18 @@ jobs:
           distribution: "adopt"
 
       # 세 번째 단계: GitHub secrets에서 데이터를 가져와 application.properties 파일 생성
-#      - name: Make application.properties
-#        run: |
-#          cd ./src/main/resources
-#          touch ./application.properties
-#          echo "${{ secrets.PROPERTIES }}" > ./application.properties
-#        shell: bash
+      - name: Make application.yaml
+        run: |
+          cd ./src/main/resources
+          touch ./application.yaml
+          echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
+          cd ../../test/resources
+          touch ./application.yaml
+          echo "${{ secrets.APPLICATION_TEST_YAML }}" > ./application.yaml
+        shell: bash
 
-      # 네 번째 단계: Gradle을 사용해 프로젝트 빌드, 테스트는 제외
+      # 네 번째 단계: Gradle을 사용해 프로젝트 빌
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew clean build -x test
-
-      # 다섯 번째 단계: Docker 이미지를 빌드하고 Docker 저장소에 푸시
-      - name: Docker build & push to docker repo
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/directors-dev .
-          docker push ${{ secrets.DOCKER_REPO }}/directors-dev
-      # 실행주체: GitHub Actions > GitHub Infra // End
-
-      # 여섯 번째 단계: SSH를 사용하여 서버에 배포
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ubuntu
-          key: ${{ secrets.KEY }}
-          envs: GITHUB_SHA
-          script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_REPO }}/directors-dev
-            docker-compose up -d
-            docker image prune -f
+          ./gradlew clean build
