@@ -66,6 +66,6 @@ jobs:
       - name: S3에 업로드
         run: aws deploy push --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://gamemuncheol-s3/deploy.zip --source ./deploy
       - name: EC2에 배포
-        run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --s3-location bucket=gamemuncheol-s3,key=deploy.
+        run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --s3-location bucket=gamemuncheol-s3,key=deploy.zip,bundleType=zip
 
 
