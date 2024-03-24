@@ -35,6 +35,7 @@ jobs:
           cd ./src/main/resources
           touch ./application.yaml
           echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
+          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./keystore-aws.p12
           cd ../../test/resources
           touch ./application.yaml
           echo "${{ secrets.APPLICATION_TEST_YAML }}" > ./application.yaml
