@@ -52,7 +52,8 @@ jobs:
 
       # Jar 파일 Copy
       - name: Copy Jar
-        run: cp ./build/libs/*.jar ./deploy/
+        run: |
+          cp ./build/libs/*.jar ./deploy/
           cp ./appspec.yml ./deploy/
           cp -r ./scripts ./deploy/
 
