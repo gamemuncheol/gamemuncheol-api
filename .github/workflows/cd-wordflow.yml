@@ -57,16 +57,6 @@ jobs:
           cp ./appspec.yml ./deploy/
           cp -r ./scripts ./deploy/
 
-      # 압축파일 형태로 전달
-      - name: Make zip file
-        run: zip -r ./springboot-intro-build.zip ./deploy
-
-      # CodeDeploy 파일 복사
-      - name: Copy CodeDeploy Files
-        run: |
-          cp ./appspec.yml ./deploy/
-          cp -r ./scripts ./deploy/
-
       - name: Deliver to AWS S3
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -74,9 +64,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: S3에 업로드
-        run: aws deploy push --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://gamemuncheol-s3/deploy --source ./deploy
+        run: aws deploy push --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://gamemuncheol-s3/deploy.zip --source ./deploy
       - name: EC2에 배포
-        #        run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=cicdtest/$GITHUB_SHA.zip,bundleType=zip
-        run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --s3-location bucket=gamemuncheol-s3,key=deploy/springboot-intro-build.zip,bundleType=zip
+        run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --s3-location bucket=gamemuncheol-s3,key=deploy.
 
 
