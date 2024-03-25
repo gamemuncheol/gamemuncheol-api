@@ -42,6 +42,12 @@ public class Member extends BaseTimeEntity {
 
     private String picture;
 
+    @Column(name = "privacy_agreed",nullable = false)
+    private boolean privacyAgreed;
+
+    @Column(name = "privacy_agreed_at")
+    private LocalDateTime privacyAgreedAt;
+
     @Column(nullable = false)
     private Double score;
 

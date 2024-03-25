@@ -11,5 +11,6 @@ public class MemberResponseDto {
     private String nickname;
     private String email;
     private String picture;
+    private boolean privacyAgreed;
     private Double score;
 }

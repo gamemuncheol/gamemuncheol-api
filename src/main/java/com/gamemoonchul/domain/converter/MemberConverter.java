@@ -31,6 +31,8 @@ public class MemberConverter {
                 .nickname(
                         nickname.get()
                 )
+                .privacyAgreed(false)
+                .privacyAgreedAt(null)
                 .score(0.0)
                 .email(userInfo
                         .getEmail())
@@ -48,6 +50,8 @@ public class MemberConverter {
                 .identifier(userInfo.getSub()).provider(OAuth2Provider.APPLE)
                 .nickname(randomNickname())
                 .score(0.0)
+                .privacyAgreed(false)
+                .privacyAgreedAt(null)
                 .email(userInfo.getEmail())
                 .picture(null)
                 .birth(null)
@@ -60,6 +64,7 @@ public class MemberConverter {
                 .name(entity.getName())
                 .nickname(entity.getNickname())
                 .email(entity.getEmail())
+                .privacyAgreed(entity.isPrivacyAgreed())
                 .picture(entity.getPicture())
                 .score(entity.getScore())
                 .build();
