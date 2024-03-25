@@ -6,6 +6,7 @@ import com.gamemoonchul.config.oauth.CustomAuthenticationEntryPoint;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
+import com.gamemoonchul.domain.enums.MemberRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -54,8 +55,11 @@ public class SpringSecurityConfig {
                             .permitAll()
                             .requestMatchers(EXCEPTION.toArray(new String[0]))
                             .permitAll()
-                            .anyRequest()
-                            .authenticated()
+                            .requestMatchers("/api/**")
+                            .hasAnyRole("USER")
+                            .requestMatchers("/privacy/**")
+                            .hasAnyRole("PRIVACY_NOT_AGREED")
+                            .anyRequest().authenticated();
                     ;
                 })
                 .csrf(AbstractHttpConfigurer::disable)

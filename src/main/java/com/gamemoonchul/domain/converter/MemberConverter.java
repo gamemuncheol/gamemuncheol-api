@@ -24,7 +24,7 @@ public class MemberConverter {
             nickname = Optional.of(randomNickname());
         }
         Member member = Member.builder()
-                .role(MemberRole.USER)
+                .role(MemberRole.PRIVACY_NOT_AGREED)
                 .name(userInfo.getName())
                 .identifier(userInfo.getIdentifier())
                 .provider(userInfo.getProvider())
@@ -45,7 +45,7 @@ public class MemberConverter {
 
     public static Member toEntity(AppleCredential userInfo) {
         Member member = Member.builder()
-                .role(MemberRole.USER)
+                .role(MemberRole.PRIVACY_NOT_AGREED)
                 .name(userInfo.getName())
                 .identifier(userInfo.getSub()).provider(OAuth2Provider.APPLE)
                 .nickname(randomNickname())
