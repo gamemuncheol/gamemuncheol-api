@@ -6,10 +6,10 @@ import com.gamemoonchul.domain.enums.MemberRole;
 public class MemberDummy {
     public static Member create() {
         return Member.builder()
-                .provider(OAuth2Provider.APPLE)
-                .email("적길동@gmail.com")
+                .provider(OAuth2Provider.GOOGLE)
+                .email("test@gmail.com")
                 .nickname("적길동")
-                .identifier("1234567890")
+                .identifier("test")
                 .name("적길동")
                 .picture("https://www.naver.com")
                 .score(0.0)
