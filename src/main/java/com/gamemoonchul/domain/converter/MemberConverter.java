@@ -5,14 +5,18 @@ import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.enums.MemberRole;
+import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class MemberConverter {
     private static String randomNickname() {
         return UUID.randomUUID().toString().substring(0, 30);
     }
+
     public static Member toEntity(OAuth2UserInfo userInfo) {
         Optional<String> nickname = Optional.ofNullable(userInfo
                 .getNickname());
@@ -49,5 +53,15 @@ public class MemberConverter {
                 .birth(null)
                 .build();
         return member;
+    }
+
+    public static MemberResponseDto toResponseDto(Member entity) {
+        return MemberResponseDto.builder()
+                .name(entity.getName())
+                .nickname(entity.getNickname())
+                .email(entity.getEmail())
+                .picture(entity.getPicture())
+                .score(entity.getScore())
+                .build();
     }
 }
