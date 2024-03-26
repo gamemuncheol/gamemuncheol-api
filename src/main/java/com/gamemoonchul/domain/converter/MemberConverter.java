@@ -24,13 +24,15 @@ public class MemberConverter {
             nickname = Optional.of(randomNickname());
         }
         Member member = Member.builder()
-                .role(MemberRole.USER)
+                .role(MemberRole.PRIVACY_NOT_AGREED)
                 .name(userInfo.getName())
                 .identifier(userInfo.getIdentifier())
                 .provider(userInfo.getProvider())
                 .nickname(
                         nickname.get()
                 )
+                .privacyAgreed(false)
+                .privacyAgreedAt(null)
                 .score(0.0)
                 .email(userInfo
                         .getEmail())
@@ -43,11 +45,13 @@ public class MemberConverter {
 
     public static Member toEntity(AppleCredential userInfo) {
         Member member = Member.builder()
-                .role(MemberRole.USER)
+                .role(MemberRole.PRIVACY_NOT_AGREED)
                 .name(userInfo.getName())
                 .identifier(userInfo.getSub()).provider(OAuth2Provider.APPLE)
                 .nickname(randomNickname())
                 .score(0.0)
+                .privacyAgreed(false)
+                .privacyAgreedAt(null)
                 .email(userInfo.getEmail())
                 .picture(null)
                 .birth(null)
@@ -60,6 +64,7 @@ public class MemberConverter {
                 .name(entity.getName())
                 .nickname(entity.getNickname())
                 .email(entity.getEmail())
+                .privacyAgreed(entity.isPrivacyAgreed())
                 .picture(entity.getPicture())
                 .score(entity.getScore())
                 .build();

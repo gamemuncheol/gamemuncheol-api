@@ -1,7 +1,10 @@
 package com.gamemoonchul.config.jwt;
 
 import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
+import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,13 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,6 +32,8 @@ public class TokenHelper {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    private final MemberRepository memberRepository;
     private Key key;
 
     @PostConstruct
@@ -105,7 +109,18 @@ public class TokenHelper {
         // pricipal : 사용자의 세부 정보
         // credentials : 사용자의 비밀번호
         // authorities : 사용자의 권한 정보
-        return new UsernamePasswordAuthenticationToken(getTokenInfo(token), "", Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(getTokenInfo(token), "", getAuthorities(token));
+    }
+
+    private Collection<GrantedAuthority> getAuthorities(String token) {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        TokenInfo tokenInfo = getTokenInfo(token);
+        Optional<Member> member = memberRepository.findTop1ByEmailAndProviderAndIdentifier(tokenInfo.email(), OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier());
+        if (member.isPresent()) {
+            authorities.add(new SimpleGrantedAuthority(member.get().getRole().getKey()));
+
+        }
+        return authorities;
     }
 
     public TokenInfo getTokenInfo(String token) {
