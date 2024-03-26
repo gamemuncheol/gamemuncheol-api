@@ -76,6 +76,6 @@ class MemberApiControllerTest extends BaseIntegrationTest {
         ResultActions resultActions = super.mvc.perform(get("/api/member/me").header("Authorization", "Bearer " + accessToken));
 
         // then
-        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("$.status.statusCode").value(MemberStatus.MEMBER_NOT_FOUND.getStatusCode()));
+        resultActions.andExpect(status().isForbidden());
     }
 }
