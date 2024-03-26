@@ -6,6 +6,7 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,5 +19,10 @@ public class MemberPrivacyController {
     @PatchMapping("/agree")
     public MemberResponseDto agreePrivacy(@MemberSession Member member) {
         return memberService.privacyAgree(member);
+    }
+
+    @GetMapping("/is-agreed")
+    public boolean isAgreedPrivacy(@MemberSession Member member) {
+        return member.isPrivacyAgreed();
     }
 }

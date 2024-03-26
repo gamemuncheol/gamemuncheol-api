@@ -58,7 +58,7 @@ public class SpringSecurityConfig {
                             .requestMatchers("/api/**")
                             .hasAnyRole("USER")
                             .requestMatchers("/privacy/**")
-                            .hasAnyRole("PRIVACY_NOT_AGREED")
+                            .hasAnyRole("PRIVACY_NOT_AGREED", "USER")
                             .anyRequest().authenticated();
                     ;
                 })
