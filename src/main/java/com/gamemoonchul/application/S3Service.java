@@ -31,7 +31,7 @@ public class S3Service {
 
         try {
             String fileName = file.getOriginalFilename();
-            String fileUrl = "https://" + bucket + "/test" + fileName;
+            String fileUrl = "https://gamemuncheol-s3.s3.ap-southeast-2.amazonaws.com/" + fileName;
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
