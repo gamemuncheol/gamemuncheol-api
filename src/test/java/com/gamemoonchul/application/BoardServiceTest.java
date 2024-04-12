@@ -4,7 +4,7 @@ import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
-import com.gamemoonchul.infrastructure.adapter.RiotApiPort;
+import com.gamemoonchul.infrastructure.adapter.RiotApiAdapter;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @Transactional
 class BoardServiceTest {
-    private RiotApiPort mockLolSearch = mock(RiotApiPort.class);
+    private RiotApiAdapter mockLolSearch = mock(RiotApiAdapter.class);
 
     @Autowired
     private MatchGameService matchGameService;
@@ -29,7 +29,7 @@ class BoardServiceTest {
     private MatchUserService matchUserService;
 
     @Autowired
-    private RiotApiPort riotApiAdapter;
+    private RiotApiAdapter riotApiAdapter;
 
     private BoardService boardService;
 

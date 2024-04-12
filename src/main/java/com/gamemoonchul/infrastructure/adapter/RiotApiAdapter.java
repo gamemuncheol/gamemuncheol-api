@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.adapter;
 
+import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
@@ -10,13 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class RiotApiPort implements com.gamemoonchul.application.ports.output.RiotApiPort {
+public class RiotApiAdapter implements RiotApiPort {
     @Value("${lol.api.key}")
     private String apiKey;
     private final RestTemplate restTemplate;
 
     @Autowired
-    RiotApiPort(RestTemplate restTemplate) {
+    RiotApiAdapter(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -34,6 +35,7 @@ public class RiotApiPort implements com.gamemoonchul.application.ports.output.Ri
      * @param matchId
      * @return
      */
+    @Override
      public MatchRecord searchMatch(String matchId) {
          try {
              MatchRecord result =  restTemplate.getForObject(
