@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/board")
 public class BoardApiController {
     private final BoardService boardService;
-    private final S3Service videoService;
+    private final S3Service s3Service;
 
     @GetMapping("/search-match/{gameId}")
     public MatchGameResponse searchMatch(@PathVariable String gameId) {
@@ -22,7 +22,14 @@ public class BoardApiController {
 
     @PostMapping("/video-upload")
     public String uploadVideo(@RequestParam("file") MultipartFile file) {
-        String fileUrl = videoService.upload(file);
+        String fileUrl = s3Service.uploadVideo(file);
         return fileUrl;
     }
+
+    @PostMapping("/thumbnail-upload")
+    public String uploadThumbnail(@RequestParam("file") MultipartFile file) {
+        String fileUrl = s3Service.uploadImage(file);
+        return fileUrl;
+    }
+
 }

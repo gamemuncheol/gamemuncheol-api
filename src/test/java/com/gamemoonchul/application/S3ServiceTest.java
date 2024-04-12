@@ -38,7 +38,7 @@ class S3ServiceTest {
 
 
         // when
-        fileName = s3Service.upload(file);
+        fileName = s3Service.uploadVideo(file);
 
 
         //then
