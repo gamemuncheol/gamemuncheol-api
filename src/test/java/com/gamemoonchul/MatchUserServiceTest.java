@@ -1,6 +1,7 @@
 package com.gamemoonchul;
 
 import com.gamemoonchul.application.MatchGameService;
+import com.gamemoonchul.application.MatchUserService;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;

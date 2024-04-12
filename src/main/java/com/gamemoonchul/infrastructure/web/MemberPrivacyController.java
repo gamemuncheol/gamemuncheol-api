@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure;
+package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.MemberService;
 import com.gamemoonchul.common.annotation.MemberSession;

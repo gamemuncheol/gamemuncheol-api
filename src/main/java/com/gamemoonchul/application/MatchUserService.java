@@ -1,4 +1,4 @@
-package com.gamemoonchul;
+package com.gamemoonchul.application;
 
 import com.gamemoonchul.domain.converter.riot.MatchUserConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
