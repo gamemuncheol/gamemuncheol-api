@@ -4,7 +4,7 @@ import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
-import com.gamemoonchul.infrastructure.adapter.LolSearchAdapter;
+import com.gamemoonchul.infrastructure.adapter.RiotApiPort;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @Transactional
 class BoardServiceTest {
-    private LolSearchAdapter mockLolSearch = mock(LolSearchAdapter.class);
+    private RiotApiPort mockLolSearch = mock(RiotApiPort.class);
 
     @Autowired
     private MatchGameService matchGameService;
@@ -29,7 +29,7 @@ class BoardServiceTest {
     private MatchUserService matchUserService;
 
     @Autowired
-    private LolSearchAdapter lolSearchAdapter;
+    private RiotApiPort riotApiAdapter;
 
     private BoardService boardService;
 
@@ -54,7 +54,7 @@ class BoardServiceTest {
     @DisplayName("저장되지 않은 게임이 있을 때 lolSearchAdapter를 통해서 검색한다")
     void searchNotSavedGame() {
         // given
-        boardService = new BoardService(matchGameService, matchUserService, lolSearchAdapter);
+        boardService = new BoardService(matchGameService, matchUserService, riotApiAdapter);
         String gameId = "KR_6980800844";
 
         // when

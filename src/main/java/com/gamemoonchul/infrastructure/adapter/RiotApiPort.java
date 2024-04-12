@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class LolSearchAdapter {
+public class RiotApiPort implements com.gamemoonchul.application.ports.output.RiotApiPort {
     @Value("${lol.api.key}")
     private String apiKey;
     private final RestTemplate restTemplate;
 
     @Autowired
-    LolSearchAdapter(RestTemplate restTemplate) {
+    RiotApiPort(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
