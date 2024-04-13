@@ -18,7 +18,7 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     public PostResponseDto upload(PostUploadRequest request,
-                                  @MemberSession Member member) {
+                                  Member member) {
         Post entity = PostConverter.requestToEntity(request, member);
         Post saved = postRepository.save(entity);
         PostResponseDto response = PostConverter.toResponse(saved);
