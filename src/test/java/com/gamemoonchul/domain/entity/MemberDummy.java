@@ -17,6 +17,20 @@ public class MemberDummy {
                 .build();
     }
 
+    public static Member createWithId(String id) {
+        return Member.builder()
+                .provider(OAuth2Provider.GOOGLE)
+                .email(id + "@gmail.com")
+                .nickname(id)
+                .identifier(id)
+                .name(id)
+                .picture("https://www.naver.com")
+                .score(0.0)
+                .role(MemberRole.USER)
+                .build();
+    }
+
+
     public static Member createPrivacyRole() {
         return Member.builder()
                 .provider(OAuth2Provider.GOOGLE)
