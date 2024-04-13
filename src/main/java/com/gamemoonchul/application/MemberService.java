@@ -28,7 +28,7 @@ public class MemberService {
     private final MemberConverter memberConverter;
 
     public void signInOrUp(Member member) {
-        Optional<Member> alreadyExistMember = memberRepository.findTop1ByEmailAndProviderAndIdentifier(member.getEmail(), member.getProvider(), member.getIdentifier());
+        Optional<Member> alreadyExistMember = memberRepository.findTop1ByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
         if (alreadyExistMember.isEmpty()) {
             memberRepository.save(member);
         } else {
@@ -37,7 +37,7 @@ public class MemberService {
     }
 
     public void unlink(String email, OAuth2Provider provider, String identifier) {
-        Optional<Member> member = memberRepository.findTop1ByEmailAndProviderAndIdentifier(email, provider, identifier);
+        Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
         if (member.isEmpty()) {
             throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
         }
