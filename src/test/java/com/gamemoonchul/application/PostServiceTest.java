@@ -26,6 +26,8 @@ class PostServiceTest {
     @Autowired
     private PostRepository postRepository;
 
+
+
     @Test
     @DisplayName("게시물 업로드 테스트 ")
     public void default_upload_test() {

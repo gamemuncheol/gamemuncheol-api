@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class RiotApiAdapterTest {
     @Autowired
-    RiotApiPort lolSearchService;
+    RiotApiPort riotApi;
 
 //    @Test
 //    @DisplayName("롤 유저 검색 테스트")
@@ -37,7 +37,7 @@ class RiotApiAdapterTest {
         String matchId = "KR_6995213153";
 
         // when
-        MatchRecord result = lolSearchService.searchMatch(matchId);
+        MatchRecord result = riotApi.searchMatch(matchId);
 
         // then
         assertEquals(matchId, result.metadata().matchId());
@@ -52,7 +52,7 @@ class RiotApiAdapterTest {
 
         // when // then
         assertThrows(ApiException.class, () -> {
-            lolSearchService.searchMatch(matchId);
+            riotApi.searchMatch(matchId);
         }, SearchStatus.SEARCH_RESULT_NOT_FOUND.getMessage());
     }
 }

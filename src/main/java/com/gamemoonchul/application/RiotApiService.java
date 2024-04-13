@@ -1,8 +1,8 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
-import com.gamemoonchul.infrastructure.adapter.RiotApiAdapter;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,12 +11,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BoardService {
+public class RiotApiService {
     private final MatchGameService matchGameService;
     private final MatchUserService matchUserService;
-    private final RiotApiAdapter riotApi;
+    private final RiotApiPort riotApi;
 
-    public MatchGameResponse searchMatch(String gameId) {
+            public MatchGameResponse searchMatch(String gameId) {
         Optional<MatchGame> savedEntity = matchGameService.findByGameId(gameId);
         MatchGame matchGame;
 
@@ -31,4 +31,5 @@ public class BoardService {
         MatchGameResponse response = MatchGameResponse.toResponse(matchGame);
         return response;
     }
+
 }
