@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum VideoStatus implements ApiStatusIfs {
+public enum S3Status implements ApiStatusIfs {
     INVALID_FILETYPE(4400, "지원하지 않는 파일 형식입니다."),
     FILE_SIZE_EXCEEDED(4401, "파일 크기가 최대 크기를 초과하였습니다."),
     FILE_UPLOAD_FAILED(4502, "파일 업로드에 실패하였습니다."),
