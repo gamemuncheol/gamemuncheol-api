@@ -40,8 +40,8 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
         RequestAttributes requestContext = RequestContextHolder.getRequestAttributes();
         TokenInfo tokenInfo = (TokenInfo) requestContext.getAttribute("tokenInfo", RequestAttributes.SCOPE_REQUEST);
 
-        Member entity = memberRepository.findTop1ByEmailAndProviderAndIdentifier(
-                tokenInfo.email(), OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier())
+        Member entity = memberRepository.findTop1ByProviderAndIdentifier(
+                OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier())
                 .orElseThrow(() -> new ApiException(MemberStatus.MEMBER_NOT_FOUND));
         return entity;
     }

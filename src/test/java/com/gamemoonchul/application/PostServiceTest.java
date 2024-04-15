@@ -1,0 +1,65 @@
+package com.gamemoonchul.application;
+
+import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.MemberDummy;
+import com.gamemoonchul.domain.entity.PostDummy;
+import com.gamemoonchul.domain.status.PostStatus;
+import com.gamemoonchul.infrastructure.repository.MemberRepository;
+import com.gamemoonchul.infrastructure.repository.PostRepository;
+import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+
+@SpringBootTest
+@Transactional
+class PostServiceTest {
+    @Autowired
+    private PostService postService;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private PostRepository postRepository;
+
+
+    @Test
+    @DisplayName("게시물 업로드 테스트 ")
+    public void defaultUploadTest() {
+        // given
+        PostUploadRequest request = PostDummy.createRequest();
+        Member member = memberRepository.save(MemberDummy.create());
+
+        // when
+        postService.upload(request, member);
+
+        // then
+        assertThat(postRepository.findAll()
+                .size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("권한 없는 사용자가 삭제 요청했을 경우 에러 확인")
+    public void unauthorizedDeleteTest() {
+        // given
+        Member member1 = MemberDummy.createWithId("1");
+        Member member2 = MemberDummy.createWithId("2");
+        memberRepository.saveAll(List.of(member1, member2));
+        PostUploadRequest request = PostDummy.createRequest();
+
+        // when
+        PostResponseDto response = postService.upload(PostDummy.createRequest(), member1);
+
+        // then
+        assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(ApiException.class)
+                .hasMessageContaining(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
+    }
+}

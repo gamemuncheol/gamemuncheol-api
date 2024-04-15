@@ -115,7 +115,7 @@ public class TokenHelper {
     private Collection<GrantedAuthority> getAuthorities(String token) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         TokenInfo tokenInfo = getTokenInfo(token);
-        Optional<Member> member = memberRepository.findTop1ByEmailAndProviderAndIdentifier(tokenInfo.email(), OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier());
+        Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier());
         if (member.isPresent()) {
             authorities.add(new SimpleGrantedAuthority(member.get().getRole().getKey()));
 
