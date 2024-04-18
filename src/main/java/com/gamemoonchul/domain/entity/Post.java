@@ -23,5 +23,4 @@ public class Post extends BaseTimeEntity {
     private String content;
 
     private Long viewCount;
-
 }

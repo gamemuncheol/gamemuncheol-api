@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.status.S3Status;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 @Service
-@Slf4j
+@Slf4j @Transactional
 @RequiredArgsConstructor
 public class S3Service {
     public static BigInteger MAX_FILE_SIZE = BigInteger.valueOf(1024L).multiply(BigInteger.valueOf(1024L)).multiply(BigInteger.valueOf(500L)); // 500MB

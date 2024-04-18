@@ -4,12 +4,13 @@ import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service @Transactional
 @RequiredArgsConstructor
 public class RiotApiService {
     private final MatchGameService matchGameService;
