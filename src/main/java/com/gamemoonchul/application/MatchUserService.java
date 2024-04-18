@@ -28,8 +28,4 @@ public class MatchUserService {
         });
         return matchUsers;
     }
-
-    public List<MatchUser> findByMatchGameId(MatchGame matchGame) {
-        return matchUserRepository.findByMatchGame(matchGame);
-    }
 }
