@@ -13,7 +13,7 @@ public class Post extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne @Setter
+    @ManyToOne(fetch = FetchType.LAZY) @Setter
     @JoinColumn(name = "memberId", referencedColumnName = "id")
     private Member member;
 
