@@ -10,9 +10,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = true)
 public class Post extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY) @Setter
     @JoinColumn(name = "memberId", referencedColumnName = "id")
     private Member member;

@@ -20,10 +20,6 @@ import java.util.List;
 @SuperBuilder
 public class Member extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false, length = 30)
     private String name;
 
