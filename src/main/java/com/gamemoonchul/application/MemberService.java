@@ -33,8 +33,6 @@ public class MemberService {
         Optional<Member> alreadyExistMember = memberRepository.findTop1ByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
         if (alreadyExistMember.isEmpty()) {
             memberRepository.save(member);
-        } else {
-            member = alreadyExistMember.get();
         }
     }
 
