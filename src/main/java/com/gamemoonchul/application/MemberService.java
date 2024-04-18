@@ -29,7 +29,7 @@ public class MemberService {
     private final TokenHelper tokenHelper;
     private final MemberConverter memberConverter;
 
-    public void signInOrUp(Member member) {
+    public void signIn(Member member) {
         Optional<Member> alreadyExistMember = memberRepository.findTop1ByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
         if (alreadyExistMember.isEmpty()) {
             memberRepository.save(member);

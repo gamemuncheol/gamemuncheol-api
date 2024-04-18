@@ -31,10 +31,10 @@ public class AppleService {
     return appleUserInfo;
   }
 
-  public TokenDto signInOrUp(AppleCredential credential) {
+  public TokenDto signIn(AppleCredential credential) {
     Member member = MemberConverter.toEntity(credential);
     AppleOAuth2UserInfo userInfo = new AppleOAuth2UserInfo(credential);
-    memberService.signInOrUp(member);
+    memberService.signIn(member);
     TokenDto token  = tokenHelper.generateToken(userInfo);
     return token;
   }

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -35,9 +34,9 @@ class MemberServiceTest {
         memberRepository.save(member);
 
         // when
-        memberService.signInOrUp(member);
-        memberService.signInOrUp(member);
-        memberService.signInOrUp(member);
+        memberService.signIn(member);
+        memberService.signIn(member);
+        memberService.signIn(member);
         List<Member>
                 members = memberRepository.findAllByEmailAndProviderAndIdentifier(member.getEmail(), member.getProvider(), member.getIdentifier());
 
