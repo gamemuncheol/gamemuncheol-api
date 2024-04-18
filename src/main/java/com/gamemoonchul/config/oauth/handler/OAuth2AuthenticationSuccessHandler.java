@@ -113,7 +113,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // TODO: Redis 리프레시 토큰 삭제
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberService.unlink(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
+        memberService.deactivateAccount(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
     }
 
     private TokenDto signIn(Authentication authentication, OAuth2UserPrincipal principal) {

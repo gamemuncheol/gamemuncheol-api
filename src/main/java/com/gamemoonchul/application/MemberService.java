@@ -36,7 +36,7 @@ public class MemberService {
         }
     }
 
-    public void unlink(String email, OAuth2Provider provider, String identifier) {
+    public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
         Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
         if (member.isEmpty()) {
             throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
