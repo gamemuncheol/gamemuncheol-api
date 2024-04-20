@@ -39,8 +39,7 @@ public class PostService {
                 .orElseThrow(() ->
                         new ApiException(PostStatus.POST_NOT_FOUND)
                 );
-        if (member.getId()
-                .equals(post.getId())) {
+        if (member.getId().equals(post.getId())) {
             postRepository.delete(post);
             return "Delete Complete";
         }
