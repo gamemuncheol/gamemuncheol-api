@@ -10,14 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service @Transactional
+@Service
+@Transactional
 @RequiredArgsConstructor
 public class RiotApiService {
     private final MatchGameService matchGameService;
     private final MatchUserService matchUserService;
     private final RiotApiPort riotApi;
 
-            public MatchGameResponse searchMatch(String gameId) {
+    public MatchGameResponse searchMatch(String gameId) {
         Optional<MatchGame> savedEntity = matchGameService.findByGameId(gameId);
         MatchGame matchGame;
 
@@ -27,10 +28,10 @@ public class RiotApiService {
         } else {
             MatchRecord vo = riotApi.searchMatch(gameId);
             matchGame = matchGameService.save(vo);
-            matchUserService.saveAll(vo.info().participants(), matchGame);
+            matchUserService.saveAll(vo.info()
+                    .participants(), matchGame);
         }
         MatchGameResponse response = MatchGameResponse.toResponse(matchGame);
         return response;
     }
-
 }
