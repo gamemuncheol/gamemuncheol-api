@@ -44,7 +44,7 @@ public class MemberService {
         memberRepository.delete(member.get());
     }
 
-    public void updateNickNameOrThrow(Member member, String nickName) {
+    public void updateNickName(Member member, String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
         if (!savedMember.isEmpty()) {
             throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);

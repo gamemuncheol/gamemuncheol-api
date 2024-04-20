@@ -53,7 +53,7 @@ class MemberServiceTest {
         String nickname = "우하하";
 
         // when
-        memberService.updateNickNameOrThrow(member, nickname);
+        memberService.updateNickName(member, nickname);
         List<Member> savedMember = memberRepository.findByNickname(nickname);
 
         // then
@@ -70,10 +70,10 @@ class MemberServiceTest {
         String nickname = "우하하";
 
         // when
-        memberService.updateNickNameOrThrow(member, nickname);
+        memberService.updateNickName(member, nickname);
 
         // then
-        assertThatThrownBy(() -> memberService.updateNickNameOrThrow(member, nickname))
+        assertThatThrownBy(() -> memberService.updateNickName(member, nickname))
                 .isInstanceOf(ApiException.class)
                 .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
     }

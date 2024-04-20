@@ -24,7 +24,7 @@ public class MemberApiController {
             @MemberSession Member member,
             @PathVariable String nickname
     ) {
-        memberService.updateNickNameOrThrow(member, nickname);
+        memberService.updateNickName(member, nickname);
     }
 
     @GetMapping("/me")
