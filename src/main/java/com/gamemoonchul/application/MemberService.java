@@ -60,12 +60,8 @@ public class MemberService {
         return newToken;
     }
 
-    public MemberResponseDto me(Optional<Member> member) {
-        if (member.isEmpty()) {
-            throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
-        }
-        MemberResponseDto response = memberConverter.toResponseDto(member.get());
-
+    public MemberResponseDto me(Member member) {
+        MemberResponseDto response = memberConverter.toResponseDto(member);
         return response;
     }
 

@@ -31,6 +31,6 @@ public class MemberApiController {
     public MemberResponseDto me(
             @MemberSession Member member
     ) {
-        return memberService.me(Optional.of(member));
+        return memberService.me(member);
     }
 }
