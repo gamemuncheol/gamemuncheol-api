@@ -19,7 +19,10 @@ import java.math.BigInteger;
 @Slf4j @Transactional
 @RequiredArgsConstructor
 public class S3Service {
-    public static BigInteger MAX_FILE_SIZE = BigInteger.valueOf(1024L).multiply(BigInteger.valueOf(1024L)).multiply(BigInteger.valueOf(500L)); // 500MB
+    public static BigInteger MAX_FILE_SIZE = BigInteger
+            .valueOf(1024L)
+            .multiply(BigInteger.valueOf(1024L))
+            .multiply(BigInteger.valueOf(500L)); // 500MB
 
 
     private final AmazonS3Client amazonS3Client;
