@@ -3,6 +3,7 @@ package com.gamemoonchul.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "POST")
 @Getter @SuperBuilder
@@ -24,7 +25,10 @@ public class Post extends BaseTimeEntity {
     private String title;
 
     private String content;
-
+    @ColumnDefault("0")
     private Long viewCount;
-
+    @ColumnDefault("0")
+    private Long commentCount;
+    @ColumnDefault("0")
+    private Long voteCount;
 }
