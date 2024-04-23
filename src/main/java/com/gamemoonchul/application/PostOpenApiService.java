@@ -15,7 +15,7 @@ public class PostOpenApiService {
     private final PostRepository postRepository;
 
     public Pagination<Post> fetchByLatest(Pageable pageable) {
-        Page<Post> savedData = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Post> savedData = postRepository.findAllByOrderByCreatedAt(pageable);
         return new Pagination<Post>(savedData);
     }
 }
