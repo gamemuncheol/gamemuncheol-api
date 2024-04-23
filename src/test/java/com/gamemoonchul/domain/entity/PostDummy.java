@@ -15,4 +15,14 @@ public class PostDummy {
                 .toString()
         );
     }
+
+    public static Post createPost(String value) {
+        Post post = Post.builder()
+                .title(value)
+                .content(value)
+                .videoUrl("https://youtube.com")
+                .thumbnailUrl("https://s3.amazon.com")
+                .build();
+        return post;
+    }
 }
