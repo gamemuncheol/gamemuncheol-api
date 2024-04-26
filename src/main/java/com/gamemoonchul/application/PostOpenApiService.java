@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,8 @@ public class PostOpenApiService {
                 .map(
                         PostResponseDto::entityToResponse
                 )
-                .toList();
-
+                .sorted(Comparator.comparing(PostResponseDto::getCreatedAt))
+                .collect(Collectors.toList());
 
         return new Pagination<PostResponseDto>(savedPage, responses);
     }

@@ -1,7 +1,10 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.PostDummy;
+import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import jakarta.transaction.Transactional;
@@ -27,11 +30,17 @@ class PostOpenApiServiceTest {
     @Autowired
     private PostOpenApiService postOpenApiService;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @BeforeEach
     void set100Posts() {
+        Member member = MemberDummy.createWithId("1");
+        memberRepository.save(member);
         ArrayList<Post> posts = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Post dummy = PostDummy.createPost("value" + i);
+            dummy.setMember(member);
             posts.add(dummy);
         }
         postRepository.saveAll(posts);
