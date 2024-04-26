@@ -4,6 +4,7 @@ import com.gamemoonchul.application.PostOpenApiService;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
+import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,7 @@ public class PostOpenApiController {
     private final PostOpenApiService postService;
 
     @GetMapping("/page/new")
-    public Pagination<Post> fetchByLatest(
+    public Pagination<PostResponseDto> fetchByLatest(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {

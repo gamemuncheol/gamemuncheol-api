@@ -3,6 +3,7 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.PostDummy;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
+import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,11 +44,11 @@ class PostOpenApiServiceTest {
         Pageable pageable = PageRequest.of(0, 50);
 
         // when
-        List<Post> searchedPost = postOpenApiService.fetchByLatest(pageable)
+        List<PostResponseDto> searchedPost = postOpenApiService.fetchByLatest(pageable)
                 .getData();
 
         // then
-        Post lastPost = searchedPost.get(0);
+        PostResponseDto lastPost = searchedPost.get(0);
 
         for (int i = 1; i < searchedPost.size(); i++) {
             assertTrue(searchedPost.get(i)

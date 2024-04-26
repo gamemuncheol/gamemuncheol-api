@@ -15,7 +15,6 @@ public class Post extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY) @Setter
     @JoinColumn(name = "memberId", referencedColumnName = "id")
     private Member member;
