@@ -22,7 +22,7 @@ public class MemberApiController {
     @PatchMapping("/change-nickname/{nickname}")
     public void changeNickname(
             @MemberSession Member member,
-            @PathVariable String nickname
+            @PathVariable(name = "nickname") String nickname
     ) {
         memberService.updateNickNameOrThrow(member, nickname);
     }
