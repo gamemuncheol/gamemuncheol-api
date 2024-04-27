@@ -1,10 +1,11 @@
 package com.gamemoonchul.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.List;
 
 @Entity(name = "POST")
 @Getter @SuperBuilder
@@ -18,6 +19,10 @@ public class Post extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY) @Setter
     @JoinColumn(name = "memberId", referencedColumnName = "id")
     private Member member;
+
+    @OneToMany
+    @JoinColumn(name = "postId")
+    private List<VoteOptions> voteOptions;
 
     private String videoUrl;
 

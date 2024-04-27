@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,6 +60,9 @@ class PostOpenApiServiceTest {
         // then
         PostResponseDto lastPost = searchedPost.get(0);
 
+        IntStream.range(1, searchedPost.size())
+                    .allMatch(i -> searchedPost.get(i).getCreatedAt()
+                        .isAfter(searchedPost.get(i - 1).getCreatedAt()));
         for (int i = 1; i < searchedPost.size(); i++) {
             assertTrue(searchedPost.get(i)
                     .getCreatedAt()
