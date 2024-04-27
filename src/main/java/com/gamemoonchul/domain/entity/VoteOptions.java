@@ -17,6 +17,6 @@ public class VoteOptions {
     @JoinColumn(name = "postId")
     private Post post;
 
-    @OneToOne(fetch = FetchType.LAZY) t s@JoinColumn(name = "matchUserId")
+    @OneToOne(fetch = FetchType.LAZY) @JoinColumn(name = "matchUserId")
     private MatchUser matchUser;
 }
