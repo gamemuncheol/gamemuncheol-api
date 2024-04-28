@@ -7,6 +7,7 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public class PostApiController {
 
     @PostMapping("/upload")
     public PostResponseDto upload(
+            @Valid
             @RequestBody PostUploadRequest request,
             @MemberSession Member member
     ) {
