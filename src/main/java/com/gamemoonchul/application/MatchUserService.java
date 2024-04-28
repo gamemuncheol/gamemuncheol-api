@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MatchUserService {
     private final MatchUserRepository matchUserRepository;
-    private final MatchUt sserConverter matchUserConverter;
+    private final MatchUserConverter matchUserConverter;
 
     public List<MatchUser> saveAll(List<ParticipantRecord> participants, MatchGame matchGame) {
         List<MatchUser> matchUsers = new ArrayList<>();

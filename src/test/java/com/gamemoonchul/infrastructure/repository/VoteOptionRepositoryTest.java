@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@SpringBootTest @Transactional
+@SpringBootTest
+@Transactional
 class VoteOptionRepositoryTest {
     @Autowired
     private VoteOptionRepository voteOptionRepository;
@@ -46,24 +48,28 @@ class VoteOptionRepositoryTest {
     }
 
     @Test
-    @DisplayName("Vote Options matchUser, post 연관관계 잘 Join 되는지 확인")
-    void voteOptionsJoinTest() {
+    @DisplayName("findByPostId 조회 테스트 Post Member fetchJoin 되야 한다")
+    void testFindByPostId() {
         // given
         VoteOptions voteOptions1 = VoteOptions.builder()
                 .post(post)
                 .matchUser(matchUsers.get(0))
                 .build();
-                VoteOptions voteOptions2 = VoteOptions.builder()
+        VoteOptions voteOptions2 = VoteOptions.builder()
                 .post(post)
                 .matchUser(matchUsers.get(1))
                 .build();
+
         // when
         voteOptionRepository.save(voteOptions1);
         voteOptionRepository.save(voteOptions2);
-        em.clear();
-        List<VoteOptions> searchedOptions = voteOptionRepository.findByPost_Id(post.getId());
+        List<VoteOptions> searchedOptions = voteOptionRepository.searchByPostId(post.getId());
+        searchedOptions.sort(Comparator.comparing(a -> a.getMatchUser()
+                .getPuuid()));
 
         // then
         assertThat(searchedOptions.size()).isEqualTo(2);
+        assertThat(searchedOptions.get(0).getPost().getContent()).isEqualTo(voteOptions1.getPost().getContent());
+        assertThat(searchedOptions.get(0).getMatchUser().getId()).isEqualTo(voteOptions1.getMatchUser().getId());
     }
 }
