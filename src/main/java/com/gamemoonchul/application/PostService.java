@@ -47,7 +47,7 @@ public class PostService {
     }
 
     private List<VoteOptions> saveVoteOptions(List<Long> matchUserIds, Post post) {
-        List<VoteOptions> savedVoteOptions = matchUserIds.stream().map(matchUserService::findById).map(
+        List<VoteOptions> voteOptions = matchUserIds.stream().map(matchUserService::findById).map(
                 matchUser -> {
                     return VoteOptions.builder()
                             .matchUser(matchUser)
@@ -55,6 +55,7 @@ public class PostService {
                             .build();
                 }
         ).toList();
+        List<VoteOptions> savedVoteOptions = voteOptionRepository.saveAll(voteOptions);
         return savedVoteOptions;
     }
 
