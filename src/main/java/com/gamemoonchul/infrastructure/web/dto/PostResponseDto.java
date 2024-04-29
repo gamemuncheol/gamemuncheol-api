@@ -23,7 +23,7 @@ public class PostResponseDto {
     private Long viewCount;
     private HashMap<MatchUser, Integer> voteRate;
 
-    public static PostResponseDto entityToResponse(Post entity) {
+    public static PostResponseDto entityToResponse(Post entity, HashMap<MatchUser, Integer> voteRate) {
         return PostResponseDto.builder()
                 .id(entity.getId())
                 .member(MemberConverter.toResponseDto(entity.getMember()))
@@ -33,6 +33,7 @@ public class PostResponseDto {
                 .viewCount(entity.getViewCount())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .voteRate(voteRate)
                 .build();
     }
 }

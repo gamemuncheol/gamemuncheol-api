@@ -75,14 +75,13 @@ class VoteRepositoryImplTest {
         List<Vote> votes = new ArrayList<>();
         List<Vote> savedVotes = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            Member tmp = members.get(i);
             savedVotes.add(voteRepository.save(Vote.builder()
                     .post(post)
                     .voteOptions(voteOptions.get(i % 2))
-                    .member(tmp)
+                    .member(members.get(i))
                     .build()));
         }
-        HashMap<VoteOptions, Integer> voteRate = voteRepository.getVoteRateByPostId(post.getId());
+        HashMap<MatchUser, Integer> voteRate = voteRepository.getVoteRateByPostId(post.getId());
 
         // then
         voteRate.values().forEach(v -> assertThat(v).isEqualTo(50));

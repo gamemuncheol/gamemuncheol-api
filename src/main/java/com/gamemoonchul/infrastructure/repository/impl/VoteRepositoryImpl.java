@@ -2,6 +2,7 @@ package com.gamemoonchul.infrastructure.repository.impl;
 
 import com.gamemoonchul.domain.entity.Vote;
 import com.gamemoonchul.domain.entity.VoteOptions;
+import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.infrastructure.repository.ifs.VoteRepositoryIfs;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -30,7 +31,7 @@ public class VoteRepositoryImpl implements VoteRepositoryIfs {
     }
 
     @Override
-    public HashMap<VoteOptions, Integer> getVoteRateByPostId(Long postId) {
+    public HashMap<MatchUser, Integer> getVoteRateByPostId(Long postId) {
         List<Vote> searchedVotes = queryFactory.select(vote)
                 .from(vote)
                 .join(vote.post, post)
@@ -43,15 +44,16 @@ public class VoteRepositoryImpl implements VoteRepositoryIfs {
                 .fetch()
                 ;
 
-        HashMap<VoteOptions, Integer> voteRateHashMap = new HashMap<>();
+        HashMap<MatchUser, Integer> voteRateHashMap = new HashMap<>();
         int sum = 0;
         for (Vote v: searchedVotes) {
-            int curVal = voteRateHashMap.getOrDefault(v.getVoteOptions(), 0);
-            voteRateHashMap.put(v.getVoteOptions(), curVal + 1);
+            MatchUser curMatchUser = v.getVoteOptions().getMatchUser();
+            int curVal = voteRateHashMap.getOrDefault(curMatchUser, 0);
+            voteRateHashMap.put(curMatchUser, curVal + 1);
             sum++;
         }
 
-        for (VoteOptions vo: voteRateHashMap.keySet()) {
+        for (MatchUser vo: voteRateHashMap.keySet()) {
             voteRateHashMap.put(vo, voteRateHashMap.get(vo) * 100 / sum);
         }
 
