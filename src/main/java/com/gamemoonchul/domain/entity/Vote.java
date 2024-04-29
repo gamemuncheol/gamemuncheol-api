@@ -11,12 +11,12 @@ public class Vote {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY) @JoinColumn(name = "optionsId")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "optionsId")
     private VoteOptions voteOptions;
 
-    @OneToOne(fetch = FetchType.LAZY) @JoinColumn(name = "memberId")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "memberId")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY) @JoinColumn(name = "postId")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "postId")
     private Post post;
 }
