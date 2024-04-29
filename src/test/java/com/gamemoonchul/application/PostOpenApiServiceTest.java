@@ -59,22 +59,13 @@ class PostOpenApiServiceTest {
                 .getData();
 
         // then
-        PostResponseDto lastPost = searchedPost.get(0);
-
-        IntStream.range(1, searchedPost.size())
-                    .allMatch(i -> searchedPost.get(i).getCreatedAt()
-                        .isAfter(searchedPost.get(i - 1).getCreatedAt()));
         for (int i = 1; i < searchedPost.size(); i++) {
-            PostResponseDto curResponse = searchedPost.get(i);
-            assertTrue(curResponse
-                    .getCreatedAt()
-                    .isAfter(lastPost.getCreatedAt()));
-            curResponse.getVoteRate().values().forEach(
-                    it -> {
-                        assertThat(it).isEqualTo(0);
-                    }
-            );
-            lastPost = searchedPost.get(i);
+            assertTrue(searchedPost.get(i).getCreatedAt()
+                    .isAfter(searchedPost.get(i - 1).getCreatedAt()));
+            searchedPost.get(0).getVoteRates()
+                    .forEach(voteRate -> {
+                        assertThat(voteRate.getRate()).isEqualTo(0);
+                    });
         }
     }
 }

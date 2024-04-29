@@ -2,6 +2,9 @@ package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PostDummy {
     public static PostUploadRequest createRequest() {
@@ -10,6 +13,7 @@ public class PostDummy {
                 .content("string")
                 .videoUrl("https://youtube.com/")
                 .thumbnailUrl("https://s3/" )
+                .matchUserIds(new ArrayList<>())
                 .build();
     }
 

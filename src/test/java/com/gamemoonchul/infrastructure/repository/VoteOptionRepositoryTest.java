@@ -1,12 +1,12 @@
 package com.gamemoonchul.infrastructure.repository;
 
-import com.gamemoonchul.domain.entity.Post;
-import com.gamemoonchul.domain.entity.PostDummy;
-import com.gamemoonchul.domain.entity.VoteOptions;
+import com.gamemoonchul.domain.entity.*;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.entity.riot.MatchUserDummy;
+import com.gamemoonchul.domain.model.dto.VoteRate;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,10 +33,18 @@ class VoteOptionRepositoryTest {
     private PostRepository postRepository;
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private VoteRepository voteRepository;
+
+    @Autowired
     private EntityManager em;
 
     private Post post;
     private List<MatchUser> matchUsers = new ArrayList<MatchUser>();
+    private List<Member> members;
+    private List<VoteOptions> voteOptions = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -45,31 +53,43 @@ class VoteOptionRepositoryTest {
         matchUsers.add(MatchUserDummy.createDummy("4387931221"));
         matchUserRepository.saveAll(matchUsers);
         postRepository.save(post);
+        voteOptions.add(VoteOptions.builder()
+                .post(post)
+                .matchUser(matchUsers.get(0))
+                .build());
+        voteOptions.add(VoteOptions.builder()
+                .post(post)
+                .matchUser(matchUsers.get(1))
+                .build());
+        voteOptionRepository.saveAll(voteOptions);
     }
 
     @Test
-    @DisplayName("findByPostId 조회 테스트 Post Member fetchJoin 되야 한다")
-    void testFindByPostId() {
+    @DisplayName("임의의 멤버로 투표를 진행했을 때 투표의 결과가 정확히 실행한 투표의 결과와 일치하는지 테스트")
+    void 투표50건테스트() {
         // given
-        VoteOptions voteOptions1 = VoteOptions.builder()
-                .post(post)
-                .matchUser(matchUsers.get(0))
-                .build();
-        VoteOptions voteOptions2 = VoteOptions.builder()
-                .post(post)
-                .matchUser(matchUsers.get(1))
-                .build();
+        members = MemberDummy.createUserRoleMembers(50);
+        members = memberRepository.saveAll(members);
 
         // when
-        voteOptionRepository.save(voteOptions1);
-        voteOptionRepository.save(voteOptions2);
-        List<VoteOptions> searchedOptions = voteOptionRepository.searchByPostId(post.getId());
-        searchedOptions.sort(Comparator.comparing(a -> a.getMatchUser()
-                .getPuuid()));
+        List<Vote> votes = new ArrayList<>();
+        List<Vote> savedVotes = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            savedVotes.add(voteRepository.save(Vote.builder()
+                    .post(post)
+                    .voteOptions(voteOptions.get(i % 2))
+                    .member(members.get(i))
+                    .build()));
+        }
+        List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
 
         // then
-        assertThat(searchedOptions.size()).isEqualTo(2);
-        assertThat(searchedOptions.get(0).getPost().getContent()).isEqualTo(voteOptions1.getPost().getContent());
-        assertThat(searchedOptions.get(0).getMatchUser().getId()).isEqualTo(voteOptions1.getMatchUser().getId());
+        voteRates.forEach(
+                voteRate -> {
+                    AssertionsForClassTypes.assertThat(voteRate.getRate())
+                            .isEqualTo(50);
+                }
+        );
     }
+
 }

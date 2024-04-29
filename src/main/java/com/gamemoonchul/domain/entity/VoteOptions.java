@@ -4,6 +4,8 @@ import com.gamemoonchul.domain.entity.riot.MatchUser;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Builder @Getter
 @Entity(name = "VOTE_OPTIONS")
