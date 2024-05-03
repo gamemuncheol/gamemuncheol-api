@@ -9,7 +9,8 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
   @Bean
-  public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-    return restTemplateBuilder.build();
+  public RestTemplate restTemplate() {
+    RestTemplateBuilder builder = new RestTemplateBuilder();
+    return builder.build();
   }
 }

@@ -27,19 +27,50 @@ dependencies {
 	implementation 'javax.xml.bind:jaxb-api:2.3.1' // xml 에러 방지
 	// Swagger end
 
+	// aws s3를 위한 설정 - start
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// aws s3를 위한 설정 - end
+
+
 	// spring security start
     implementation 'org.springframework.boot:spring-boot-starter-security'
-	testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.projectlombok:lombok:1.18.30'
+    testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // oauth2
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	implementation 'com.auth0:jwks-rsa:0.22.1' // apple oauth
+	implementation 'com.auth0:java-jwt:4.4.0' // apple oauth
 	// spring security end
+
+
+	// Process Executor
+	implementation 'org.zeroturnaround:zt-exec:1.12'
+	// Process Executor
+
+	// prometheus + grafana
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 
 	// JPA start
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
 	// JPA end
+
+	// Test를 위한 H2database
+	runtimeOnly 'com.h2database:h2'
+	// Test를 위한 H2database
+
+	// youtube
+	implementation 'com.google.apis:google-api-services-youtube:v3-rev222-1.25.0'
+	implementation 'com.google.oauth-client:google-oauth-client-jetty:1.35.0'
+	// youtube
+
+	// Apple Oauth 관련 라이브러리 Start
+	implementation 'com.google.code.gson:gson:2.10.1'
+	// Apple Oauth 관련 라이브러리 End
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -47,6 +78,7 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

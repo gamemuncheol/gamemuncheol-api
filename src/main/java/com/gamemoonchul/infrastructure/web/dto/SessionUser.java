@@ -1,10 +1,9 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
-import com.gamemoonchul.domain.MemberEntity;
+import com.gamemoonchul.domain.entity.Member;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.lang.reflect.Member;
 
 @Getter
 public class SessionUser implements Serializable {
@@ -12,7 +11,7 @@ public class SessionUser implements Serializable {
     private String email;
     private String picture;
 
-    public SessionUser(MemberEntity member) {
+    public SessionUser(Member member) {
         this.name = member.getName();
         this.email = member.getEmail();
         this.picture = member.getPicture();
