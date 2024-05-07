@@ -24,8 +24,8 @@ public class MatchUserService {
     public List<MatchUser> saveAll(List<ParticipantRecord> participants, MatchGame matchGame) {
         List<MatchUser> matchUsers = new ArrayList<>();
         participants.stream()
-                .map(
-                        participant -> matchUserConverter.toEntities(participant, matchGame)
+                .map(participant ->
+                        matchUserConverter.toEntities(participant, matchGame)
                 )
                 .forEach(matchUser -> {
                     matchUsers.add(matchUserRepository.save(matchUser));
