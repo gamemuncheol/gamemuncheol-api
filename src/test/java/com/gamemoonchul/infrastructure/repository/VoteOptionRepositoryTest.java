@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-@Transactional
 class VoteOptionRepositoryTest {
     @Autowired
     private VoteOptionRepository voteOptionRepository;
@@ -40,6 +39,7 @@ class VoteOptionRepositoryTest {
 
     @Autowired
     private EntityManager em;
+
 
     private Post post;
     private List<MatchUser> matchUsers = new ArrayList<MatchUser>();
@@ -62,6 +62,20 @@ class VoteOptionRepositoryTest {
                 .matchUser(matchUsers.get(1))
                 .build());
         voteOptionRepository.saveAll(voteOptions);
+        em.flush();
+        em.clear();
+    }
+
+    @Test
+    @DisplayName("포스트 ID로 VoteOptions잘 가져올 수 있는지 테스트")
+    @Transactional
+    void getVoteRateByPostId() {
+        // given // when
+        List<VoteOptions> voteRates = voteOptionRepository.searchByPostId(1L);
+
+        // then
+        assertThat(voteRates.size()).isEqualTo(2);
+        assertThat(voteRates.get(0).getPost().getId()).isEqualTo(post.getId());
     }
 
     @Test
@@ -91,5 +105,4 @@ class VoteOptionRepositoryTest {
                 }
         );
     }
-
 }
