@@ -18,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -47,7 +49,7 @@ class PostOpenApiServiceTest {
     }
 
     @Test
-    @DisplayName("제일 처음 포스트는 반드시 다음에 나오는 포스트보다 이전 시간인지 확인")
+    @DisplayName("제일 처음 포스트는 반드시 다음에 나오는 포스트보다 이전 시간인지 확인, 투표 항목이 없기 때문에 0:0으로 나와야 함")
     void latestSorting() {
         // given
         Pageable pageable = PageRequest.of(0, 50);
@@ -57,13 +59,13 @@ class PostOpenApiServiceTest {
                 .getData();
 
         // then
-        PostResponseDto lastPost = searchedPost.get(0);
-
         for (int i = 1; i < searchedPost.size(); i++) {
-            assertTrue(searchedPost.get(i)
-                    .getCreatedAt()
-                    .isAfter(lastPost.getCreatedAt()));
-            lastPost = searchedPost.get(i);
+            assertTrue(searchedPost.get(i).getCreatedAt()
+                    .isAfter(searchedPost.get(i - 1).getCreatedAt()));
+            searchedPost.get(0).getVoteRates()
+                    .forEach(voteRate -> {
+                        assertThat(voteRate.getRate()).isEqualTo(0);
+                    });
         }
     }
 }

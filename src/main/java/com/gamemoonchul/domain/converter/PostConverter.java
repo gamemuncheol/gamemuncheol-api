@@ -12,7 +12,8 @@ public class PostConverter {
     public static PostResponseDto toResponse(Post entity) {
         return PostResponseDto.builder()
                 .id(entity.getId())
-                .title(entity.getTitle()).member(MemberConverter.toResponseDto(entity.getMember()))
+                .title(entity.getTitle())
+                .member(MemberConverter.toResponseDto(entity.getMember()))
                 .thumbnailUrl(entity.getThumbnailUrl())
                 .videoUrl(entity.getVideoUrl())
                 .viewCount(entity.getViewCount())
@@ -22,9 +23,13 @@ public class PostConverter {
     public static Post requestToEntity(
             PostUploadRequest request, Member member
     ) {
-        Post entity = Post.builder().title(
-                request.title()
-        ).videoUrl(request.videoUrl()).thumbnailUrl(request.thumbnailUrl()).build();
+        Post entity = Post.builder()
+                .title(
+                        request.title()
+                )
+                .videoUrl(request.videoUrl())
+                .thumbnailUrl(request.thumbnailUrl())
+                .build();
         entity.setMember(member);
         return entity;
     }

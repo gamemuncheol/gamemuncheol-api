@@ -2,10 +2,15 @@ package com.gamemoonchul.infrastructure.web.dto;
 
 import com.gamemoonchul.domain.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.domain.entity.VoteOptions;
+import com.gamemoonchul.domain.entity.riot.MatchUser;
+import com.gamemoonchul.domain.model.dto.VoteRate;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 @Getter
 @Builder
@@ -18,8 +23,9 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long viewCount;
+    private List<VoteRate> voteRates;
 
-    public static PostResponseDto entityToResponse(Post entity) {
+    public static PostResponseDto entityToResponse(Post entity, List<VoteRate> voteRates) {
         return PostResponseDto.builder()
                 .id(entity.getId())
                 .member(MemberConverter.toResponseDto(entity.getMember()))
@@ -29,6 +35,7 @@ public class PostResponseDto {
                 .viewCount(entity.getViewCount())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .voteRates(voteRates)
                 .build();
     }
 }

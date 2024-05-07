@@ -51,7 +51,7 @@ public class MatchGameResponse {
     @Getter
     @Builder
     static class MatchUserResponse {
-        private String puuid;
+        private Long id;
         private String nickname;
         private String championName;
         private String championThumbnail;
@@ -61,7 +61,7 @@ public class MatchGameResponse {
             String koChampName = getKoChampName(loadProperties(properties), matchUser);
 
             return MatchUserResponse.builder()
-                    .puuid(matchUser.getPuuid())
+                    .id(matchUser.getId())
                     .nickname(matchUser.getNickname())
                     .championName(koChampName)
                     .championThumbnail(matchUser.getChampionThumbnail())

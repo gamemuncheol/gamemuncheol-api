@@ -15,7 +15,7 @@ public class RiotApiController {
     private final RiotApiService riotApiService;
 
     @GetMapping("/search-match/{gameId}")
-    public MatchGameResponse searchMatch(@PathVariable String gameId) {
+    public MatchGameResponse searchMatch(@PathVariable(name = "gameId") String gameId) {
         return riotApiService.searchMatch("KR_" + gameId);
     }
 }
