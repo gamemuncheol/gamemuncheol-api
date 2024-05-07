@@ -24,13 +24,13 @@ public class MemberApiController {
             @MemberSession Member member,
             @PathVariable(name = "nickname") String nickname
     ) {
-        memberService.updateNickNameOrThrow(member, nickname);
+        memberService.updateNickName(member, nickname);
     }
 
     @GetMapping("/me")
     public MemberResponseDto me(
             @MemberSession Member member
     ) {
-        return memberService.me(Optional.of(member));
+        return memberService.me(member);
     }
 }

@@ -19,7 +19,6 @@ import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

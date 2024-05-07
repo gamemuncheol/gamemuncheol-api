@@ -13,6 +13,7 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
 import com.google.common.collect.Lists;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
-@Slf4j
+@Slf4j @Transactional
 public class YoutubeService {
     /**
      * Define a global instance of a Youtube object, which will be used

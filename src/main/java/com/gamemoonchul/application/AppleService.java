@@ -10,11 +10,12 @@ import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.converter.MemberConverter;
 import com.gamemoonchul.infrastructure.web.dto.AppleSignUpRequestDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-@Service
+@Service @Transactional
 @RequiredArgsConstructor
 public class AppleService {
   private final AppleIDTokenValidator appleIDTokenValidator;
@@ -30,10 +31,10 @@ public class AppleService {
     return appleUserInfo;
   }
 
-  public TokenDto signInOrUp(AppleCredential credential) {
+  public TokenDto signIn(AppleCredential credential) {
     Member member = MemberConverter.toEntity(credential);
     AppleOAuth2UserInfo userInfo = new AppleOAuth2UserInfo(credential);
-    memberService.signInOrUp(member);
+    memberService.signIn(member);
     TokenDto token  = tokenHelper.generateToken(userInfo);
     return token;
   }

@@ -82,7 +82,7 @@ public class AppleServiceTest {
 
   @Test
   @DisplayName("동일한 이메일, provider, identifier를 가진 회원이 이미 존재하는 경우 회원이 중복 생성되지 않는지 검증한다.")
-  public void signInOrUp() {
+  public void signIn() {
     // given
     AppleCredential appleUserInfo = AppleCredential.builder()
         .issuer("yourIssuer")
@@ -97,8 +97,8 @@ public class AppleServiceTest {
         .build();
 
     // when
-    appleService.signInOrUp(appleUserInfo);
-    appleService.signInOrUp(appleUserInfo);
+    appleService.signIn(appleUserInfo);
+    appleService.signIn(appleUserInfo);
     List<Member> members = memberRepository.findAllByEmailAndProviderAndIdentifier(appleUserInfo.getEmail(), OAuth2Provider.APPLE, appleUserInfo.getSub());
 
     // then

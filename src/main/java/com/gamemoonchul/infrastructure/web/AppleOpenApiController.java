@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AppleOpenApiController {
   private final AppleService appleService;
 
-  @PostMapping("/sign-up")
-  public TokenDto signInOrUp(@RequestBody AppleSignUpRequestDto signUpRequest) {
+  @PostMapping("/sign-in")
+  public TokenDto signIn(@RequestBody AppleSignUpRequestDto signUpRequest) {
     AppleCredential userInfo = appleService.validateRequest(signUpRequest);
-    TokenDto token = appleService.signInOrUp(userInfo);
+    TokenDto token = appleService.signIn(userInfo);
     return token;
   }
 }

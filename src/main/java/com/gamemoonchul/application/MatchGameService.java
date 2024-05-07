@@ -4,6 +4,7 @@ import com.gamemoonchul.domain.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.repository.MatchGameRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@Slf4j
+@Slf4j @Transactional
 @RequiredArgsConstructor
 public class MatchGameService {
     private final MatchGameRepository matchGameRepository;

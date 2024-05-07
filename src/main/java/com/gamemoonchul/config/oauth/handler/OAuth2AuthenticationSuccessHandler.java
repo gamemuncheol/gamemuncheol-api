@@ -82,7 +82,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .orElse("");
 
         if ("login".equalsIgnoreCase(mode)) {
-            TokenDto tokenDto = signInOrUp(authentication, principal);
+            TokenDto tokenDto = signIn(authentication, principal);
             request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
@@ -113,10 +113,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // TODO: Redis 리프레시 토큰 삭제
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberService.unlink(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
+        memberService.deactivateAccount(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
     }
 
-    private TokenDto signInOrUp(Authentication authentication, OAuth2UserPrincipal principal) {
+    private TokenDto signIn(Authentication authentication, OAuth2UserPrincipal principal) {
         // TODO: 리프레시 토큰 DB 저장
         log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo().getEmail(),
                 principal.getUserInfo().getName(),
@@ -124,7 +124,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 principal.getUserInfo().getAccessToken()
         );
         Member member = MemberConverter.toEntity(principal.getUserInfo());
-        memberService.signInOrUp(member);
+        memberService.signIn(member);
 
         TokenDto tokenDto = tokenProvider.generateToken(principal.getUserInfo());
         return tokenDto;

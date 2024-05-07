@@ -12,6 +12,7 @@ import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -27,16 +29,14 @@ public class MemberService {
     private final TokenHelper tokenHelper;
     private final MemberConverter memberConverter;
 
-    public void signInOrUp(Member member) {
+    public void signIn(Member member) {
         Optional<Member> alreadyExistMember = memberRepository.findTop1ByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
         if (alreadyExistMember.isEmpty()) {
             memberRepository.save(member);
-        } else {
-            member = alreadyExistMember.get();
         }
     }
 
-    public void unlink(String email, OAuth2Provider provider, String identifier) {
+    public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
         Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
         if (member.isEmpty()) {
             throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
@@ -44,7 +44,7 @@ public class MemberService {
         memberRepository.delete(member.get());
     }
 
-    public void updateNickNameOrThrow(Member member, String nickName) {
+    public void updateNickName(Member member, String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
         if (!savedMember.isEmpty()) {
             throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);
@@ -60,12 +60,8 @@ public class MemberService {
         return newToken;
     }
 
-    public MemberResponseDto me(Optional<Member> member) {
-        if (member.isEmpty()) {
-            throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
-        }
-        MemberResponseDto response = memberConverter.toResponseDto(member.get());
-
+    public MemberResponseDto me(Member member) {
+        MemberResponseDto response = memberConverter.toResponseDto(member);
         return response;
     }
 

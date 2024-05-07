@@ -8,7 +8,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MatchUserRepository extends JpaRepository<MatchUser, Long> {
-    List<MatchUser> findByMatchGame(MatchGame matchGame);
-
-    Optional<MatchUser> findTopById(Long id);
 }
