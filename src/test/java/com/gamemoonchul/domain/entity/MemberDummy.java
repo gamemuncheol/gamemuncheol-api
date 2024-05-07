@@ -3,6 +3,9 @@ package com.gamemoonchul.domain.entity;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.enums.MemberRole;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MemberDummy {
     public static Member create() {
         return Member.builder()
@@ -28,6 +31,29 @@ public class MemberDummy {
                 .score(0.0)
                 .role(MemberRole.USER)
                 .build();
+    }
+
+    /**
+     * 다수의 멤버를 생성해주는 메서드
+     *
+     * @param count 생성할 멤버의 수
+     * @return 생성된 멤버들
+     */
+    public static List<Member> createUserRoleMembers(Integer count) {
+        List<Member> result = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            result.add(Member.builder()
+                    .provider(OAuth2Provider.GOOGLE)
+                    .email("test" + i + "@gmail.com")
+                    .nickname("test" + i)
+                    .identifier("test" + i)
+                    .name("test" + i)
+                    .picture("https://www.naver.com")
+                    .score(0.0)
+                    .role(MemberRole.USER)
+                    .build());
+        }
+        return result;
     }
 
 
