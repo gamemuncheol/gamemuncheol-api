@@ -1,9 +1,6 @@
 package com.gamemoonchul.infrastructure.repository.impl;
 
-import com.gamemoonchul.domain.entity.QMember;
-import com.gamemoonchul.domain.entity.QPost;
-import com.gamemoonchul.domain.entity.QVoteOptions;
-import com.gamemoonchul.domain.entity.VoteOptions;
+import com.gamemoonchul.domain.entity.*;
 import com.gamemoonchul.domain.model.dto.QVoteRate;
 import com.gamemoonchul.domain.model.dto.VoteRate;
 import com.gamemoonchul.infrastructure.repository.ifs.VoteOptionRepositoryIfs;
@@ -26,18 +23,22 @@ public class VoteOptionRepositoryImpl implements VoteOptionRepositoryIfs {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+
     @Override
     public List<VoteOptions> searchByPostId(Long searchPostId) {
         return queryFactory.select(voteOptions)
                 .from(voteOptions)
-                .join(voteOptions.post, post)
-                .fetchJoin()
-                .join(voteOptions.matchUser, matchUser)
-                .fetchJoin()
-                .where(post.id.eq(searchPostId))
+                .join(post)
+                .on(voteOptions.post.id.eq(post.id))
+                .join(matchUser)
+                .on(voteOptions.matchUser.id.eq(matchUser.id))
+                .where(voteOptions.post.id.eq(searchPostId))
                 .fetch();
     }
 
+    /**
+     * matchUser(투표 정보)와 해당 matchUser의 투표수를 가져오는 쿼리 입니다.
+     */
     @Override
     public List<VoteRate> getVoteRateByPostId(Long postId) {
         List<VoteRate> results = queryFactory
