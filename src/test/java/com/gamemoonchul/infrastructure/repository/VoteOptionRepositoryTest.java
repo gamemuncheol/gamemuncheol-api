@@ -84,9 +84,6 @@ class VoteOptionRepositoryTest {
         // given
         members = MemberDummy.createUserRoleMembers(50);
         members = memberRepository.saveAll(members);
-
-        // when
-        List<Vote> votes = new ArrayList<>();
         List<Vote> savedVotes = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
             savedVotes.add(voteRepository.save(Vote.builder()
@@ -95,6 +92,9 @@ class VoteOptionRepositoryTest {
                     .member(members.get(i))
                     .build()));
         }
+
+
+        // when
         List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
 
         // then
