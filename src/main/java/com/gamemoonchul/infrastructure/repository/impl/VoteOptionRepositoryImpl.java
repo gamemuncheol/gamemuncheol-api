@@ -30,8 +30,10 @@ public class VoteOptionRepositoryImpl implements VoteOptionRepositoryIfs {
                 .from(voteOptions)
                 .join(post)
                 .on(voteOptions.post.id.eq(post.id))
+                .fetchJoin()
                 .join(matchUser)
                 .on(voteOptions.matchUser.id.eq(matchUser.id))
+                .fetchJoin()
                 .where(voteOptions.post.id.eq(searchPostId))
                 .fetch();
     }
