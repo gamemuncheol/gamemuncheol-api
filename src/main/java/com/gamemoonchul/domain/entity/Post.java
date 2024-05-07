@@ -20,7 +20,7 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "memberId", referencedColumnName = "id")
     private Member member;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
     private List<VoteOptions> voteOptions;
 
