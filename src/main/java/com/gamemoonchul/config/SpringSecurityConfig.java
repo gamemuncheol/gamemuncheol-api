@@ -29,7 +29,7 @@ import java.util.List;
 public class SpringSecurityConfig {
     private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
     //private List<String> EXCEPTION = List.of("/test/**");
-    private List<String> EXCEPTION = List.of("/open-api/**");
+    private List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**");
 
     private final CustomOAuth2UserService customOauth;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;

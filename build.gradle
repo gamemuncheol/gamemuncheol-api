@@ -49,6 +49,10 @@ dependencies {
 	implementation 'org.zeroturnaround:zt-exec:1.12'
 	// Process Executor
 
+	// prometheus + grafana
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
 	// JPA start
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
