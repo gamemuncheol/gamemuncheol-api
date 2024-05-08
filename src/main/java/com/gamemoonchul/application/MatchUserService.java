@@ -1,9 +1,11 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.converter.riot.MatchUserConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
+import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.MatchUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +31,16 @@ public class MatchUserService {
                     matchUsers.add(matchUserRepository.save(matchUser));
                 });
         return matchUsers;
+    }
+
+    public MatchUser findById(Long id) {
+        return matchUserRepository.findById(id)
+                .orElseThrow(
+                        () -> new ApiException(PostStatus.WRONG_MATCH_USER)
+                );
+    }
+
+    public List<MatchUser> findByMatchGameId(Long gameId) {
+        return matchUserRepository.searchByGameId(gameId);
     }
 }
