@@ -41,7 +41,7 @@ class MatchUserServiceTest {
         participants = gameVO.info()
                 .participants();
         matchUserService.saveAll(participants, gameEntity);
-        matchUsers = matchUserService.findByMatchGameId(gameEntity);
+        matchUsers = matchUserService.findByMatchGameId(gameEntity.getId());
     }
 
     @Test

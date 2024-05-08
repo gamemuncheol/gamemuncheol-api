@@ -39,4 +39,8 @@ public class MatchUserService {
                         () -> new ApiException(PostStatus.WRONG_MATCH_USER)
                 );
     }
+
+    public List<MatchUser> findByMatchGameId(Long gameId) {
+        return matchUserRepository.searchByGameId(gameId);
+    }
 }
