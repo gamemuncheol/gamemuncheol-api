@@ -49,21 +49,25 @@ class VoteOptionRepositoryTest {
     @BeforeEach
     void setUp() {
         post = PostDummy.createPost("String1");
+        post = postRepository.save(post);
+
         matchUsers.add(MatchUserDummy.createDummy("232123123"));
         matchUsers.add(MatchUserDummy.createDummy("4387931221"));
         matchUserRepository.saveAll(matchUsers);
-        postRepository.save(post);
-        voteOptions.add(VoteOptions.builder()
+
+        VoteOptions vote1 = VoteOptions.builder()
                 .post(post)
                 .matchUser(matchUsers.get(0))
-                .build());
-        voteOptions.add(VoteOptions.builder()
+                .build();
+        VoteOptions vote2 = VoteOptions.builder()
                 .post(post)
                 .matchUser(matchUsers.get(1))
-                .build());
+                .build();
+
+        voteOptions.add(vote1);
+        voteOptions.add(vote2);
+
         voteOptionRepository.saveAll(voteOptions);
-        em.flush();
-        em.clear();
     }
 
     @Test
@@ -71,11 +75,13 @@ class VoteOptionRepositoryTest {
     @Transactional
     void getVoteRateByPostId() {
         // given // when
-        List<VoteOptions> voteRates = voteOptionRepository.searchByPostId(1L);
+        List<VoteOptions> voteRates = voteOptionRepository.searchByPostId(post.getId());
 
         // then
         assertThat(voteRates.size()).isEqualTo(2);
-        assertThat(voteRates.get(0).getPost().getId()).isEqualTo(post.getId());
+        assertThat(voteRates.get(0)
+                .getPost()
+                .getId()).isEqualTo(post.getId());
     }
 
     @Test
