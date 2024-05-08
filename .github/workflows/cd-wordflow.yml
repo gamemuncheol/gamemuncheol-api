@@ -33,7 +33,7 @@ jobs:
       - name: Make application.yaml
         run: |
           rm -rf ./build.gradle
-          echo "${{ secrets.GRADLE }}" > ./build.gradle
+          mv ./aws.build.gradle ./build.gradle
           cd ./src/main/resources
           touch ./application.yaml
           echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
