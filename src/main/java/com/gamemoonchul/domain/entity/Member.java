@@ -40,8 +40,10 @@ public class Member extends BaseTimeEntity {
 
     private String picture;
 
+    @Setter
     private boolean privacyAgreed;
 
+    @Setter
     private LocalDateTime privacyAgreedAt;
 
     @Column(nullable = false)
@@ -49,7 +51,7 @@ public class Member extends BaseTimeEntity {
 
     private LocalDateTime birth;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @Setter
     @Column(nullable = false, columnDefinition = "varchar(255)")
     private MemberRole role;
 

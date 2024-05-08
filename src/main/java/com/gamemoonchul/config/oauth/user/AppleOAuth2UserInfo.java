@@ -5,10 +5,11 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 public class AppleOAuth2UserInfo implements OAuth2UserInfo {
-        private final Map<String, Object> attributes;
+    private final Map<String, Object> attributes;
     private final OAuth2Provider provider;
     private final String accessToken;
     /**
@@ -24,6 +25,24 @@ public class AppleOAuth2UserInfo implements OAuth2UserInfo {
     private final String nickname;
     private final String profileImageUrl;
 
+    public AppleOAuth2UserInfo(Map<String, Object> attributes) {
+        this.accessToken = null;
+        this.attributes = attributes;
+        this.identifier = (String) attributes.get("sub"); // 없으면 에러 발생하는게 맞음
+        this.email = (String) attributes.get("email"); // 없으면 에러 발생하는게 맞음
+        this.birth = null;
+        this.name = (String) attributes.getOrDefault("name", UUID.randomUUID()
+                .toString()
+                .substring(0, 8));
+        this.firstName = null;
+        this.lastName = null;
+        this.nickname = (String) attributes.getOrDefault("name", UUID.randomUUID()
+                .toString()
+                .substring(0, 8));
+        this.provider = OAuth2Provider.APPLE;
+        this.profileImageUrl = null;
+    }
+
     public AppleOAuth2UserInfo(AppleCredential credential) {
         this.accessToken = null;
         this.attributes = null;
@@ -33,7 +52,7 @@ public class AppleOAuth2UserInfo implements OAuth2UserInfo {
         this.name = credential.getName();
         this.firstName = null;
         this.lastName = null;
-        this.nickname= null;
+        this.nickname = null;
         this.provider = OAuth2Provider.APPLE;
         this.profileImageUrl = null;
     }
