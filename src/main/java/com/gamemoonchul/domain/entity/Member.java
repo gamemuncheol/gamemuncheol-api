@@ -1,6 +1,7 @@
 package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
+import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import com.gamemoonchul.domain.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,16 +10,16 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "MEMBER", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"identifier"})
-})
 @SuperBuilder
+@Entity(name = "MEMBER")
+@Getter @Setter
 public class Member extends BaseTimeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @Column(nullable = false, length = 30)
     private String name;

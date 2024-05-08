@@ -99,7 +99,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-//querydsl 추가 시작
+// QueryDSL Plugins 쓰는 버전
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -118,4 +118,3 @@ configurations {
    }
    querydsl.extendsFrom compileClasspath
 }
-//querydsl 추가 끝

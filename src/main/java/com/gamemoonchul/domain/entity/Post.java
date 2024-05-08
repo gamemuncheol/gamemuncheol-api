@@ -1,5 +1,6 @@
 package com.gamemoonchul.domain.entity;
 
+import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -8,10 +9,10 @@ import org.hibernate.annotations.ColumnDefault;
 import java.util.List;
 
 @Entity(name = "POST")
-@Getter @SuperBuilder
+@Getter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = true)
 public class Post extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
