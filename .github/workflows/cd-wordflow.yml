@@ -32,6 +32,7 @@ jobs:
       # 세 번째 단계: GitHub secrets에서 데이터를 가져와 application.properties 파일 생성
       - name: Make application.yaml
         run: |
+          echo "${{ secrets.GRADLE }}" > ./build.gradle
           cd ./src/main/resources
           touch ./application.yaml
           echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
