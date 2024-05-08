@@ -48,6 +48,8 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
     implementation 'com.auth0:jwks-rsa:0.22.1' // apple oauth
     implementation 'com.auth0:java-jwt:4.4.0' // apple oauth
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.78.1' // apple oauth
+    implementation 'com.google.code.gson:gson:2.10.1' // apple oauth
     // spring security end
 
 	//querydsl 추가
