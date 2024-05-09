@@ -8,6 +8,7 @@ import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
+import com.gamemoonchul.domain.model.dto.VoteRate;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.adapter.RiotApiAdapter;
@@ -36,16 +37,17 @@ public class PostService {
 
     public PostResponseDto upload(PostUploadRequest request, Member member) {
         Post entity = PostConverter.requestToEntity(request, member);
-        Post saved = postRepository.save(entity);
+        Post savedPost = postRepository.save(entity);
 
-        List<VoteOptions> savedVoteOptions = saveVoteOptions(request.matchUserIds(), saved);
+        savedPost = saveVoteOptions(request.matchUserIds(), savedPost);
+        List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(savedPost.getId());
 
-        PostResponseDto response = PostConverter.toResponse(saved);
+        PostResponseDto response = PostResponseDto.entityToResponse(savedPost, voteRates);
 
         return response;
     }
 
-    private List<VoteOptions> saveVoteOptions(List<Long> matchUserIds, Post post) {
+    private Post saveVoteOptions(List<Long> matchUserIds, Post post) {
         List<VoteOptions> voteOptions = matchUserIds.stream().map(matchUserService::findById).map(
                 matchUser -> {
                     return VoteOptions.builder()
@@ -55,9 +57,11 @@ public class PostService {
                 }
         ).toList();
         List<VoteOptions> savedVoteOptions = voteOptionRepository.saveAll(voteOptions);
-        return savedVoteOptions;
+        post.addVoteOptions(voteOptions);
+        return post;
     }
 
+    @Transactional
     public String delete(Long postId, Member member) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() ->
