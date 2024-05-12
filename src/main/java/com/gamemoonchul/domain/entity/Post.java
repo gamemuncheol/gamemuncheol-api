@@ -39,4 +39,11 @@ public class Post extends BaseTimeEntity {
     private Long commentCount=0L;
     @Builder.Default
     private Long voteCount=0L;
+
+    public void addVoteOptions(List<VoteOptions> voteOptions) {
+        if(this.voteOptions == null) {
+            this.voteOptions = new ArrayList<VoteOptions>();
+        }
+        this.voteOptions.addAll(voteOptions);
+    }
 }
