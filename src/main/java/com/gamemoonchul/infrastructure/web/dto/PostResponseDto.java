@@ -20,6 +20,7 @@ public class PostResponseDto {
     private String videoUrl;
     private String thumbnailUrl;
     private String title;
+    private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long viewCount;
@@ -32,6 +33,7 @@ public class PostResponseDto {
                 .videoUrl(entity.getVideoUrl())
                 .thumbnailUrl(entity.getThumbnailUrl())
                 .title(entity.getTitle())
+                .content(entity.getContent())
                 .viewCount(entity.getViewCount())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())

@@ -33,12 +33,12 @@ public class Post extends BaseTimeEntity {
     private String title;
 
     private String content;
-    @ColumnDefault("0L") @Builder.Default
+    @Builder.Default
     private Long viewCount = 0L;
-    @ColumnDefault("0L") @Builder.Default
-    private Long commentCount = 0L;
-    @ColumnDefault("0L") @Builder.Default
-    private Long voteCount = 0L;
+    @Builder.Default
+    private Long commentCount=0L;
+    @Builder.Default
+    private Long voteCount=0L;
 
     public void addVoteOptions(List<VoteOptions> voteOptions) {
         if(this.voteOptions == null) {
