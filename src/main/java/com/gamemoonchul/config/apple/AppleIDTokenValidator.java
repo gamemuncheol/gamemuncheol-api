@@ -30,8 +30,7 @@ public class AppleIDTokenValidator {
     private static final String ISSUER = "https://appleid.apple.com";
     @Value("${apple.clientId}")
     private  String CLIENT_ID;
-    @Value("${apple.nonce}")
-    private String NONCE;
+    private String NONCE = "HIHIHIHI";
 
     private JwkProvider jwkProvider = new JwkProviderBuilder(APPLE_PUBLIC_KEYS_DOMAIN).build();
 

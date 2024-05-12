@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "POST")
