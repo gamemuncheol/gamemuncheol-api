@@ -32,10 +32,10 @@ public class Post extends BaseTimeEntity {
     private String title;
 
     private String content;
-    @ColumnDefault("0")
-    private Long viewCount;
-    @ColumnDefault("0")
-    private Long commentCount;
-    @ColumnDefault("0")
-    private Long voteCount;
+    @Builder.Default
+    private Long viewCount = 0L;
+    @Builder.Default
+    private Long commentCount=0L;
+    @Builder.Default
+    private Long voteCount=0L;
 }
