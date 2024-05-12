@@ -8,6 +8,7 @@ import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.Oauth2Status;
+import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
@@ -18,11 +19,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 import static com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
@@ -53,7 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) throws IOException {
 
         // 로그인 또는 회원가입 처리
-        handleLoginOrSignUp(request, response, authentication);
+        handleSignIn(request, response, authentication);
 
         // 리다이렉트 URL 결정
         String targetUrl = determineTargetUrl(request);
@@ -68,9 +71,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    // 로그인 또는 회원가입 처리
-    private void handleLoginOrSignUp(HttpServletRequest request, HttpServletResponse response,
-                                     Authentication authentication) {
+    // 로그인 or 회원가입 처리
+    private void handleSignIn(HttpServletRequest request, HttpServletResponse response,
+                              Authentication authentication) {
         OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
 
         if (principal == null) {
@@ -82,7 +85,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .orElse("");
 
         if ("login".equalsIgnoreCase(mode)) {
-            TokenDto tokenDto = signIn(authentication, principal);
+            try {
+                System.out.println(principal.getUserInfo().getIdentifier().getBytes("UTF-8").length);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            TokenDto tokenDto = signIn(principal);
             request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
@@ -116,7 +124,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         memberService.deactivateAccount(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
     }
 
-    private TokenDto signIn(Authentication authentication, OAuth2UserPrincipal principal) {
+    private TokenDto signIn(OAuth2UserPrincipal principal) {
         // TODO: 리프레시 토큰 DB 저장
         log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo().getEmail(),
                 principal.getUserInfo().getName(),
@@ -135,6 +143,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (principal instanceof OAuth2UserPrincipal) {
             return (OAuth2UserPrincipal) principal;
+        } else if(principal instanceof OidcUser) {
+            AppleOAuth2UserInfo appleOAuth2UserInfo = new AppleOAuth2UserInfo(((OidcUser) principal).getAttributes());
+            return new OAuth2UserPrincipal(appleOAuth2UserInfo);
         }
         return null;
     }

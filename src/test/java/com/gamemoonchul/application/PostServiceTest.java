@@ -3,8 +3,12 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
+import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.PostDummy;
+import com.gamemoonchul.domain.entity.riot.MatchUser;
+import com.gamemoonchul.domain.entity.riot.MatchUserDummy;
 import com.gamemoonchul.domain.status.PostStatus;
+import com.gamemoonchul.infrastructure.repository.MatchUserRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
@@ -15,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -29,21 +35,34 @@ class PostServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private MatchUserRepository matchUserRepository;
 
 
     @Test
     @DisplayName("게시물 업로드 테스트 ")
     public void defaultUploadTest() {
         // given
-        PostUploadRequest request = PostDummy.createRequest();
         Member member = memberRepository.save(MemberDummy.create());
+        // match user 생성
+        List<MatchUser> matchUsers = new ArrayList<>(List.of(MatchUserDummy.createDummy("1"), MatchUserDummy.createDummy("2")));
+        List<MatchUser> savedMatchUsers = matchUserRepository.saveAll(matchUsers);
+        // request 생성
+        PostUploadRequest request = PostDummy.createRequest(savedMatchUsers.stream().map(
+                MatchUser::getId
+        ).collect(Collectors.toList()));
 
         // when
-        postService.upload(request, member);
+        PostResponseDto response = postService.upload(request, member);
+        List<Post> allSavedPost = postRepository.findAll();
 
         // then
-        assertThat(postRepository.findAll()
+        assertThat(allSavedPost
                 .size()).isEqualTo(1);
+        assertThat(response.getCreatedAt()).isNotNull();
+        assertThat(response.getUpdatedAt()).isNotNull();
+        assertThat(response.getVoteRates().size()).isEqualTo(2);
+        assertThat(response.getViewCount()).isEqualTo(0);
     }
 
     @Test

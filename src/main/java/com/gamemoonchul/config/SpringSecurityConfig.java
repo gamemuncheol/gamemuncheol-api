@@ -1,12 +1,13 @@
 package com.gamemoonchul.config;
 
+import com.gamemoonchul.config.apple.AppleClientSecretGenerator;
+import com.gamemoonchul.config.apple.OAuthRequestEntityConverter;
 import com.gamemoonchul.config.jwt.JwtAuthorizationFilter;
 import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.CustomAuthenticationEntryPoint;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
-import com.gamemoonchul.domain.enums.MemberRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,9 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -36,6 +40,7 @@ public class SpringSecurityConfig {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final AppleClientSecretGenerator appleClientSecretGenerator;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -59,7 +64,8 @@ public class SpringSecurityConfig {
                             .hasAnyRole("USER")
                             .requestMatchers("/privacy/**")
                             .hasAnyRole("PRIVACY_NOT_AGREED", "USER")
-                            .anyRequest().authenticated();
+                            .anyRequest()
+                            .authenticated();
                     ;
                 })
                 .csrf(AbstractHttpConfigurer::disable)
@@ -70,6 +76,7 @@ public class SpringSecurityConfig {
                 .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->
                         configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                                .tokenEndpoint(config -> config.accessTokenResponseClient(accessTokenResponseClient()))
                                 .userInfoEndpoint(config -> config.userService(customOauth))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
@@ -85,5 +92,12 @@ public class SpringSecurityConfig {
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
+        DefaultAuthorizationCodeTokenResponseClient accessTokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
+        accessTokenResponseClient.setRequestEntityConverter(new OAuthRequestEntityConverter(appleClientSecretGenerator));
+        return accessTokenResponseClient;
     }
 }

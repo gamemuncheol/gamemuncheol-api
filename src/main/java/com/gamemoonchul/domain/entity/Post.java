@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "POST")
@@ -32,10 +33,17 @@ public class Post extends BaseTimeEntity {
     private String title;
 
     private String content;
-    @ColumnDefault("0")
-    private Long viewCount;
-    @ColumnDefault("0")
-    private Long commentCount;
-    @ColumnDefault("0")
-    private Long voteCount;
+    @ColumnDefault("0L") @Builder.Default
+    private Long viewCount = 0L;
+    @ColumnDefault("0L") @Builder.Default
+    private Long commentCount = 0L;
+    @ColumnDefault("0L") @Builder.Default
+    private Long voteCount = 0L;
+
+    public void addVoteOptions(List<VoteOptions> voteOptions) {
+        if(this.voteOptions == null) {
+            this.voteOptions = new ArrayList<VoteOptions>();
+        }
+        this.voteOptions.addAll(voteOptions);
+    }
 }
