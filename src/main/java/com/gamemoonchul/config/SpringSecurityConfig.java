@@ -9,6 +9,7 @@ import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResp
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class SpringSecurityConfig {
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final AppleClientSecretGenerator appleClientSecretGenerator;
+    @Qualifier("corsConfigurationSource")
+    private final CorsConfigurationSource corsConfigSource;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -80,7 +84,9 @@ public class SpringSecurityConfig {
                                 .userInfoEndpoint(config -> config.userService(customOauth))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
-                );
+                ).cors(cors -> {
+                    cors.configurationSource(corsConfigSource);
+                });
 
         /**
          * Exception 발생시 Redirect를 하지 않고 401을 반환
