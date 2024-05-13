@@ -2,16 +2,17 @@ package com.gamemoonchul.config;
 
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration
+@Component
 public class CorsConfig {
 
-    @Bean(name = "corsConfigurationSource")
-    public CorsConfigurationSource corsConfigurationSource() {
+    @Bean @Primary
+    public CorsConfigurationSource customCorsConfig() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");

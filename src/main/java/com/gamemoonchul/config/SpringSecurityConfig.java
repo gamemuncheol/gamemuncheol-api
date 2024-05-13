@@ -9,6 +9,7 @@ import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -43,8 +44,7 @@ public class SpringSecurityConfig {
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final AppleClientSecretGenerator appleClientSecretGenerator;
-    @Qualifier("corsConfigurationSource")
-    private final CorsConfigurationSource corsConfigSource;
+    private final CorsConfigurationSource corsConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -85,7 +85,7 @@ public class SpringSecurityConfig {
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
                 ).cors(cors -> {
-                    cors.configurationSource(corsConfigSource);
+                    cors.configurationSource(corsConfig);
                 });
 
         /**
