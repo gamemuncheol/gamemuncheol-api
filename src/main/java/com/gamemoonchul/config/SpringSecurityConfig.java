@@ -84,7 +84,9 @@ public class SpringSecurityConfig {
                                 .userInfoEndpoint(config -> config.userService(customOauth))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
-                ).cors(AbstractHttpConfigurer::disable);
+                ).cors(corsCustomizer -> {
+                    corsCustomizer.configurationSource(corsConfig);
+                });
 
         /**
          * Exception 발생시 Redirect를 하지 않고 401을 반환
