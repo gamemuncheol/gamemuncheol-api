@@ -84,11 +84,11 @@ dependencies {
     // youtube
 
     // test container
-    implementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    implementation("org.testcontainers:testcontainers:1.19.8")
-    implementation("org.testcontainers:junit-jupiter:1.19.8")
-    implementation("org.testcontainers:mysql:1.19.8")
-    implementation("io.rest-assured:rest-assured:5.4.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("org.testcontainers:testcontainers:1.19.8")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.8")
+    testImplementation("org.testcontainers:mysql:1.19.8")
+    testImplementation("io.rest-assured:rest-assured:5.4.0")
     // test container
 
 
