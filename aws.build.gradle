@@ -52,11 +52,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1' // apple oauth
     // spring security end
 
-	//querydsl 추가
+    //querydsl 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // commons
+    implementation 'commons-io:commons-io:2.16.1'
 
     // Process Executor
     implementation 'org.zeroturnaround:zt-exec:1.12'
@@ -72,18 +75,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
     // JPA end
 
-    // Test를 위한 H2database
-    runtimeOnly 'com.h2database:h2'
-    // Test를 위한 H2database
-
     // youtube
     implementation 'com.google.apis:google-api-services-youtube:v3-rev222-1.25.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.35.0'
     // youtube
 
-    // Apple Oauth 관련 라이브러리 Start
-    implementation 'com.google.code.gson:gson:2.10.1'
-    // Apple Oauth 관련 라이브러리 End
+    // test container
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("org.testcontainers:testcontainers:1.19.8")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.8")
+    testImplementation("org.testcontainers:mysql:1.19.8")
+    testImplementation("io.rest-assured:rest-assured:5.4.0")
+    // test container
+
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
