@@ -22,9 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-class MatchUserServiceTest {
+class MatchUserServiceTest extends TestDataBase{
     @Autowired
     private MatchGameService matchGameService;
     @Autowired

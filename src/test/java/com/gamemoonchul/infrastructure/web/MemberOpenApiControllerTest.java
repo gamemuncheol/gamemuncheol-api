@@ -1,10 +1,9 @@
 package com.gamemoonchul.infrastructure.web;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.config.jwt.*;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
-import com.gamemoonchul.infrastructure.web.common.BaseIntegrationTest;
 import com.gamemoonchul.infrastructure.web.dto.RenewRequest;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@Transactional
-class MemberOpenApiControllerTest extends BaseIntegrationTest {
+class MemberOpenApiControllerTest extends TestDataBase {
 
     @Autowired
     private TokenHelper tokenHelper;

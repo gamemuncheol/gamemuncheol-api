@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
@@ -15,9 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-class MatchGameServiceTest {
+class MatchGameServiceTest extends TestDataBase {
     @Autowired
     private MatchGameService matchGameService;
 

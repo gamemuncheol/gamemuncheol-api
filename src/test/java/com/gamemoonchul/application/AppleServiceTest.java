@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.apple.AppleIDTokenValidator;
 import com.gamemoonchul.config.apple.entities.AppleCredential;
@@ -22,9 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@Transactional
-@SpringBootTest
-public class AppleServiceTest {
+public class AppleServiceTest extends TestDataBase {
 
   @Autowired
   MemberRepository memberRepository;
