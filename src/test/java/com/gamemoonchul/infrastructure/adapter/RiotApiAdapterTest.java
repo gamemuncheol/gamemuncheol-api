@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.adapter;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
@@ -11,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class RiotApiAdapterTest {
+class RiotApiAdapterTest extends TestDataBase {
     @Autowired
     RiotApiPort riotApi;
 

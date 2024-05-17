@@ -87,6 +87,15 @@ dependencies {
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.35.0'
     // youtube
 
+    // test container
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+    testImplementation 'org.testcontainers:mysql'
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // test container
+
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'

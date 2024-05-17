@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
@@ -26,9 +27,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-@SpringBootTest
-@Transactional
-class PostServiceTest {
+class PostServiceTest extends TestDataBase {
     @Autowired
     private PostService postService;
     @Autowired

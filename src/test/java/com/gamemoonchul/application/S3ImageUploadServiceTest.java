@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.ApiException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,8 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class S3ImageUploadServiceTest {
+class S3ImageUploadServiceTest extends TestDataBase {
     @Autowired
     private S3Service s3Service;
     @Value("${cloud.aws.s3.bucket}")
