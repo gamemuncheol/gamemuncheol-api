@@ -1,11 +1,9 @@
 # 자바 프로젝트를 위한 Gradle을 사용한 지속적 배포(CD) 워크플로우 설정
 name: CD with Gradle
 
-# main 브랜치로 push되거나 pull request가 발생했을 때 워크플로우를 실행
+# main 브랜치로 push될 때만 워크플로우 실행
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
     branches: [ "develop" ]
 
 # 워크플로우에서는 저장소 내용을 읽을 수 있는 권한만 설정
