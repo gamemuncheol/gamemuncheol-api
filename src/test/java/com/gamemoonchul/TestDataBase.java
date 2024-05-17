@@ -1,14 +1,18 @@
 package com.gamemoonchul;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
@@ -17,6 +21,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Import(DBInitializer.class)
 @TestPropertySource(locations = "classpath:application.yaml")
+@AutoConfigureMockMvc
+@Transactional
 // @ActiveProfiles("test")
 public abstract class TestDataBase {
 
@@ -26,6 +32,12 @@ public abstract class TestDataBase {
 
     @LocalServerPort
     protected int port;
+
+    @Autowired
+    protected MockMvc mvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
 
     @Autowired
     private DBInitializer dataInitializer;
