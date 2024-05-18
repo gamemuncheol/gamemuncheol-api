@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.converter;
 
-import com.gamemoonchul.config.apple.entities.AppleCredential;
+import com.gamemoonchul.config.apple.AppleCredential;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
