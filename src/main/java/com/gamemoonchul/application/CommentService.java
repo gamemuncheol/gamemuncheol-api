@@ -46,8 +46,7 @@ public class CommentService {
                 .orElseThrow(
                         () -> new ApiException(MemberStatus.MEMBER_NOT_FOUND)
                 );
-        if (member.getId()
-                .equals(savedMember.getId())) {
+        if (fixedComment.getMember().getId().equals(savedMember.getId())) {
             return commentRepository.save(fixedComment);
         } else {
             throw new ApiException(MemberStatus.NOT_AUTHORIZED_MEMBER);
