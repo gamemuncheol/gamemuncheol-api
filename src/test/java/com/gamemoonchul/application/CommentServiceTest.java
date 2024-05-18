@@ -3,6 +3,7 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.domain.entity.*;
+import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
@@ -13,6 +14,7 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class CommentServiceTest extends TestDataBase {
@@ -77,4 +79,41 @@ class CommentServiceTest extends TestDataBase {
         assertThat(savedEntity.getContent()).isNotEqualTo(fixedComment.getContent());
         assertThat(savedEntity.getId()).isEqualTo(fixedComment.getId());
     }
+
+    @Test
+    @DisplayName("댓글을 작성한 유저가 아닌 경우에 댓글 수정 불가능")
+    void canNotFixWithNotAuthorizedMember() throws InterruptedException {
+        // given
+        Comment savedEntity = commentRepository.save(CommentDummy.create(post, member));
+        Member anotherMember = memberRepository.save(MemberDummy.createWithId("rookedsysc"));
+        CommentFixRequest content = CommentFixRequest.builder()
+                .contents("new contents")
+                .commentId(savedEntity.getId())
+                .build();
+        em.clear();
+
+        // when // then
+        assertThatThrownBy(
+                () -> commentService.fix(content, anotherMember))
+                .isInstanceOf(ApiException.class)
+                .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
+    }
+
+
+    @Test
+    @DisplayName("저장 안되어있는 Comment 수정할려고 하면 에러 발생하는지 테스트")
+    void canNotFixNotExistComment() throws InterruptedException {
+        // given
+        CommentFixRequest content = CommentFixRequest.builder()
+                .contents("new contents")
+                .commentId(12L)
+                .build();
+
+        // when // then
+        assertThatThrownBy(
+                () -> commentService.fix(content, member))
+                .isInstanceOf(ApiException.class)
+                .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
+    }
+
 }
