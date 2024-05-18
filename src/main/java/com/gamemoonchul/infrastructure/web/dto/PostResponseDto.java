@@ -1,6 +1,6 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
-import com.gamemoonchul.domain.converter.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.domain.entity.riot.MatchUser;

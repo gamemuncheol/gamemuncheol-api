@@ -4,7 +4,6 @@ import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,10 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "postId")
     private List<VoteOptions> voteOptions;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
+    private List<Comment> comments;
+
     private String videoUrl;
 
     private String thumbnailUrl;
@@ -45,5 +48,13 @@ public class Post extends BaseTimeEntity {
             this.voteOptions = new ArrayList<VoteOptions>();
         }
         this.voteOptions.addAll(voteOptions);
+    }
+
+    public void addComment(Comment comment) {
+        if(this.comments == null) {
+            this.comments = new ArrayList<Comment>();
+        }
+        this.comments.add(comment);
+        commentCount ++;
     }
 }

@@ -1,6 +1,6 @@
 package com.gamemoonchul.application;
 
-import com.gamemoonchul.domain.converter.riot.MatchGameConverter;
+import com.gamemoonchul.application.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.repository.MatchGameRepository;

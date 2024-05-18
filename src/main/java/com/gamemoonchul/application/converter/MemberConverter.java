@@ -1,4 +1,4 @@
-package com.gamemoonchul.domain.converter;
+package com.gamemoonchul.application.converter;
 
 import com.gamemoonchul.config.apple.AppleCredential;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;

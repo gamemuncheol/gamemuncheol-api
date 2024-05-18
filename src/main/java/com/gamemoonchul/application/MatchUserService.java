@@ -1,7 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.domain.converter.riot.MatchUserConverter;
+import com.gamemoonchul.application.converter.riot.MatchUserConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;

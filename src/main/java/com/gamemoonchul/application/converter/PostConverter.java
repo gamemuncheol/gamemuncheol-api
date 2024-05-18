@@ -1,4 +1,4 @@
-package com.gamemoonchul.domain.converter;
+package com.gamemoonchul.application.converter;
 
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
