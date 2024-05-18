@@ -1,5 +1,6 @@
-package com.gamemoonchul;
+package com.gamemoonchul.application;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.application.MatchGameService;
 import com.gamemoonchul.application.MatchUserService;
 import com.gamemoonchul.common.exception.ApiException;
@@ -22,7 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MatchUserServiceTest extends TestDataBase{
+class MatchUserServiceTest extends TestDataBase {
     @Autowired
     private MatchGameService matchGameService;
     @Autowired
