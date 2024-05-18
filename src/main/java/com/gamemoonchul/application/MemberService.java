@@ -6,7 +6,7 @@ import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.jwt.TokenInfo;
 import com.gamemoonchul.config.jwt.TokenType;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
-import com.gamemoonchul.domain.converter.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.domain.status.MemberStatus;
