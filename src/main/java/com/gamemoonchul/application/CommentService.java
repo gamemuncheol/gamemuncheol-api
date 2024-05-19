@@ -40,16 +40,29 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment fix(CommentFixRequest request, Member member) {
-        Comment fixedComment = commentConverter.requestToEntity(request);
-        Member savedMember = memberRepository.findById(member.getId())
-                .orElseThrow(
-                        () -> new ApiException(MemberStatus.MEMBER_NOT_FOUND)
-                );
-        if (fixedComment.getMember().getId().equals(savedMember.getId())) {
-            return commentRepository.save(fixedComment);
-        } else {
-            throw new ApiException(MemberStatus.NOT_AUTHORIZED_MEMBER);
-        }
+    public Comment searchComment(Long commentId)  {
+        Comment result = commentRepository.searchByIdOrThrow(commentId);
+        return result;
     }
+
+    public Comment fix(CommentFixRequest request, Member authMember) {
+        Comment fixedComment = commentConverter.requestToEntity(request);
+        // 글 작성자
+        validateSameMemberId(fixedComment.getMember(), authMember);
+        return commentRepository.save(fixedComment);
+    }
+
+    public void delete(Long commentId, Member authMember) {
+        Comment savedComment = this.searchComment(commentId);
+        validateSameMemberId(savedComment.getMember(), authMember);
+        commentRepository.delete(savedComment);
+    }
+
+    private void validateSameMemberId(Member commentWriteMember, Member currentSignInMember) {
+        if (commentWriteMember.getId().equals(currentSignInMember.getId())) {
+            return;
+        }
+        throw new ApiException(MemberStatus.NOT_AUTHORIZED_MEMBER);
+    }
+
 }
