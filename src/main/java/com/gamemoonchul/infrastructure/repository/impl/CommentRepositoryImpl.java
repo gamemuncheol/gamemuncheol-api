@@ -27,7 +27,7 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
     @Override
     public Comment searchByIdOrThrow(Long commentId) {
         try {
-            return queryFactory.select(comment)
+            Comment result = queryFactory.select(comment)
                     .from(comment)
                     .join(member)
                     .on(comment.member.id.eq(member.id))
@@ -37,6 +37,12 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
                     .fetchJoin()
                     .where(comment.id.eq(commentId))
                     .fetchOne();
+
+            if(result == null) {
+                throw new Exception(new NullPointerException());
+            }
+
+            return result;
         } catch (Exception e) {
             throw new ApiException(PostStatus.COMMENT_NOT_FOUND);
         }
