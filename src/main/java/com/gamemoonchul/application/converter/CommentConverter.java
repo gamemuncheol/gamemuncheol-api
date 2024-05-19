@@ -34,11 +34,11 @@ public class CommentConverter {
                 .build();
     }
 
+    /**
+     * request의 comment id를 참조해서 실제로 영속 상태인 Comment Entity를 반환
+     */
     public Comment requestToEntity(CommentFixRequest request) {
-        Comment savedComment = commentRepository.findById(request.commentId())
-                .orElseThrow(() ->
-                        new ApiException(PostStatus.COMMENT_NOT_FOUND)
-                );
+        Comment savedComment = commentRepository.searchByIdOrThrow(request.commentId());
         savedComment.setContent(request.contents());
         return savedComment;
     }
