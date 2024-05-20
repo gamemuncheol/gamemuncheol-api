@@ -87,7 +87,7 @@ public class PostOpenApiServiceUnitTest {
                 when(postRepository.findAll()).thenReturn(responsePosts);
 
                 // when
-                List<Post> result = postOpenApiService.getHotPosts(0, 10);
+                List<PostResponseDto> result = postOpenApiService.getHotPosts(0, 10);
 
                 // then
                 SoftAssertions.assertSoftly(softly -> {

@@ -41,12 +41,20 @@ public class PostOpenApiService {
         return new Pagination<PostResponseDto>(savedPage, responses);
     }
 
-    public List<Post> getHotPosts(int page, int size) {
+    public List<PostResponseDto> getHotPosts(int page, int size) {
         List<Post> savedPosts = postRepository.findAll();
         return savedPosts.stream()
                 .filter(Post::isHot)
                 .skip((long) page * size) // 건너뛸 요소 수 계산
                 .limit(size) // 요소 수 제한
+                .map(post -> {
+                            List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
+                            return PostResponseDto.entityToResponse(post, voteRates);
+                        }
+                )
+                .sorted(
+                        Comparator.comparing(PostResponseDto::getCreatedAt)
+                )
                 .toList();
     }
 }

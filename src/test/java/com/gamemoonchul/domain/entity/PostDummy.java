@@ -43,8 +43,11 @@ public class PostDummy {
         Post post = Post.builder()
                 .title("제목")
                 .content("내용")
+                .member(MemberDummy.create())
                 .videoUrl("https://youtube.com")
                 .thumbnailUrl("https://s3.amazon.com")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .voteOptions(VoteOptionsDummy.createHotVoteOptions(firstCount, secondCount))
                 .build();
         return post;

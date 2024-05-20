@@ -1,7 +1,6 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.PostOpenApiService;
-import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
@@ -30,7 +29,7 @@ public class PostOpenApiController {
     }
 
     @GetMapping("")
-    public List<Post> getHotPosts(
+    public List<PostResponseDto> getHotPosts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
