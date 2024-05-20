@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchGameDummy;
 import org.junit.jupiter.api.DisplayName;
@@ -8,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class MatchGameResponseTest {
+class MatchGameResponseTest extends TestDataBase {
     @DisplayName("MatchGameResponse 객체 생성 테스트")
     @Test
     void createMatchGameResponse() {

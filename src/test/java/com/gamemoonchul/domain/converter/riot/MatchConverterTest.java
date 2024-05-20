@@ -1,5 +1,7 @@
 package com.gamemoonchul.domain.converter.riot;
 
+import com.gamemoonchul.TestDataBase;
+import com.gamemoonchul.application.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
@@ -9,8 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-class MatchConverterTest {
+class MatchConverterTest extends TestDataBase {
 
     @Autowired
     private MatchGameConverter matchConverter;

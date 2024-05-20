@@ -13,6 +13,7 @@ public enum PostStatus implements ApiStatusIfs {
   POST_NOT_FOUND(6404, "게시글을 찾을 수 없습니다."),
   UNAUTHORIZED_REQUEST(6403, "권한없는 요청 입니다."),
   WRONG_MATCH_USER(6402, "잘못된 투표 유저 입니다."),
+  COMMENT_NOT_FOUND(6405, "댓글을 찾을 수 없습니다.")
 
   ;
 

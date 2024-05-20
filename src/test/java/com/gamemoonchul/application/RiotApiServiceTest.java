@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
@@ -18,9 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional
-class RiotApiServiceTest {
+class RiotApiServiceTest extends TestDataBase {
     private RiotApiAdapter mockRiotApi = mock(RiotApiAdapter.class);
 
     @Autowired

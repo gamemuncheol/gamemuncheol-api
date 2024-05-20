@@ -12,7 +12,7 @@ import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.domain.converter.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

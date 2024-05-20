@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.repository;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.domain.entity.*;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.entity.riot.MatchUserDummy;
@@ -20,8 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@SpringBootTest
-class VoteOptionRepositoryTest {
+class VoteOptionRepositoryTest extends TestDataBase {
     @Autowired
     private VoteOptionRepository voteOptionRepository;
 

@@ -1,4 +1,4 @@
-package com.gamemoonchul.config.apple.entities;
+package com.gamemoonchul.config.apple;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.*;

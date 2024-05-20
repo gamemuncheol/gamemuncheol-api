@@ -14,18 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Setter
+    @ManyToOne(fetch = FetchType.LAZY) @Setter
     @JoinColumn(name = "memberId", referencedColumnName = "id")
     private Member member;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
     private List<VoteOptions> voteOptions;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
+    private List<Comment> comments;
 
     private String videoUrl;
 
@@ -37,15 +39,23 @@ public class Post extends BaseTimeEntity {
     @Builder.Default
     private Long viewCount = 0L;
     @Builder.Default
-    private Long commentCount = 0L;
+    private Long commentCount=0L;
     @Builder.Default
-    private Long voteCount = 0L;
+    private Long voteCount=0L;
 
     public void addVoteOptions(List<VoteOptions> voteOptions) {
-        if (this.voteOptions == null) {
+        if(this.voteOptions == null) {
             this.voteOptions = new ArrayList<VoteOptions>();
         }
         this.voteOptions.addAll(voteOptions);
+    }
+
+    public void addComment(Comment comment) {
+        if(this.comments == null) {
+            this.comments = new ArrayList<Comment>();
+        }
+        this.comments.add(comment);
+        commentCount ++;
     }
 
     public boolean isHot() {

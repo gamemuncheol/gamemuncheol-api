@@ -1,6 +1,6 @@
 package com.gamemoonchul.config.oauth.user;
 
-import com.gamemoonchul.config.apple.entities.AppleCredential;
+import com.gamemoonchul.config.apple.AppleCredential;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

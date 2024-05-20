@@ -1,31 +1,24 @@
 package com.gamemoonchul.infrastructure.web;
 
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.config.jwt.*;
-import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
-import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import com.gamemoonchul.infrastructure.web.common.BaseIntegrationTest;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.List;
 import java.util.UUID;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
-class MemberApiControllerTest extends BaseIntegrationTest {
+class MemberApiControllerTest extends TestDataBase {
     @Autowired
     private TokenHelper tokenHelper;
     private TokenDto tokenDto;

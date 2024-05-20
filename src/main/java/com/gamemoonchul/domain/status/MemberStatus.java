@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MemberStatus implements ApiStatusIfs {
+  NOT_AUTHORIZED_MEMBER(2403, "권한이 없는 멤버 입니다."),
   MEMBER_NOT_FOUND(2404, "회원을 찾을 수 없습니다."),
   ALREADY_EXIST_NICKNAME(2405, "이미 존재하는 닉네임입니다."),
   ;
