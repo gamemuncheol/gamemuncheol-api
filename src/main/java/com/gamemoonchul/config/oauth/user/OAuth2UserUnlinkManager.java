@@ -1,7 +1,7 @@
 package com.gamemoonchul.config.oauth.user;
 
 import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.config.oauth.Oauth2Status;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

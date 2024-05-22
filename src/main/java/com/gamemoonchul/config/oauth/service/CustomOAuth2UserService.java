@@ -2,7 +2,7 @@ package com.gamemoonchul.config.oauth.service;
 
 import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
-import com.gamemoonchul.config.oauth.Oauth2Status;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfoFactory;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;

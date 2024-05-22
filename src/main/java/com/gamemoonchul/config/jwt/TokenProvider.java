@@ -1,6 +1,7 @@
 package com.gamemoonchul.config.jwt;
 
 import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.domain.status.JwtStatus;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

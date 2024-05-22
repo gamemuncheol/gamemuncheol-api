@@ -4,6 +4,7 @@ import com.gamemoonchul.common.exception.ApiException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.status.JwtStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

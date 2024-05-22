@@ -7,7 +7,7 @@ import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
-import com.gamemoonchul.config.oauth.Oauth2Status;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
