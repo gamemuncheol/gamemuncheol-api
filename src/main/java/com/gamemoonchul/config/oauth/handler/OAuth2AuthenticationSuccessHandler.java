@@ -1,7 +1,8 @@
 package com.gamemoonchul.config.oauth.handler;
 
 import com.gamemoonchul.application.MemberService;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.common.util.CookieUtils;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
@@ -63,7 +64,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // 응답이 이미 커밋된 경우 리다이렉트를 수행할 수 없으므로 로그 남기고 종료
         if (response.isCommitted()) {
-            throw new ApiException(Oauth2Status.EXPIRED_LOGIN);
+            log.error(Oauth2Status.EXPIRED_LOGIN.getMessage());
+            throw new InternalServerException(Oauth2Status.EXPIRED_LOGIN);
         }
 
         clearAuthenticationAttributes(request, response);
@@ -77,7 +79,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
 
         if (principal == null) {
-            throw new ApiException(Oauth2Status.LOGIN_FAILED);
+            log.error(Oauth2Status.LOGIN_FAILED.getMessage());
+            throw new InternalServerException(Oauth2Status.LOGIN_FAILED);
         }
 
         String mode = CookieUtils.getCookie(request, MODE_PARAM_COOKIE_NAME)
@@ -95,7 +98,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
         } else {
-            throw new ApiException(Oauth2Status.LOGIN_FAILED);
+            log.error(Oauth2Status.LOGIN_FAILED.getMessage());
+            throw new BadRequestException(Oauth2Status.LOGIN_FAILED);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.status.MemberStatus;
@@ -73,7 +73,7 @@ class MemberServiceTest extends TestDataBase {
 
         // then
         assertThatThrownBy(() -> memberService.updateNickName(member, nickname))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
     }
 }

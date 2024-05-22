@@ -1,7 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.PostConverter;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.VoteOptions;
@@ -13,10 +13,12 @@ import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -38,14 +40,17 @@ public class PostService {
     }
 
     private Post saveVoteOptions(List<Long> matchUserIds, Post post) {
-        List<VoteOptions> voteOptions = matchUserIds.stream().map(matchUserService::findById).map(
-                matchUser -> {
-                    return VoteOptions.builder()
-                            .matchUser(matchUser)
-                            .post(post)
-                            .build();
-                }
-        ).toList();
+        List<VoteOptions> voteOptions = matchUserIds.stream()
+                .map(matchUserService::findById)
+                .map(
+                        matchUser -> {
+                            return VoteOptions.builder()
+                                    .matchUser(matchUser)
+                                    .post(post)
+                                    .build();
+                        }
+                )
+                .toList();
         List<VoteOptions> savedVoteOptions = voteOptionRepository.saveAll(voteOptions);
         post.addVoteOptions(voteOptions);
         return post;
@@ -54,14 +59,18 @@ public class PostService {
     @Transactional
     public String delete(Long postId, Member member) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() ->
-                        new ApiException(PostStatus.POST_NOT_FOUND)
+                .orElseThrow(() -> {
+                            log.error(PostStatus.POST_NOT_FOUND.getMessage());
+                            return new BadRequestException(PostStatus.POST_NOT_FOUND);
+                        }
                 );
         if (member.getId()
-                .equals(post.getMember().getId())) {
+                .equals(post.getMember()
+                        .getId())) {
             postRepository.delete(post);
             return "Delete Complete";
         }
-        throw new ApiException(PostStatus.UNAUTHORIZED_REQUEST);
+        log.error(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
+        throw new BadRequestException(PostStatus.UNAUTHORIZED_REQUEST);
     }
 }

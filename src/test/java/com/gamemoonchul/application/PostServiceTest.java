@@ -1,7 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.entity.Post;
@@ -14,11 +14,9 @@ import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,7 @@ class PostServiceTest extends TestDataBase {
         PostResponseDto response = postService.upload(PostDummy.createRequest(), member1);
 
         // then
-        assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(ApiException.class)
+        assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
     }
 }

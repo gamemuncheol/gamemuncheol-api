@@ -3,7 +3,8 @@ package com.gamemoonchul.application;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.domain.status.S3Status;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 @Service
-@Slf4j @Transactional
+@Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class S3Service {
     public static BigInteger MAX_FILE_SIZE = BigInteger
@@ -43,7 +45,7 @@ public class S3Service {
             return fileUrl;
         } catch (IOException e) {
             log.error("S3 업로드에 실패하였습니다.", e);
-            throw new ApiException(S3Status.S3_UPLOAD_FAILED);
+            throw new InternalServerException(S3Status.S3_UPLOAD_FAILED);
         }
     }
 
@@ -60,7 +62,7 @@ public class S3Service {
             return fileUrl;
         } catch (IOException e) {
             log.error("S3 업로드에 실패하였습니다.", e);
-            throw new ApiException(S3Status.S3_UPLOAD_FAILED);
+            throw new InternalServerException(S3Status.S3_UPLOAD_FAILED);
         }
     }
 
@@ -93,17 +95,20 @@ public class S3Service {
     }
 
     /**
-     * 파일 타입이 MP4인지 확인
+     * 동영상일 경우 : 파일 타입이 MP4인지 확인
+     * 이미지일 경우 : 파일 타입이 jpeg, gif, png인지 확인
      */
     private void checkFileTypeOrThrow(String contentType, FileType type) {
         if (type == FileType.VIDEO) {
             if (!contentType.equals("video/mp4")) {
-                throw new ApiException(S3Status.INVALID_FILETYPE);
+                log.error(S3Status.INVALID_FILETYPE.getMessage());
+                throw new BadRequestException(S3Status.INVALID_FILETYPE);
             }
         } else {
             boolean fileTypeIsNotImage = !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif"));
-            if(fileTypeIsNotImage) {
-                throw new ApiException(S3Status.INVALID_FILETYPE);
+            if (fileTypeIsNotImage) {
+                log.error(S3Status.INVALID_FILETYPE.getMessage());
+                throw new BadRequestException(S3Status.INVALID_FILETYPE);
             }
         }
 

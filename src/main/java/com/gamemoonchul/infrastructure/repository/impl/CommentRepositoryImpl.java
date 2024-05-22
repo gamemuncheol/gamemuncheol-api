@@ -1,6 +1,6 @@
 package com.gamemoonchul.infrastructure.repository.impl;
 
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.ifs.CommentRepositoryIfs;
@@ -44,7 +44,7 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
 
             return result;
         } catch (Exception e) {
-            throw new ApiException(PostStatus.COMMENT_NOT_FOUND);
+            throw new BadRequestException(PostStatus.COMMENT_NOT_FOUND);
         }
     }
 }

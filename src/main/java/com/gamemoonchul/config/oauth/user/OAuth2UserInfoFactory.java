@@ -1,6 +1,6 @@
 package com.gamemoonchul.config.oauth.user;
 
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.status.Oauth2Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,8 @@ public class OAuth2UserInfoFactory {
         .equals(registrationId)) {
       return new GoogleOAuth2UserInfo(accessToken, attributes);
     } else {
-      throw new ApiException(Oauth2Status.NOT_FOUND_PROVIDER);
+      log.error(Oauth2Status.NOT_FOUND_PROVIDER.getMessage());
+      throw new BadRequestException(Oauth2Status.NOT_FOUND_PROVIDER);
     }
   }
 }

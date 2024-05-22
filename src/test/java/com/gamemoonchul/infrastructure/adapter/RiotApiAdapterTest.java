@@ -2,7 +2,7 @@ package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.application.ports.output.RiotApiPort;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ class RiotApiAdapterTest extends TestDataBase {
         String matchId = "132132313";
 
         // when // then
-        assertThrows(ApiException.class, () -> {
+        assertThrows(BadRequestException.class, () -> {
             riotApi.searchMatch(matchId);
         }, SearchStatus.SEARCH_RESULT_NOT_FOUND.getMessage());
     }

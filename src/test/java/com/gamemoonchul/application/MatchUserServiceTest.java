@@ -3,7 +3,7 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.application.MatchGameService;
 import com.gamemoonchul.application.MatchUserService;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
@@ -75,7 +75,7 @@ class MatchUserServiceTest extends TestDataBase {
         Long id = 999999L;
 
         // when // then
-         assertThrows(ApiException.class, () -> {
+         assertThrows(BadRequestException.class, () -> {
             matchUserService.findById(id);
         }, PostStatus.WRONG_MATCH_USER.getMessage());
 

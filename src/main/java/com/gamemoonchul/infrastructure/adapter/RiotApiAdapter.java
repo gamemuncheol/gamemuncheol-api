@@ -1,15 +1,17 @@
 package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.application.ports.output.RiotApiPort;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
 public class RiotApiAdapter implements RiotApiPort {
     @Value("${lol.api.key}")
@@ -44,7 +46,7 @@ public class RiotApiAdapter implements RiotApiPort {
              );
              return result;
          } catch (Exception e) {
-             throw new ApiException(SearchStatus.SEARCH_RESULT_NOT_FOUND);
+             throw new BadRequestException(SearchStatus.SEARCH_RESULT_NOT_FOUND);
          }
     }
 }

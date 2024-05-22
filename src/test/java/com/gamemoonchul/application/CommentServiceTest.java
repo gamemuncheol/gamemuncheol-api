@@ -1,7 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.*;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.PostStatus;
@@ -53,7 +53,7 @@ class CommentServiceTest extends TestDataBase {
         Comment savedEntity = commentService.save(request, member);
         Post searchedPost = postRepository.findById(post.getId())
                 .orElseThrow(
-                        () -> new ApiException(PostStatus.POST_NOT_FOUND)
+                        () -> new BadRequestException(PostStatus.POST_NOT_FOUND)
                 );
 
         // then
@@ -97,7 +97,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.fix(content, anotherMember))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
 
@@ -113,7 +113,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.fix(content, member))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 
@@ -131,7 +131,7 @@ class CommentServiceTest extends TestDataBase {
         // then
         assertThatThrownBy(
                 () -> commentService.searchComment(savedComment.getId()))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
 
     }
@@ -151,7 +151,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.delete(content.commentId(), anotherMember))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
 
@@ -167,7 +167,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.delete(content.commentId(), member))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 }

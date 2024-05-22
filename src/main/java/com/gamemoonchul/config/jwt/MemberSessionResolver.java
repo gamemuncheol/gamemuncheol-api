@@ -1,12 +1,13 @@
 package com.gamemoonchul.config.jwt;
 
 import com.gamemoonchul.common.annotation.MemberSession;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MemberSessionResolver implements HandlerMethodArgumentResolver {
@@ -29,7 +31,8 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
         // 1. 어노테이션이 있는지 체크
         var annotation = parameter.hasParameterAnnotation(MemberSession.class);
         // 2. parameter type 체크
-        boolean parameterType = parameter.getParameterType().equals(Member.class);
+        boolean parameterType = parameter.getParameterType()
+                .equals(Member.class);
 
         return annotation && parameterType;
     }
@@ -41,8 +44,11 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
         TokenInfo tokenInfo = (TokenInfo) requestContext.getAttribute("tokenInfo", RequestAttributes.SCOPE_REQUEST);
 
         Member entity = memberRepository.findTop1ByProviderAndIdentifier(
-                OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier())
-                .orElseThrow(() -> new ApiException(MemberStatus.MEMBER_NOT_FOUND));
+                        OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier())
+                .orElseThrow(() -> {
+                    log.error(MemberStatus.MEMBER_NOT_FOUND.getMessage());
+                    return new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
+                });
         return entity;
     }
 }
