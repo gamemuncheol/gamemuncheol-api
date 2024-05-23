@@ -17,36 +17,45 @@ jobs:
 
     steps:
       # 실행주체: GitHub Actions > GitHub Infra
-      # 첫 번째 단계: 워크플로우를 트리거한 커밋에서 저장소 코드를 체크아웃
       - uses: actions/checkout@v3
 
-      # 두 번째 단계: Java Development Kit(JDK) 버전 17을 설정
+      # Java Development Kit(JDK) 버전 17을 설정
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: "adopt"
 
-      # 세 번째 단계: GitHub secrets에서 데이터를 가져와 application.properties 파일 생성
-      - name: Make application.yaml
+      # aws.build.gradle을 build.gradle로 변경
+      - name: MV build.aws.gradle to build.gradle
         run: |
           rm -rf ./build.gradle
           mv ./aws.build.gradle ./build.gradle
-          cd ./src/main/resources
-          touch ./application.yaml
-          echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
-          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./keystore-aws.p12
-          cd ../../test/resources
-          touch ./application.yaml
-          echo "${{ secrets.APPLICATION_TEST_YAML }}" > ./application.yaml
+          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./localhost.p12
         shell: bash
 
-      # 네 번째 단계: Gradle을 사용해 프로젝트 빌
+      # Gradle을 사용해 프로젝트 빌드
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew test -i
-          ./gradlew clean build --warning-mode all 
+          ./gradlew clean build --warning-mode all
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          RIOT_API: ${{ secrets.RIOT_API }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          APPLE_CLIENT_ID: ${{ secrets.APPLE_CLIENT_ID }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
 
 
       # 전송할 파일을 담을 디렉토리 생성

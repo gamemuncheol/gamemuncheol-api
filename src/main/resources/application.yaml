@@ -1,0 +1,94 @@
+jwt:
+  secret: ${JWT_SECRET}
+baseUrl: ${BASE_URL}
+
+server:
+  ssl:
+    key-store: classpath:localhost.p12
+    key-store-type: PKCS12
+    key-store-password: df159357
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    stack:
+      auto: false
+    region:
+      static: ${S3_REGION}
+      auto: false
+
+lol:
+  api:
+    key: ${RIOT_API}
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB #10GB
+      max-request-size: 500MB # 10GB
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jpa:
+    show-sql: true
+    properties:
+      format_sql: true
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  datasource:
+    # jdbc:mysql://localhost:3306/[TABLE NAME]?userSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
+    url: ${DB_URL}
+    driver-class-name: com.mysql.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID }
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          apple:
+            client-id: ${APPLE_CLIENT_ID} # input apple client id
+            redirect-uri: '${baseUrl}/login/oauth2/code/apple'
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Apple
+            scope:
+              - openid
+              - email
+              - name
+        provider:
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize?response_mode=form_post
+            token-uri: https://appleid.apple.com/auth/token
+            jwk-set-uri: https://appleid.apple.com/auth/keys
+
+apple:
+  clientId: ${APPLE_CLIENT_ID}
+  keyId: ${APPLE_KEY_ID}
+  teamId: ${APPLE_TEAM_ID}
+  privateKey: ${APPLE_PRIVATE_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+
+logging:
+  level:
+    root: error
