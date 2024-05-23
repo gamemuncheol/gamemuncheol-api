@@ -1,6 +1,7 @@
 package com.gamemoonchul.application.converter;
 
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
@@ -10,10 +11,10 @@ import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.CommentFixRequest;
 import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static com.gamemoonchul.domain.entity.QPost.post;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentConverter {
@@ -23,8 +24,10 @@ public class CommentConverter {
     public Comment requestToEntity(Member member, CommentRequest request) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(
-                        () ->
-                                new ApiException(PostStatus.POST_NOT_FOUND)
+                        () -> {
+                            log.error(PostStatus.POST_NOT_FOUND.getMessage());
+                            return new NotFoundException(PostStatus.POST_NOT_FOUND);
+                        }
                 );
 
         return Comment.builder()

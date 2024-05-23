@@ -1,14 +1,12 @@
 package com.gamemoonchul.config.oauth.user;
 
-import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.config.oauth.Oauth2Status;
+import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Slf4j
@@ -24,7 +22,8 @@ public class OAuth2UserInfoFactory {
         .equals(registrationId)) {
       return new GoogleOAuth2UserInfo(accessToken, attributes);
     } else {
-      throw new ApiException(Oauth2Status.NOT_FOUND_PROVIDER);
+      log.error(Oauth2Status.NOT_FOUND_PROVIDER.getMessage());
+      throw new BadRequestException(Oauth2Status.NOT_FOUND_PROVIDER);
     }
   }
 }

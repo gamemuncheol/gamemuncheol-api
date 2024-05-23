@@ -1,12 +1,14 @@
 package com.gamemoonchul.config.oauth.user;
 
-import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.config.oauth.Oauth2Status;
+import com.gamemoonchul.common.exception.InternalServerException;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class OAuth2UserUnlinkManager {
 
   private final GoogleOAuth2UserUnlink googleOAuth2UserUnlink;
@@ -15,7 +17,8 @@ public class OAuth2UserUnlinkManager {
     if (OAuth2Provider.GOOGLE.equals(provider)) {
       googleOAuth2UserUnlink.unlink(accessToken);
     } else {
-      throw new ApiException(Oauth2Status.UNLINK_FAILED);
+      log.error(Oauth2Status.UNLINK_FAILED.getMessage());
+      throw new InternalServerException(Oauth2Status.UNLINK_FAILED);
     }
   }
 }

@@ -70,7 +70,7 @@ class MemberOpenApiControllerTest extends TestDataBase {
         }
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
 }

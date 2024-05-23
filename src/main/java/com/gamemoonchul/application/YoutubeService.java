@@ -1,6 +1,6 @@
 package com.gamemoonchul.application;
 
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.config.youtube.YoutubeAuth;
 import com.gamemoonchul.domain.status.YoutubeStatus;
 import com.google.api.client.auth.oauth2.Credential;
@@ -160,12 +160,12 @@ public class YoutubeService {
             return "https://www.youtube.com/watch?v=" + returnedVideo.getId();
         } catch (GoogleJsonResponseException e) {
             log.error("GoogleJsonResponseException: ", e);
-            throw new ApiException(YoutubeStatus.JSON_PARSE_ERROR);
+            throw new InternalServerException(YoutubeStatus.JSON_PARSE_ERROR);
         } catch (IOException e) {
-            throw new ApiException(YoutubeStatus.UNKNOWN_ERROR);
+            throw new InternalServerException(YoutubeStatus.UNKNOWN_ERROR);
         } catch (Throwable t) {
             log.error("Throwable: ", t);
-            throw new ApiException(YoutubeStatus.UNKNOWN_ERROR);
+            throw new InternalServerException(YoutubeStatus.UNKNOWN_ERROR);
         }
     }
 }
