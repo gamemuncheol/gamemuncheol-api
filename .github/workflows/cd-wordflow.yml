@@ -47,7 +47,7 @@ jobs:
         with:
           tokenPrefix: "${"
           tokenSuffix: "}"
-          files: "[\"./src/main/resources/application.yml\"]"
+          files: "[\"./src/main/resources/application.yaml\"]"
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
@@ -69,7 +69,7 @@ jobs:
         with:
           tokenPrefix: "${"
           tokenSuffix: "}"
-          files: "[\"./src/test/resources/application.yml\"]"
+          files: "[\"./src/test/resources/application.yaml\"]"
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
