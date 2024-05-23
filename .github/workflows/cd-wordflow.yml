@@ -29,11 +29,11 @@ jobs:
           java-version: '17'
           distribution: "adopt"
 
-      # 세 번째 단계: GitHub secrets에서 데이터를 가져와 application.properties 파일 생성
-#      - name: Make application.yaml
-#        run: |
-#          rm -rf ./build.gradle
-#          mv ./aws.build.gradle ./build.gradle
+      # 세 번째 단계: build.aws.gradle을 build.gradle로 변경
+      - name: MV build.aws.gradle to build.gradle
+        run: |
+          rm -rf ./build.gradle
+          mv ./aws.build.gradle ./build.gradle
 #          cd ./src/main/resources
 #          touch ./application.yaml
 #          echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
@@ -41,11 +41,11 @@ jobs:
 #          cd ../../test/resources
 #          touch ./application.yaml
 #          echo "${{ secrets.APPLICATION_TEST_YAML }}" > ./application.yaml
-#        shell: bash
+        shell: bash
       - name: Set Yaml
         uses: microsoft/variable-substitution@v1
         with:
-          files: ./src/main/resources/application.yml
+          files: ./src/main/resources/application.yaml
         env:
           jwt.secret: ${{ secrets.JWT_SECRET }}
           cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
@@ -66,7 +66,7 @@ jobs:
       - name: Set Test Yaml
         uses: microsoft/variable-substitution@v1
         with:
-          files: ./src/test/resources/application.yml
+          files: ./src/test/resources/application.yaml
         env:
           jwt.secret: ${{ secrets.JWT_SECRET }}
           cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
