@@ -5,6 +5,8 @@ name: CD with Gradle
 on:
   push:
     branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
 # 워크플로우에서는 저장소 내용을 읽을 수 있는 권한만 설정
 permissions:
