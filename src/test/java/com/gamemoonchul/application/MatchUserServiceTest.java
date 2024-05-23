@@ -4,6 +4,7 @@ import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.application.MatchGameService;
 import com.gamemoonchul.application.MatchUserService;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
@@ -75,11 +76,8 @@ class MatchUserServiceTest extends TestDataBase {
         Long id = 999999L;
 
         // when // then
-         assertThrows(BadRequestException.class, () -> {
+         assertThrows(NotFoundException.class, () -> {
             matchUserService.findById(id);
         }, PostStatus.WRONG_MATCH_USER.getMessage());
-
     }
-
-
 }

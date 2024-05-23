@@ -2,10 +2,12 @@ package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class RiotApiAdapter implements RiotApiPort {
              );
              return result;
          } catch (Exception e) {
-             throw new BadRequestException(SearchStatus.SEARCH_RESULT_NOT_FOUND);
+             throw new NotFoundException(SearchStatus.SEARCH_RESULT_NOT_FOUND);
          }
     }
 }

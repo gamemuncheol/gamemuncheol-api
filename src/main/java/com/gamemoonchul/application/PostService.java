@@ -2,6 +2,8 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.VoteOptions;
@@ -61,7 +63,7 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> {
                             log.error(PostStatus.POST_NOT_FOUND.getMessage());
-                            return new BadRequestException(PostStatus.POST_NOT_FOUND);
+                            return new NotFoundException(PostStatus.POST_NOT_FOUND);
                         }
                 );
         if (member.getId()
@@ -71,6 +73,6 @@ public class PostService {
             return "Delete Complete";
         }
         log.error(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
-        throw new BadRequestException(PostStatus.UNAUTHORIZED_REQUEST);
+        throw new UnauthorizedException(PostStatus.UNAUTHORIZED_REQUEST);
     }
 }

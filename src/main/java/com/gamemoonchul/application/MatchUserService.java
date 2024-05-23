@@ -2,6 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.riot.MatchUserConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
@@ -40,7 +41,7 @@ public class MatchUserService {
                 .orElseThrow(
                         () -> {
                             log.error(PostStatus.WRONG_MATCH_USER.getMessage());
-                            return new BadRequestException(PostStatus.WRONG_MATCH_USER);
+                            return new NotFoundException(PostStatus.WRONG_MATCH_USER);
                         }
                 );
     }

@@ -1,11 +1,13 @@
 package com.gamemoonchul.infrastructure.repository.impl;
 
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.ifs.CommentRepositoryIfs;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Repository;
 
 import static com.gamemoonchul.domain.entity.QComment.comment;
@@ -26,25 +28,21 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
      */
     @Override
     public Comment searchByIdOrThrow(Long commentId) {
-        try {
-            Comment result = queryFactory.select(comment)
-                    .from(comment)
-                    .join(member)
-                    .on(comment.member.id.eq(member.id))
-                    .fetchJoin()
-                    .join(post)
-                    .on(comment.post.id.eq(post.id))
-                    .fetchJoin()
-                    .where(comment.id.eq(commentId))
-                    .fetchOne();
+        Comment result = queryFactory.select(comment)
+                .from(comment)
+                .join(member)
+                .on(comment.member.id.eq(member.id))
+                .fetchJoin()
+                .join(post)
+                .on(comment.post.id.eq(post.id))
+                .fetchJoin()
+                .where(comment.id.eq(commentId))
+                .fetchOne();
 
-            if(result == null) {
-                throw new Exception(new NullPointerException());
-            }
-
-            return result;
-        } catch (Exception e) {
-            throw new BadRequestException(PostStatus.COMMENT_NOT_FOUND);
+        if (result == null) {
+            throw new NotFoundException(PostStatus.COMMENT_NOT_FOUND);
         }
+
+        return result;
     }
 }

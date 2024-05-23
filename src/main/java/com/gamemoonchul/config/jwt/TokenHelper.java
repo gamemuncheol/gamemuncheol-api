@@ -1,6 +1,8 @@
 package com.gamemoonchul.config.jwt;
 
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.MethodNotAllowedException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
@@ -51,18 +53,18 @@ public class TokenHelper {
                     .parseClaimsJws(token);
             TokenInfo tokenInfo = getTokenInfo(token);
             if(tokenInfo.tokenType() != type) {
-                throw new BadRequestException(JwtStatus.TOKEN_TYPE_NOT_MATCH);
+                throw new MethodNotAllowedException(JwtStatus.TOKEN_TYPE_NOT_MATCH);
             }
             return true;
         } catch (SignatureException exception) {
             log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
-            throw new BadRequestException(JwtStatus.SIGNATURE_NOT_MATCH);
+            throw new MethodNotAllowedException(JwtStatus.SIGNATURE_NOT_MATCH);
         } catch (ExpiredJwtException exception) {
             log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
             throw new BadRequestException(JwtStatus.EXPIRED_TOKEN);
         } catch (Exception exception) {
             log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
-            throw new BadRequestException(JwtStatus.NOT_VALID_TOKEN);
+            throw new UnauthorizedException(JwtStatus.NOT_VALID_TOKEN);
         }
     }
 

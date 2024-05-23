@@ -2,6 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.MethodNotAllowedException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ class S3ImageUploadServiceTest extends TestDataBase {
             file = new MockMultipartFile(fileName, fileName, "video/mp4", content);
 
         // when // then
-        assertThrows(BadRequestException.class, () -> {
+        assertThrows(MethodNotAllowedException.class, () -> {
             s3Service.uploadImage(file);
         });
     }

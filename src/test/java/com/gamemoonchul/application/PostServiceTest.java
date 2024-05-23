@@ -2,6 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.entity.Post;
@@ -75,7 +76,7 @@ class PostServiceTest extends TestDataBase {
         PostResponseDto response = postService.upload(PostDummy.createRequest(), member1);
 
         // then
-        assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(BadRequestException.class)
+        assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(UnauthorizedException.class)
                 .hasMessageContaining(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
     }
 }

@@ -1,6 +1,7 @@
 package com.gamemoonchul.application.converter;
 
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
@@ -25,7 +26,7 @@ public class CommentConverter {
                 .orElseThrow(
                         () -> {
                             log.error(PostStatus.POST_NOT_FOUND.getMessage());
-                            return new BadRequestException(PostStatus.POST_NOT_FOUND);
+                            return new NotFoundException(PostStatus.POST_NOT_FOUND);
                         }
                 );
 

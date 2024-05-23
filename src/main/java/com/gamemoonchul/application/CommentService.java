@@ -2,6 +2,9 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.CommentConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.MethodNotAllowedException;
+import com.gamemoonchul.common.exception.NotFoundException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
@@ -32,7 +35,7 @@ public class CommentService {
         Comment comment = commentConverter.requestToEntity(member, request);
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(
-                        () -> new BadRequestException(PostStatus.POST_NOT_FOUND)
+                        () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
                 );
         post.addComment(comment);
         postRepository.save(post);
@@ -61,7 +64,7 @@ public class CommentService {
         if (commentWriteMember.getId().equals(currentSignInMember.getId())) {
             return;
         }
-        throw new BadRequestException(MemberStatus.NOT_AUTHORIZED_MEMBER);
+        throw new UnauthorizedException(MemberStatus.NOT_AUTHORIZED_MEMBER);
     }
 
 }
