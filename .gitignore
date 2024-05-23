@@ -38,10 +38,8 @@ out/
 .vscode/
 
 ### Security ###
-/src/main/resources/application.yaml
 AuthKey_P2J7JVJRGF.p8
 /src/main/resources/keystore.p12
-/src/test/resources/application.yaml
 src/main/resources/lol_scrapers.py
 src/main/resources/client_secrets.json
 
