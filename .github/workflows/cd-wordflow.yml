@@ -28,18 +28,60 @@ jobs:
           distribution: "adopt"
 
       # 세 번째 단계: GitHub secrets에서 데이터를 가져와 application.properties 파일 생성
-      - name: Make application.yaml
-        run: |
-          rm -rf ./build.gradle
-          mv ./aws.build.gradle ./build.gradle
-          cd ./src/main/resources
-          touch ./application.yaml
-          echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
-          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./keystore-aws.p12
-          cd ../../test/resources
-          touch ./application.yaml
-          echo "${{ secrets.APPLICATION_TEST_YAML }}" > ./application.yaml
-        shell: bash
+#      - name: Make application.yaml
+#        run: |
+#          rm -rf ./build.gradle
+#          mv ./aws.build.gradle ./build.gradle
+#          cd ./src/main/resources
+#          touch ./application.yaml
+#          echo "${{ secrets.APPLICATION_YAML }}" > ./application.yaml
+#          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./localhost.p12
+#          cd ../../test/resources
+#          touch ./application.yaml
+#          echo "${{ secrets.APPLICATION_TEST_YAML }}" > ./application.yaml
+#        shell: bash
+      - name: Set Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application.yml
+        env:
+          jwt.secret: ${{ secrets.JWT_SECRET }}
+          cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
+          cloud.aws.credential.access-key: ${{ secrets.S3_ACCESS_KEY }}
+          cloud.aws.credential.secret-key: ${{ secrets.S3_SECRET_KEY }}
+          cloud.aws.region.static: ${{ secrets.S3_REGION }}
+          lol.api.key: ${{ secrets.RIOT_API }}
+          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          apple.clientId: ${{ secrets.APPLE_CLIENT_ID }}
+          apple.keyId: ${{ secrets.APPLE_KEY_ID }}
+          apple.teamId: ${{ secrets.APPLE_TEAM_ID }}
+          apple.privateKey: ${{ secrets.APPLE_PRIVATE_KEY }}
+      - name: Set Test Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/test/resources/application.yml
+        env:
+          jwt.secret: ${{ secrets.JWT_SECRET }}
+          cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
+          cloud.aws.credential.access-key: ${{ secrets.S3_ACCESS_KEY }}
+          cloud.aws.credential.secret-key: ${{ secrets.S3_SECRET_KEY }}
+          cloud.aws.region.static: ${{ secrets.S3_REGION }}
+          lol.api.key: ${{ secrets.RIOT_API }}
+          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          apple.clientId: ${{ secrets.APPLE_CLIENT_ID }}
+          apple.keyId: ${{ secrets.APPLE_KEY_ID }}
+          apple.teamId: ${{ secrets.APPLE_TEAM_ID }}
+          apple.privateKey: ${{ secrets.APPLE_PRIVATE_KEY }}
 
       # 네 번째 단계: Gradle을 사용해 프로젝트 빌
       - name: Build with Gradle
