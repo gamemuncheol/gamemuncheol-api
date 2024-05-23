@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.InternalServerException;
-import com.gamemoonchul.common.exception.MethodNotAllowedException;
 import com.gamemoonchul.domain.status.S3Status;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -103,13 +102,13 @@ public class S3Service {
         if (type == FileType.VIDEO) {
             if (!contentType.equals("video/mp4")) {
                 log.error(S3Status.INVALID_FILETYPE.getMessage());
-                throw new MethodNotAllowedException(S3Status.INVALID_FILETYPE);
+                throw new BadRequestException(S3Status.INVALID_FILETYPE);
             }
         } else {
             boolean fileTypeIsNotImage = !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif"));
             if (fileTypeIsNotImage) {
                 log.error(S3Status.INVALID_FILETYPE.getMessage());
-                throw new MethodNotAllowedException(S3Status.INVALID_FILETYPE);
+                throw new ethodbNotAllowedException(S3Status.INVALID_FILETYPE);
             }
         }
 

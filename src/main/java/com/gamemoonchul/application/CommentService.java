@@ -2,7 +2,6 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.CommentConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
-import com.gamemoonchul.common.exception.MethodNotAllowedException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Comment;

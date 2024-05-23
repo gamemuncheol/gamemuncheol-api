@@ -2,9 +2,7 @@ package com.gamemoonchul.config.oauth.handler;
 
 import com.gamemoonchul.application.MemberService;
 import com.gamemoonchul.common.exception.BadRequestException;
-import com.gamemoonchul.common.exception.GatewayTimeoutException;
 import com.gamemoonchul.common.exception.InternalServerException;
-import com.gamemoonchul.common.exception.MethodNotAllowedException;
 import com.gamemoonchul.common.util.CookieUtils;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
@@ -67,7 +65,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // 응답이 이미 커밋된 경우 리다이렉트를 수행할 수 없으므로 로그 남기고 종료
         if (response.isCommitted()) {
             log.error(Oauth2Status.EXPIRED_LOGIN.getMessage());
-            throw new GatewayTimeoutException(Oauth2Status.EXPIRED_LOGIN);
+            throw new InternalServerException(Oauth2Status.EXPIRED_LOGIN);
         }
 
         clearAuthenticationAttributes(request, response);
@@ -101,7 +99,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             unlink(principal);
         } else {
             log.error(Oauth2Status.LOGIN_FAILED.getMessage());
-            throw new MethodNotAllowedException(Oauth2Status.LOGIN_FAILED);
+            throw new BadRequestException(Oauth2Status.LOGIN_FAILED);
         }
     }
 
