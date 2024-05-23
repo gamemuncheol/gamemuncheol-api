@@ -26,18 +26,13 @@ jobs:
           java-version: '17'
           distribution: "adopt"
 
-      # build.aws.gradle을 build.gradle로 변경
+      # aws.build.gradle을 build.gradle로 변경
       - name: MV build.aws.gradle to build.gradle
         run: |
           rm -rf ./build.gradle
           mv ./aws.build.gradle ./build.gradle
+          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./localhost.p12
         shell: bash
-
-      # Base URL만 출력
-      - name: Extract and Print baseUrl from application.yaml
-        run: |
-          cat ./src/main/resources/application.yaml | grep baseUrl
-          cat ./src/main/resources/application.yaml | grep format_sql
 
       # Gradle을 사용해 프로젝트 빌드
       - name: Build with Gradle
