@@ -87,6 +87,12 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
 
+      # Base URL만 출력
+      - name: Extract and Print baseUrl from application.yaml
+        run: |
+          grep "baseUrl:" ./src/main/resources/application.yaml | awk '{print $2}'
+
+
       # 네 번째 단계: Gradle을 사용해 프로젝트 빌
       - name: Build with Gradle
         run: |
