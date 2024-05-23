@@ -89,7 +89,9 @@ jobs:
 
       # Base URL만 출력
       - name: Extract and Print baseUrl from application.yaml
-        run: cat ./src/main/resources/application.yaml | grep baseUrl
+        run: |
+          cat ./src/main/resources/application.yaml | grep baseUrl
+          cat ./src/main/resources/application.yaml | grep format_sql
 
       # 네 번째 단계: Gradle을 사용해 프로젝트 빌
       - name: Build with Gradle
