@@ -108,7 +108,7 @@ public class S3Service {
             boolean fileTypeIsNotImage = !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif"));
             if (fileTypeIsNotImage) {
                 log.error(S3Status.INVALID_FILETYPE.getMessage());
-                throw new ethodbNotAllowedException(S3Status.INVALID_FILETYPE);
+                throw new BadRequestException(S3Status.INVALID_FILETYPE);
             }
         }
 
