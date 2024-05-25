@@ -48,13 +48,20 @@ public class MemberService {
     }
 
     public void updateNickName(Member member, String nickName) {
-        List<Member> savedMember = memberRepository.findByNickname(nickName);
-        if (!savedMember.isEmpty()) {
+        if (validateNickname(nickName)) {
             log.error(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
         Member updatedMember = member.updateNickname(nickName);
         memberRepository.save(updatedMember);
+    }
+
+    public boolean validateNickname(String nickName) {
+        List<Member> savedMember = memberRepository.findByNickname(nickName);
+        if(savedMember.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     public TokenDto renew(String refreshToken) {
