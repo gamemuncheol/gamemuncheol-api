@@ -48,7 +48,7 @@ public class MemberService {
     }
 
     public void updateNickName(Member member, String nickName) {
-        if (validateNickname(nickName)) {
+        if (checkDuplicated(nickName)) {
             log.error(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
@@ -56,7 +56,7 @@ public class MemberService {
         memberRepository.save(updatedMember);
     }
 
-    public boolean validateNickname(String nickName) {
+    public boolean checkDuplicated(String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
         if(savedMember.isEmpty()) {
             return true;

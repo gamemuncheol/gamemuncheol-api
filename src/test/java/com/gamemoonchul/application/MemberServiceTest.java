@@ -6,11 +6,9 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -85,7 +83,7 @@ class MemberServiceTest extends TestDataBase {
         memberRepository.save(member);
 
         // when
-        boolean result = memberService.validateNickname(member.getNickname());
+        boolean result = memberService.checkDuplicated(member.getNickname());
 
         // then
         assertThat(result).isEqualTo(false);
