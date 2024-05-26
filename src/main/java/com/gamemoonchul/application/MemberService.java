@@ -58,10 +58,7 @@ public class MemberService {
 
     public boolean checkDuplicated(String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
-        if(savedMember.isEmpty()) {
-            return true;
-        }
-        return false;
+        return !savedMember.isEmpty();
     }
 
     public TokenDto renew(String refreshToken) {

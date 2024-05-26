@@ -76,7 +76,7 @@ class MemberServiceTest extends TestDataBase {
     }
 
     @Test
-    @DisplayName("validate 메서드에서 이미 존재하는 닉네임을 입력했을 때 false를 return 하는지 Test")
+    @DisplayName("validate 메서드에서 이미 존재하는 닉네임을 입력했을 때 true를 return 하는지 Test")
     void validateNicknameTest() {
         // given
         Member member = MemberDummy.create();
@@ -86,6 +86,6 @@ class MemberServiceTest extends TestDataBase {
         boolean result = memberService.checkDuplicated(member.getNickname());
 
         // then
-        assertThat(result).isEqualTo(false);
+        assertThat(result).isEqualTo(true);
     }
 }
