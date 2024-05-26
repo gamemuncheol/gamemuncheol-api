@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberApiController {
     private final MemberService memberService;
 
-    @PatchMapping("/change-nickname/{nickname}")
+    @PatchMapping("/nickname/{nickname}")
     public void changeNickname(
             @MemberSession Member member,
             @PathVariable(name = "nickname") String nickname
@@ -22,14 +22,12 @@ public class MemberApiController {
         memberService.updateNickName(member, nickname);
     }
 
-
-    @GetMapping("/duplication")
-    public boolean checkDuplicated(
-            @RequestParam(name = "nickname") String nickname
+    @GetMapping("/nickname/{nickname}")
+    public boolean checkNicknameDuplicated(
+            @PathVariable(name = "nickname") String nickname
     ) {
         return memberService.checkDuplicated(nickname);
     }
-
 
     @GetMapping("/me")
     public MemberResponseDto me(
