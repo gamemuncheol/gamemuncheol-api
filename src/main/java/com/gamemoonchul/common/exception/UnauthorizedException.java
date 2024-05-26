@@ -19,10 +19,12 @@ public class UnauthorizedException extends RuntimeException implements ApiExcept
    */
   private final ApiStatusIfs status;
   private final String detail;
+  private final Integer httpStatus;
 
   public UnauthorizedException(ApiStatusIfs status) {
     super(status.getMessage());
     this.status = status;
     this.detail = status.getMessage();
+    this.httpStatus = HttpStatus.UNAUTHORIZED.value();
   }
 }

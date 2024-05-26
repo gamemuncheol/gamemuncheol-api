@@ -20,10 +20,12 @@ public class BadRequestException extends RuntimeException implements ApiExceptio
   private final ApiStatusIfs status;
   // 좀 더 세부적인 Error Detail이 필요할 경우
   private final String detail;
+  private final Integer httpStatus;
 
   public BadRequestException(ApiStatusIfs status) {
     super(status.getMessage());
     this.status = status;
     this.detail = status.getMessage();
+    this.httpStatus = HttpStatus.BAD_REQUEST.value();
   }
 }
