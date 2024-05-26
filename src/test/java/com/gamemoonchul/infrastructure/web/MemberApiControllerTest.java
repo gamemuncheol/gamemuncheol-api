@@ -42,7 +42,7 @@ class MemberApiControllerTest extends TestDataBase {
         String nickname = UUID.randomUUID().toString().substring(0, 8);
 
         // when
-        ResultActions resultActions = super.mvc.perform(patch("/api/member/change-nickname/" + nickname).header("Authorization", "Bearer " + tokenDto.getAccessToken()));
+        ResultActions resultActions = super.mvc.perform(patch("/api/member/nickname/" + nickname).header("Authorization", "Bearer " + tokenDto.getAccessToken()));
 
         // then
         resultActions.andExpect(status().isOk());
