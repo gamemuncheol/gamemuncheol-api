@@ -38,48 +38,27 @@ jobs:
 
       # main/resources/application.yml 파일에 환경변수 적용
       - name: Set Yaml
-        uses: microsoft/variable-substitution@v1
+        uses: cschleiden/replace-tokens@v1
         with:
-          files: ./src/main/resources/application.yml
+          tokenPrefix: "${"
+          tokenSuffix: "}"
+          files: '["./src/main/resources/application.yaml"]'
         env:
-          jwt.secret: ${{ secrets.JWT_SECRET }}
-          cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
-          cloud.aws.credential.access-key: ${{ secrets.S3_ACCESS_KEY }}
-          cloud.aws.credential.secret-key: ${{ secrets.S3_SECRET_KEY }}
-          cloud.aws.region.static: ${{ secrets.S3_REGION }}
-          lol.api.key: ${{ secrets.RIOT_API }}
-          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
-          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          spring.security.oauth2.client.registration.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
-          spring.datasource.url: ${{ secrets.DB_URL }}
-          spring.datasource.username: ${{ secrets.DB_USERNAME }}
-          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-          apple.clientId: ${{ secrets.APPLE_CLIENT_ID }}
-          apple.keyId: ${{ secrets.APPLE_KEY_ID }}
-          apple.teamId: ${{ secrets.APPLE_TEAM_ID }}
-          apple.privateKey: ${{ secrets.APPLE_PRIVATE_KEY }}
-      # test/resources/application.yml 파일에 환경변수 적용
-      - name: Set Test Yaml
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./src/test/resources/application.yml
-        env:
-          jwt.secret: ${{ secrets.JWT_SECRET }}
-          cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
-          cloud.aws.credential.access-key: ${{ secrets.S3_ACCESS_KEY }}
-          cloud.aws.credential.secret-key: ${{ secrets.S3_SECRET_KEY }}
-          cloud.aws.region.static: ${{ secrets.S3_REGION }}
-          lol.api.key: ${{ secrets.RIOT_API }}
-          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
-          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          spring.security.oauth2.client.registration.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
-          spring.datasource.url: ${{ secrets.DB_URL }}
-          spring.datasource.username: ${{ secrets.DB_USERNAME }}
-          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-          apple.clientId: ${{ secrets.APPLE_CLIENT_ID }}
-          apple.keyId: ${{ secrets.APPLE_KEY_ID }}
-          apple.teamId: ${{ secrets.APPLE_TEAM_ID }}
-          apple.privateKey: ${{ secrets.APPLE_PRIVATE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          RIOT_API: ${{ secrets.RIOT_API }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          APPLE_CLIENT_ID: ${{ secrets.APPLE_CLIENT_ID }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
 
       # Gradle을 사용해 프로젝트 빌드
       - name: Build with Gradle
