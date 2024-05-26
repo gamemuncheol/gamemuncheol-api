@@ -33,7 +33,7 @@ jobs:
         run: |
           rm -rf ./build.gradle
           mv ./aws.build.gradle ./build.gradle
-          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./src/main/source/localhost.p12
+          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./src/main/resource/localhost.p12
         shell: bash
 
       # main/resources/application.yml 파일에 환경변수 적용
