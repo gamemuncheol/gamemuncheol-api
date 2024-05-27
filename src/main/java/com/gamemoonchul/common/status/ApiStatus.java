@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ApiStatus implements ApiStatusIfs{
   OK(200, "OK"),
   BAD_REQUEST(400, "Bad Request"),
+  VALIDATION_ERROR(444, "Validation Error"),
   SERVER_ERROR(500, "Server Error"),
   NULL_POINT(512, "Null Point Error"),
   ;
