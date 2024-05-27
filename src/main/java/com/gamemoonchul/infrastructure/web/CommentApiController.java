@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentApiController {
     private final CommentService commentService;
 
-    @PutMapping
+    @PostMapping
     public void save(CommentRequest request, @MemberSession Member member) {
         commentService.save(request, member);
     }
