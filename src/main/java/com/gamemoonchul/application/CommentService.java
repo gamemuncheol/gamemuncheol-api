@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.CommentConverter;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Comment;
@@ -61,9 +60,7 @@ public class CommentService {
     }
 
     private void commentCountDown(Post post) {
-        Long curCount = post.getCommentCount();
-        curCount --;
-        post.setCommentCount(curCount);
+        post.commentCountDown();
         postRepository.save(post);
     }
 
