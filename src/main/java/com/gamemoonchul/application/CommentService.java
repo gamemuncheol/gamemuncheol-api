@@ -56,7 +56,15 @@ public class CommentService {
     public void delete(Long commentId, Member authMember) {
         Comment savedComment = this.searchComment(commentId);
         validateSameMemberId(savedComment.getMember(), authMember);
+        commentCountDown(savedComment.getPost());
         commentRepository.delete(savedComment);
+    }
+
+    private void commentCountDown(Post post) {
+        Long curCount = post.getCommentCount();
+        curCount --;
+        post.setCommentCount(curCount);
+        postRepository.save(post);
     }
 
     private void validateSameMemberId(Member commentWriteMember, Member currentSignInMember) {

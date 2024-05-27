@@ -38,6 +38,7 @@ public class Post extends BaseTimeEntity {
     private String content;
     @Builder.Default
     private Long viewCount = 0L;
+    @Setter
     @Builder.Default
     private Long commentCount=0L;
     @Builder.Default
