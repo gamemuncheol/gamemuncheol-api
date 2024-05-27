@@ -18,6 +18,7 @@ public record PostUploadRequest(
         String title,
         String content,
         @Size(min = 2)
-        List<Long> matchUserIds
+        List<Long> matchUserIds,
+        List<String> tags
 ) {
 }

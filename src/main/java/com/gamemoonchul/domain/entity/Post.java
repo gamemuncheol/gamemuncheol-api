@@ -1,5 +1,6 @@
 package com.gamemoonchul.domain.entity;
 
+import com.gamemoonchul.application.converter.JsonStringListConverter;
 import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +37,10 @@ public class Post extends BaseTimeEntity {
     private String title;
 
     private String content;
+
+    @Convert(converter = JsonStringListConverter.class)
+    private List<String> tags;
+
     @Builder.Default
     private Long viewCount = 0L;
     @Builder.Default
