@@ -24,4 +24,9 @@ public class CommentApiController {
     public void fix(CommentFixRequest request, @MemberSession Member member) {
         commentService.fix(request, member);
     }
+
+    @DeleteMapping("/{id}")
+    public void del(@PathVariable(name= "id") Long id, @MemberSession Member member) {
+        commentService.delete(id, member);
+    }
 }
