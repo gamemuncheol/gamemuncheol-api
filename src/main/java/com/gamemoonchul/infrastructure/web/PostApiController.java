@@ -17,9 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class PostApiController {
     private final PostService postService;
-    private final S3Service s3Service;
 
-    @PostMapping("/upload")
+    @PostMapping
     public PostResponseDto upload(
             @Valid
             @RequestBody PostUploadRequest request,
@@ -29,22 +28,10 @@ public class PostApiController {
         return response;
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{id}")
     public String delete(
-            @MemberSession Member member, @RequestParam("id") Long id
+            @MemberSession Member member, @PathVariable("id") Long id
     ) {
         return postService.delete(id, member);
-    }
-
-    @PostMapping("/video-upload")
-    public String uploadVideo(@RequestParam("file") MultipartFile file) {
-        String fileUrl = s3Service.uploadVideo(file);
-        return fileUrl;
-    }
-
-    @PostMapping("/thumbnail-upload")
-    public String uploadThumbnail(@RequestParam("file") MultipartFile file) {
-        String fileUrl = s3Service.uploadImage(file);
-        return fileUrl;
     }
 }

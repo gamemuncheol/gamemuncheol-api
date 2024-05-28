@@ -45,4 +45,8 @@ public class ApiResponse<T> {
   public static <T> ApiResponse<T> ERROR(ApiStatusIfs status) {
     return new ApiResponse<>(false, null, status);
   }
+
+  public static <T> ApiResponse<T> ERROR(ApiStatusIfs status, T data) {
+    return new ApiResponse<>(false, data, status);
+  }
 }
