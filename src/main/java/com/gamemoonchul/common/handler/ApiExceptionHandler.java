@@ -39,6 +39,6 @@ public class ApiExceptionHandler {
                 .toList();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.ERROR(ApiStatus.VALIDATION_ERROR, errorMessageList));
+                .body(ApiResponse.ERROR(ApiStatus.BAD_REQUEST, errorMessageList));
     }
 }
