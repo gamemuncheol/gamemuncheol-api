@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.*;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -136,6 +137,25 @@ class CommentServiceTest extends TestDataBase {
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
 
+    }
+
+    @Test
+    @DisplayName("댓글 삭제시 Comment Count가 감소하는지 테스트")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    void shouldDecreaseCommentCountWhenCommentIsDeleted() throws InterruptedException {
+        // given
+        CommentRequest request = CommentDummy.createRequest(post.getId());
+        Comment savedComment = commentService.save(request, member);
+        post = postRepository.findById(post.getId()).orElseThrow();
+
+        // when
+        commentService.delete(savedComment.getId(), member);
+        em.clear();
+        Post post2 = postRepository.findById(post.getId())
+                .orElseThrow();
+
+        // then
+        assertThat(post.getCommentCount() - 1).isEqualTo(post2.getCommentCount());
     }
 
     @Test

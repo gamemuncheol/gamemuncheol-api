@@ -7,9 +7,7 @@ import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPatte
 import com.gamemoonchul.infrastructure.web.dto.CommentFixRequest;
 import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
@@ -17,13 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CommentApiController {
     private final CommentService commentService;
 
-    @PostMapping("/save")
+    @PostMapping
     public void save(CommentRequest request, @MemberSession Member member) {
         commentService.save(request, member);
     }
 
-    @PatchMapping("/fix")
+    @PatchMapping
     public void fix(CommentFixRequest request, @MemberSession Member member) {
         commentService.fix(request, member);
+    }
+
+    @DeleteMapping("/{id}")
+    public void del(@PathVariable(name= "id") Long id, @MemberSession Member member) {
+        commentService.delete(id, member);
     }
 }

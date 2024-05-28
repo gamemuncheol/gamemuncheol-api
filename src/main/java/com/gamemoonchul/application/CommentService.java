@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.CommentConverter;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Comment;
@@ -56,7 +55,13 @@ public class CommentService {
     public void delete(Long commentId, Member authMember) {
         Comment savedComment = this.searchComment(commentId);
         validateSameMemberId(savedComment.getMember(), authMember);
+        commentCountDown(savedComment.getPost());
         commentRepository.delete(savedComment);
+    }
+
+    private void commentCountDown(Post post) {
+        post.commentCountDown();
+        postRepository.save(post);
     }
 
     private void validateSameMemberId(Member commentWriteMember, Member currentSignInMember) {
