@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostApiController {
     private final PostService postService;
 
-    @PutMapping
+    @PostMapping
     public PostResponseDto upload(
             @Valid
             @RequestBody PostUploadRequest request,
