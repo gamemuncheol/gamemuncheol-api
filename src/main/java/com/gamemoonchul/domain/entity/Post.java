@@ -55,7 +55,6 @@ public class Post extends BaseTimeEntity {
     @Builder.Default
     private Long voteCount = 0L;
 
-    @Column(name = "vote_ratio")
     private Double voteRatio;
 
     public void commentCountDown() {
@@ -77,19 +76,4 @@ public class Post extends BaseTimeEntity {
         commentCount++;
     }
 
-    public boolean isHot() {
-        List<Integer> votesCount = voteOptions
-                .stream()
-                .map(voteOptions -> {
-                    return voteOptions.getVotes().size();
-                })
-                .toList();
-        if (votesCount.get(0) == 0 || votesCount.get(1) == 0) {
-            return false;
-        }
-
-        int votesTotalCount = votesCount.get(0) + votesCount.get(1);
-        double firstVotingPercentage = (double) votesCount.get(0) / (double) votesTotalCount * 100;
-        return firstVotingPercentage >= 45 && firstVotingPercentage <= 55;
-    }
 }

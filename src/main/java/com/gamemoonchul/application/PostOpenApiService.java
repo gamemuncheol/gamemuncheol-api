@@ -5,9 +5,11 @@ import com.gamemoonchul.domain.model.dto.VoteRate;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
+import com.gamemoonchul.infrastructure.web.dto.PostMainResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,19 +43,17 @@ public class PostOpenApiService {
         return new Pagination<PostResponseDto>(savedPage, responses);
     }
 
-    public List<PostResponseDto> getHotPosts(int page, int size) {
-        List<Post> savedPosts = postRepository.findAll();
-        return savedPosts.stream()
-                .filter(Post::isHot)
+    public List<PostMainResponse> getHotPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Double standardRatio = 45.0;
+        return postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable)
+                .getContent()
+                .stream()
                 .skip((long) page * size) // 건너뛸 요소 수 계산
                 .limit(size) // 요소 수 제한
-                .map(post -> {
-                            List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
-                            return PostResponseDto.entityToResponse(post, voteRates);
-                        }
-                )
+                .map(PostMainResponse::entityToResponse)
                 .sorted(
-                        Comparator.comparing(PostResponseDto::getCreatedAt)
+                        Comparator.comparing(PostMainResponse::getCreatedAt)
                 )
                 .toList();
     }

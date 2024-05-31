@@ -3,6 +3,7 @@ package com.gamemoonchul.infrastructure.web;
 import com.gamemoonchul.application.PostOpenApiService;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
+import com.gamemoonchul.infrastructure.web.dto.PostMainResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping("/open-api/post")
+@RequestMapping("/open-api/posts")
 @RestControllerWithEnvelopPattern
 @RequiredArgsConstructor
 public class PostOpenApiController {
@@ -28,8 +29,8 @@ public class PostOpenApiController {
         return postService.fetchByLatest(pageable);
     }
 
-    @GetMapping("")
-    public List<PostResponseDto> getHotPosts(
+    @GetMapping("/page/hot")
+    public List<PostMainResponse> getHotPosts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
