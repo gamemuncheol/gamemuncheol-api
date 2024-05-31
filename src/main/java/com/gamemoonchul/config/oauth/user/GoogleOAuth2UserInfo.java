@@ -32,7 +32,7 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
         this.name = (String) attributes.get("name");
         this.firstName = (String) attributes.get("given_name");
         this.lastName = (String) attributes.get("family_name");
-        this.nickname= (String) attributes.get("nickname");
+        this.nickname = (String) attributes.get("nickname");
         this.provider = OAuth2Provider.GOOGLE;
         this.profileImageUrl = (String) attributes.get("picture");
     }

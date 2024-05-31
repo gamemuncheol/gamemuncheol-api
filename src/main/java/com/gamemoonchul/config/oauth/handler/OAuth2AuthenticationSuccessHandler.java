@@ -1,6 +1,7 @@
 package com.gamemoonchul.config.oauth.handler;
 
 import com.gamemoonchul.application.MemberService;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.common.util.CookieUtils;
@@ -8,12 +9,11 @@ import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
-import com.gamemoonchul.domain.status.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.application.converter.MemberConverter;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -147,7 +147,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (principal instanceof OAuth2UserPrincipal) {
             return (OAuth2UserPrincipal) principal;
-        } else if(principal instanceof OidcUser) {
+        } else if (principal instanceof OidcUser) {
             AppleOAuth2UserInfo appleOAuth2UserInfo = new AppleOAuth2UserInfo(((OidcUser) principal).getAttributes());
             return new OAuth2UserPrincipal(appleOAuth2UserInfo);
         }

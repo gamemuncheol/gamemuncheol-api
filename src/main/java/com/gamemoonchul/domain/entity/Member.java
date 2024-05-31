@@ -4,7 +4,10 @@ import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import com.gamemoonchul.domain.enums.MemberRole;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -14,7 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Entity(name = "MEMBER")
-@Getter @Setter
+@Getter
+@Setter
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +55,8 @@ public class Member extends BaseTimeEntity {
 
     private LocalDateTime birth;
 
-    @Enumerated(EnumType.STRING) @Setter
+    @Enumerated(EnumType.STRING)
+    @Setter
     @Column(nullable = false, columnDefinition = "varchar(255)")
     private MemberRole role;
 

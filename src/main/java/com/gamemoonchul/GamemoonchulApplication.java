@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class GamemoonchulApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GamemoonchulApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GamemoonchulApplication.class, args);
+    }
 
 }

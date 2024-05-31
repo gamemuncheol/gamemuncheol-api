@@ -31,10 +31,6 @@ spring:
       enabled: true
       max-file-size: 500MB #10GB
       max-request-size: 500MB # 10GB
-  data:
-    redis:
-      host: localhost
-      port: 6379
   jpa:
     show-sql: true
     properties:
@@ -91,4 +87,4 @@ management:
 
 logging:
   level:
-    root: error
+    root: info

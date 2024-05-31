@@ -7,7 +7,10 @@ import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.JwtStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -51,7 +54,7 @@ public class TokenHelper {
                     .build()
                     .parseClaimsJws(token);
             TokenInfo tokenInfo = getTokenInfo(token);
-            if(tokenInfo.tokenType() != type) {
+            if (tokenInfo.tokenType() != type) {
                 throw new BadRequestException(JwtStatus.TOKEN_TYPE_NOT_MATCH);
             }
             return true;

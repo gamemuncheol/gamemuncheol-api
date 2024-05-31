@@ -20,84 +20,88 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 @Component
 public class HttpCookieOAuth2AuthorizationRequestRepository
-    implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
-  public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
-  public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
-  public static final String MODE_PARAM_COOKIE_NAME = "mode";
-  private static final int COOKIE_EXPIRE_SECONDS = 180;
+        implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+    public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
+    public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+    public static final String MODE_PARAM_COOKIE_NAME = "mode";
+    private static final int COOKIE_EXPIRE_SECONDS = 180;
 
-  /**
-   * OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME를 찾아서 역직렬화해서 반환
-   * 쿠키 없는 경우 null 반환
-   * @param request
-   * @return
-   */
-  @Override
-  public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-    return CookieUtils.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
-        .map(cookie -> CookieUtils.deserialize(cookie, OAuth2AuthorizationRequest.class))
-        .orElse(null);
-  }
-
-  /**
-   * OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME에 OAuth2AuthorizationRequest를 직렬화해서 저장
-   * 쿠키에 저장할 때는 redirect_uri, mode도 같이 저장
-   * @param authorizationRequest
-   * @param request
-   * @param response
-   */
-  @Override
-  public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
-                                       HttpServletResponse response) {
-    if (authorizationRequest == null) {
-      CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-      CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-      CookieUtils.deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
-      return;
+    /**
+     * OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME를 찾아서 역직렬화해서 반환
+     * 쿠키 없는 경우 null 반환
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
+        return CookieUtils.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
+                .map(cookie -> CookieUtils.deserialize(cookie, OAuth2AuthorizationRequest.class))
+                .orElse(null);
     }
 
-    CookieUtils.addCookie(response,
-        OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
-        CookieUtils.serialize(authorizationRequest),
-        COOKIE_EXPIRE_SECONDS);
+    /**
+     * OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME에 OAuth2AuthorizationRequest를 직렬화해서 저장
+     * 쿠키에 저장할 때는 redirect_uri, mode도 같이 저장
+     *
+     * @param authorizationRequest
+     * @param request
+     * @param response
+     */
+    @Override
+    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
+                                         HttpServletResponse response) {
+        if (authorizationRequest == null) {
+            CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+            CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+            CookieUtils.deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
+            return;
+        }
 
-    String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-    if (StringUtils.hasText(redirectUriAfterLogin)) {
-      CookieUtils.addCookie(response,
-          REDIRECT_URI_PARAM_COOKIE_NAME,
-          redirectUriAfterLogin,
-          COOKIE_EXPIRE_SECONDS);
+        CookieUtils.addCookie(response,
+                OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
+                CookieUtils.serialize(authorizationRequest),
+                COOKIE_EXPIRE_SECONDS);
+
+        String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
+        if (StringUtils.hasText(redirectUriAfterLogin)) {
+            CookieUtils.addCookie(response,
+                    REDIRECT_URI_PARAM_COOKIE_NAME,
+                    redirectUriAfterLogin,
+                    COOKIE_EXPIRE_SECONDS);
+        }
+
+        String mode = request.getParameter(MODE_PARAM_COOKIE_NAME);
+        if (StringUtils.hasText(mode)) {
+            CookieUtils.addCookie(response,
+                    MODE_PARAM_COOKIE_NAME,
+                    mode,
+                    COOKIE_EXPIRE_SECONDS);
+        }
     }
 
-    String mode = request.getParameter(MODE_PARAM_COOKIE_NAME);
-    if (StringUtils.hasText(mode)) {
-      CookieUtils.addCookie(response,
-          MODE_PARAM_COOKIE_NAME,
-          mode,
-          COOKIE_EXPIRE_SECONDS);
+    /**
+     * 현재 요청에 대한 인증 요청을 로드한 후 제거
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request,
+                                                                 HttpServletResponse response) {
+        return this.loadAuthorizationRequest(request);
     }
-  }
 
-  /**
-   * 현재 요청에 대한 인증 요청을 로드한 후 제거
-   * @param request
-   * @param response
-   * @return
-   */
-  @Override
-  public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request,
-                                                               HttpServletResponse response) {
-    return this.loadAuthorizationRequest(request);
-  }
-
-  /**
-   * 인증과 관련된 모든 쿠키를 삭제
-   * @param request
-   * @param response
-   */
-  public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
-    CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-    CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-    CookieUtils.deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
-  }
+    /**
+     * 인증과 관련된 모든 쿠키를 삭제
+     *
+     * @param request
+     * @param response
+     */
+    public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
+        CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+        CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+        CookieUtils.deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
+    }
 }

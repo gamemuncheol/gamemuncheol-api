@@ -1,6 +1,5 @@
 package com.gamemoonchul.config.jwt;
 
-import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import lombok.Builder;
 
 import java.util.Date;
@@ -13,4 +12,5 @@ public record TokenInfo(
         TokenType tokenType,
         Date iat,
         Date exp
-) { }
+) {
+}

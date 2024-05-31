@@ -1,9 +1,8 @@
 package com.gamemoonchul.infrastructure.web.common;
 
-import lombok.*;
+import lombok.Getter;
 import org.springframework.data.domain.Page;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Getter
@@ -24,7 +23,7 @@ public class Pagination<T> {
         this.data = page.getContent();
     }
 
-    public Pagination(Page page,List<T> data) {
+    public Pagination(Page page, List<T> data) {
         this.page = page.getNumber();
         this.size = page.getSize();
         this.currentElements = page.getNumberOfElements();

@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter @Builder
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchedGame {
-     private String gametype;
+    private String gametype;
     private String gamedate;
     private String gameresult;
     private String gametime;

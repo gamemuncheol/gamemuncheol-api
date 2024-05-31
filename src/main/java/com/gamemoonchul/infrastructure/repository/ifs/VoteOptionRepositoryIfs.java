@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface VoteOptionRepositoryIfs {
     List<VoteOptions> searchByPostId(Long postId);
+
     List<VoteRate> getVoteRateByPostId(Long postId);
 }

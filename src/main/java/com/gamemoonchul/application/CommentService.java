@@ -40,7 +40,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment searchComment(Long commentId)  {
+    public Comment searchComment(Long commentId) {
         Comment result = commentRepository.searchByIdOrThrow(commentId);
         return result;
     }

@@ -25,7 +25,8 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
-@Slf4j @Transactional
+@Slf4j
+@Transactional
 public class YoutubeService {
     /**
      * Define a global instance of a Youtube object, which will be used

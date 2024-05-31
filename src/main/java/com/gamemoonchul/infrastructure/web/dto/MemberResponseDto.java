@@ -1,9 +1,9 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
-import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import lombok.*;
 
-@Getter @Builder
+@Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class MemberResponseDto {

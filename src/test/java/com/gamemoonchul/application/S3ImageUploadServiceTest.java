@@ -29,8 +29,8 @@ class S3ImageUploadServiceTest extends TestDataBase {
     void uploadWrongType() throws IOException {
         // given
         MultipartFile file;
-            byte[] content = Files.readAllBytes(Paths.get("src/test/resources/test.mp4"));
-            file = new MockMultipartFile(fileName, fileName, "video/mp4", content);
+        byte[] content = Files.readAllBytes(Paths.get("src/test/resources/test.mp4"));
+        file = new MockMultipartFile(fileName, fileName, "video/mp4", content);
 
         // when // then
         assertThrows(BadRequestException.class, () -> {

@@ -20,7 +20,8 @@ import lombok.*;
  limitations under the License.
  **************************************************************************/
 
-@Builder @Getter
+@Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppleCredential {
@@ -34,7 +35,8 @@ public class AppleCredential {
     @SerializedName("iss")
     private String issuer;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
 
 

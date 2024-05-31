@@ -13,17 +13,17 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class OAuth2UserInfoFactory {
-  private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-  public static OAuth2UserInfo getOAuth2UserInfo(String registrationId,
-                                                 String accessToken,
-                                                 Map<String, Object> attributes) {
-    if (OAuth2Provider.GOOGLE.getRegistrationId()
-        .equals(registrationId)) {
-      return new GoogleOAuth2UserInfo(accessToken, attributes);
-    } else {
-      log.error(Oauth2Status.NOT_FOUND_PROVIDER.getMessage());
-      throw new BadRequestException(Oauth2Status.NOT_FOUND_PROVIDER);
+    public static OAuth2UserInfo getOAuth2UserInfo(String registrationId,
+                                                   String accessToken,
+                                                   Map<String, Object> attributes) {
+        if (OAuth2Provider.GOOGLE.getRegistrationId()
+                .equals(registrationId)) {
+            return new GoogleOAuth2UserInfo(accessToken, attributes);
+        } else {
+            log.error(Oauth2Status.NOT_FOUND_PROVIDER.getMessage());
+            throw new BadRequestException(Oauth2Status.NOT_FOUND_PROVIDER);
+        }
     }
-  }
 }

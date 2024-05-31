@@ -1,6 +1,5 @@
 package com.gamemoonchul.domain.entity;
 
-import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class PostDummy {
                 .title("string")
                 .content("string")
                 .videoUrl("https://youtube.com/")
-                .thumbnailUrl("https://s3/" )
+                .thumbnailUrl("https://s3/")
                 .matchUserIds(new ArrayList<>())
                 .build();
     }
@@ -23,7 +22,7 @@ public class PostDummy {
                 .title("string")
                 .content("string")
                 .videoUrl("https://youtube.com/")
-                .thumbnailUrl("https://s3/" )
+                .thumbnailUrl("https://s3/")
                 .matchUserIds(matchUserIds)
                 .build();
     }

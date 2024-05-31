@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface MatchGameRepository extends JpaRepository<MatchGame, Long>{
+public interface MatchGameRepository extends JpaRepository<MatchGame, Long> {
     Optional<MatchGame> findByGameId(String gameId);
 }

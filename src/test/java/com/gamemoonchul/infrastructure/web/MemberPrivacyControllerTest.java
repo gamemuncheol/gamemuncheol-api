@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MemberPrivacyControllerTest extends TestDataBase{
+class MemberPrivacyControllerTest extends TestDataBase {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -39,7 +39,7 @@ class MemberPrivacyControllerTest extends TestDataBase{
 
     void getTokenDto() {
         member = MemberDummy.createPrivacyRole();
-                TokenInfo tokenInfo = TokenInfo.builder()
+        TokenInfo tokenInfo = TokenInfo.builder()
                 .email(member.getEmail())
                 .provider(member.getProvider().toString())
                 .identifier(member.getIdentifier())

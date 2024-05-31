@@ -1,9 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.application.MatchGameService;
-import com.gamemoonchul.application.MatchUserService;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
@@ -11,18 +8,15 @@ import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import com.gamemoonchul.domain.status.PostStatus;
-import com.gamemoonchul.domain.status.SearchStatus;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MatchUserServiceTest extends TestDataBase {
     @Autowired
@@ -76,7 +70,7 @@ class MatchUserServiceTest extends TestDataBase {
         Long id = 999999L;
 
         // when // then
-         assertThrows(NotFoundException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             matchUserService.findById(id);
         }, PostStatus.WRONG_MATCH_USER.getMessage());
     }
