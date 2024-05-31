@@ -34,6 +34,7 @@ public class PostMainResponse {
                 .viewCount(post.getViewCount())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .voteRatio(post.getVoteRatio())
                 .votes(post.getVotes())
                 .build();
     }
