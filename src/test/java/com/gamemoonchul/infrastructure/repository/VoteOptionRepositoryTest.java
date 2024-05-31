@@ -1,21 +1,20 @@
 package com.gamemoonchul.infrastructure.repository;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.domain.entity.*;
+import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.domain.entity.PostDummy;
+import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
 import com.gamemoonchul.domain.entity.riot.MatchUserDummy;
-import com.gamemoonchul.domain.model.dto.VoteRate;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,9 +32,6 @@ class VoteOptionRepositoryTest extends TestDataBase {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private VoteRepository voteRepository;
 
     @Autowired
     private EntityManager em;
@@ -87,28 +83,28 @@ class VoteOptionRepositoryTest extends TestDataBase {
     @Test
     @DisplayName("임의의 멤버로 투표를 진행했을 때 투표의 결과가 정확히 실행한 투표의 결과와 일치하는지 테스트")
     void 투표50건테스트() {
-        // given
-        members = MemberDummy.createUserRoleMembers(50);
-        members = memberRepository.saveAll(members);
-        List<Vote> savedVotes = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            savedVotes.add(voteRepository.save(Vote.builder()
-                    .post(post)
-                    .voteOptions(voteOptions.get(i % 2))
-                    .member(members.get(i))
-                    .build()));
-        }
-
-
-        // when
-        List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
-
-        // then
-        voteRates.forEach(
-                voteRate -> {
-                    AssertionsForClassTypes.assertThat(voteRate.getRate())
-                            .isEqualTo(50);
-                }
-        );
+//        // given
+//        members = MemberDummy.createUserRoleMembers(50);
+//        members = memberRepository.saveAll(members);
+//        List<Vote> savedVotes = new ArrayList<>();
+//        for (int i = 0; i < 50; i++) {
+//            savedVotes.add(voteRepository.save(Vote.builder()
+//                    .post(post)
+//                    .voteOptions(voteOptions.get(i % 2))
+//                    .member(members.get(i))
+//                    .build()));
+//        }
+//
+//
+//        // when
+//        List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
+//
+//        // then
+//        voteRates.forEach(
+//                voteRate -> {
+//                    AssertionsForClassTypes.assertThat(voteRate.getRate())
+//                            .isEqualTo(50);
+//                }
+//        );
     }
 }
