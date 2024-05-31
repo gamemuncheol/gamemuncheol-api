@@ -20,6 +20,7 @@ class MatchUserConverterTest extends TestDataBase {
 
     @Autowired
     private MatchGameConverter matchConverter;
+
     @Test
     @DisplayName("MatchUserConverter 객체 생성 테스트")
     void createMatchUserConverter() {

@@ -1,8 +1,8 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.CommentConverter;
-import com.gamemoonchul.common.exception.ApiException;
-import com.gamemoonchul.common.status.ApiStatus;
+import com.gamemoonchul.common.exception.NotFoundException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
@@ -33,14 +33,14 @@ public class CommentService {
         Comment comment = commentConverter.requestToEntity(member, request);
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(
-                        () -> new ApiException(PostStatus.POST_NOT_FOUND)
+                        () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
                 );
         post.addComment(comment);
         postRepository.save(post);
         return commentRepository.save(comment);
     }
 
-    public Comment searchComment(Long commentId)  {
+    public Comment searchComment(Long commentId) {
         Comment result = commentRepository.searchByIdOrThrow(commentId);
         return result;
     }
@@ -55,14 +55,20 @@ public class CommentService {
     public void delete(Long commentId, Member authMember) {
         Comment savedComment = this.searchComment(commentId);
         validateSameMemberId(savedComment.getMember(), authMember);
+        commentCountDown(savedComment.getPost());
         commentRepository.delete(savedComment);
+    }
+
+    private void commentCountDown(Post post) {
+        post.commentCountDown();
+        postRepository.save(post);
     }
 
     private void validateSameMemberId(Member commentWriteMember, Member currentSignInMember) {
         if (commentWriteMember.getId().equals(currentSignInMember.getId())) {
             return;
         }
-        throw new ApiException(MemberStatus.NOT_AUTHORIZED_MEMBER);
+        throw new UnauthorizedException(MemberStatus.NOT_AUTHORIZED_MEMBER);
     }
 
 }

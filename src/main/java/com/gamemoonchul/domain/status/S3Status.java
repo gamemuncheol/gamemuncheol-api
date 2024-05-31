@@ -19,6 +19,6 @@ public enum S3Status implements ApiStatusIfs {
     UNKOWN_ERROR(4504, "알 수 없는 에러가 발생하였습니다."),
     ;
     private final Integer statusCode;
-  private final String message;
+    private final String message;
 
 }

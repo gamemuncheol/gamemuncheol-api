@@ -6,14 +6,17 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Builder @Entity
+@Getter
+@Builder
+@Entity
 @Table(name = "MATCH_GAME", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"gameId"})
 })
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MatchGame {
-    @Id @Column(name = "id")
+    @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

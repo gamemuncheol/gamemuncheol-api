@@ -13,7 +13,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Entity(name = "COMMENT")
-@Getter @Setter
+@Getter
+@Setter
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +28,5 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(nullable = false, name = "postId")
     private Post post;
 
-    @Setter
     private String content;
 }

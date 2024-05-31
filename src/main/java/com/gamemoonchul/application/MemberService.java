@@ -1,6 +1,6 @@
 package com.gamemoonchul.application;
 
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.jwt.TokenInfo;
@@ -14,12 +14,14 @@ import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -39,18 +41,24 @@ public class MemberService {
     public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
         Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
         if (member.isEmpty()) {
-            throw new ApiException(MemberStatus.MEMBER_NOT_FOUND);
+            log.error(MemberStatus.MEMBER_NOT_FOUND.getMessage());
+            throw new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
         }
         memberRepository.delete(member.get());
     }
 
     public void updateNickName(Member member, String nickName) {
-        List<Member> savedMember = memberRepository.findByNickname(nickName);
-        if (!savedMember.isEmpty()) {
-            throw new ApiException(MemberStatus.ALREADY_EXIST_NICKNAME);
+        if (checkDuplicated(nickName)) {
+            log.error(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
+            throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
         Member updatedMember = member.updateNickname(nickName);
         memberRepository.save(updatedMember);
+    }
+
+    public boolean checkDuplicated(String nickName) {
+        List<Member> savedMember = memberRepository.findByNickname(nickName);
+        return !savedMember.isEmpty();
     }
 
     public TokenDto renew(String refreshToken) {

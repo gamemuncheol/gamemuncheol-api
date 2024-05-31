@@ -4,15 +4,16 @@ import com.gamemoonchul.application.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.repository.MatchGameRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-@Slf4j @Transactional
+@Slf4j
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MatchGameService {
     private final MatchGameRepository matchGameRepository;
@@ -22,6 +23,7 @@ public class MatchGameService {
         return matchGameRepository.findByGameId(gameId);
     }
 
+    @Transactional
     public MatchGame save(MatchRecord vo) {
         MatchGame matchGame = matchConverter.toMatchGame(vo);
         return matchGameRepository.save(matchGame);

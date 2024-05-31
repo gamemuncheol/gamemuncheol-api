@@ -1,16 +1,14 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -73,7 +71,21 @@ class MemberServiceTest extends TestDataBase {
 
         // then
         assertThatThrownBy(() -> memberService.updateNickName(member, nickname))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
+    }
+
+    @Test
+    @DisplayName("validate 메서드에서 이미 존재하는 닉네임을 입력했을 때 true를 return 하는지 Test")
+    void validateNicknameTest() {
+        // given
+        Member member = MemberDummy.create();
+        memberRepository.save(member);
+
+        // when
+        boolean result = memberService.checkDuplicated(member.getNickname());
+
+        // then
+        assertThat(result).isEqualTo(true);
     }
 }

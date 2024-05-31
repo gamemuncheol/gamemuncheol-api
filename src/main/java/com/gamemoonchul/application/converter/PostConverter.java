@@ -30,6 +30,7 @@ public class PostConverter {
                 .videoUrl(request.videoUrl())
                 .thumbnailUrl(request.thumbnailUrl())
                 .content(request.content())
+                .tags(request.tags())
                 .build();
         entity.setMember(member);
         return entity;

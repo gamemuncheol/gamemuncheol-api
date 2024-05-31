@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppleSignUpRequestDto {
-  private String identityToken;
-  private String name;
+    private String identityToken;
+    private String name;
 }

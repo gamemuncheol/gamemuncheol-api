@@ -1,18 +1,19 @@
 package com.gamemoonchul.config.oauth.handler;
 
 import com.gamemoonchul.application.MemberService;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.application.converter.MemberConverter;
+import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.common.util.CookieUtils;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
 import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
-import com.gamemoonchul.config.oauth.Oauth2Status;
 import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.application.converter.MemberConverter;
+import com.gamemoonchul.domain.status.Oauth2Status;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,7 +64,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // 응답이 이미 커밋된 경우 리다이렉트를 수행할 수 없으므로 로그 남기고 종료
         if (response.isCommitted()) {
-            throw new ApiException(Oauth2Status.EXPIRED_LOGIN);
+            log.error(Oauth2Status.EXPIRED_LOGIN.getMessage());
+            throw new InternalServerException(Oauth2Status.EXPIRED_LOGIN);
         }
 
         clearAuthenticationAttributes(request, response);
@@ -77,7 +79,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
 
         if (principal == null) {
-            throw new ApiException(Oauth2Status.LOGIN_FAILED);
+            log.error(Oauth2Status.LOGIN_FAILED.getMessage());
+            throw new InternalServerException(Oauth2Status.LOGIN_FAILED);
         }
 
         String mode = CookieUtils.getCookie(request, MODE_PARAM_COOKIE_NAME)
@@ -95,7 +98,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
         } else {
-            throw new ApiException(Oauth2Status.LOGIN_FAILED);
+            log.error(Oauth2Status.LOGIN_FAILED.getMessage());
+            throw new BadRequestException(Oauth2Status.LOGIN_FAILED);
         }
     }
 
@@ -143,7 +147,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (principal instanceof OAuth2UserPrincipal) {
             return (OAuth2UserPrincipal) principal;
-        } else if(principal instanceof OidcUser) {
+        } else if (principal instanceof OidcUser) {
             AppleOAuth2UserInfo appleOAuth2UserInfo = new AppleOAuth2UserInfo(((OidcUser) principal).getAttributes());
             return new OAuth2UserPrincipal(appleOAuth2UserInfo);
         }

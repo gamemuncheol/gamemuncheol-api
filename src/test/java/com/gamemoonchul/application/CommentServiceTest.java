@@ -1,7 +1,8 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.NotFoundException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.*;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.PostStatus;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -53,7 +56,7 @@ class CommentServiceTest extends TestDataBase {
         Comment savedEntity = commentService.save(request, member);
         Post searchedPost = postRepository.findById(post.getId())
                 .orElseThrow(
-                        () -> new ApiException(PostStatus.POST_NOT_FOUND)
+                        () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
                 );
 
         // then
@@ -97,7 +100,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.fix(content, anotherMember))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(UnauthorizedException.class)
                 .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
 
@@ -113,7 +116,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.fix(content, member))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 
@@ -131,9 +134,28 @@ class CommentServiceTest extends TestDataBase {
         // then
         assertThatThrownBy(
                 () -> commentService.searchComment(savedComment.getId()))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
 
+    }
+
+    @Test
+    @DisplayName("댓글 삭제시 Comment Count가 감소하는지 테스트")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    void shouldDecreaseCommentCountWhenCommentIsDeleted() throws InterruptedException {
+        // given
+        CommentRequest request = CommentDummy.createRequest(post.getId());
+        Comment savedComment = commentService.save(request, member);
+        post = postRepository.findById(post.getId()).orElseThrow();
+
+        // when
+        commentService.delete(savedComment.getId(), member);
+        em.clear();
+        Post post2 = postRepository.findById(post.getId())
+                .orElseThrow();
+
+        // then
+        assertThat(post.getCommentCount() - 1).isEqualTo(post2.getCommentCount());
     }
 
     @Test
@@ -151,7 +173,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.delete(content.commentId(), anotherMember))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(UnauthorizedException.class)
                 .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
 
@@ -167,7 +189,7 @@ class CommentServiceTest extends TestDataBase {
         // when // then
         assertThatThrownBy(
                 () -> commentService.delete(content.commentId(), member))
-                .isInstanceOf(ApiException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 }

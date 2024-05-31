@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MemberPrivacyControllerTest extends TestDataBase{
+class MemberPrivacyControllerTest extends TestDataBase {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -39,7 +39,7 @@ class MemberPrivacyControllerTest extends TestDataBase{
 
     void getTokenDto() {
         member = MemberDummy.createPrivacyRole();
-                TokenInfo tokenInfo = TokenInfo.builder()
+        TokenInfo tokenInfo = TokenInfo.builder()
                 .email(member.getEmail())
                 .provider(member.getProvider().toString())
                 .identifier(member.getIdentifier())
@@ -55,7 +55,7 @@ class MemberPrivacyControllerTest extends TestDataBase{
         // given
         getTokenDto();
         // when
-        ResultActions resultActions = super.mvc.perform(get("/privacy/is-agreed")
+        ResultActions resultActions = super.mvc.perform(get("/privacy")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + tokenDto.getAccessToken()));
 
@@ -70,7 +70,7 @@ class MemberPrivacyControllerTest extends TestDataBase{
         // given
         getTokenDto();
         // when
-        ResultActions resultActions = super.mvc.perform(MockMvcRequestBuilders.patch("/privacy/agree")
+        ResultActions resultActions = super.mvc.perform(MockMvcRequestBuilders.patch("/privacy")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + tokenDto.getAccessToken()));
 
@@ -86,7 +86,7 @@ class MemberPrivacyControllerTest extends TestDataBase{
         getTokenDto();
         // when
         agreePrivcayTest();
-        ResultActions resultActions = super.mvc.perform(get("/privacy/is-agreed")
+        ResultActions resultActions = super.mvc.perform(get("/privacy")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + tokenDto.getAccessToken()));
 
@@ -99,7 +99,7 @@ class MemberPrivacyControllerTest extends TestDataBase{
     @DisplayName("토큰 없이 호출하면 401에러 발생")
     void notAuthorized() throws Exception {
         // given // when
-        ResultActions resultActions = super.mvc.perform(get("/privacy/is-agreed")
+        ResultActions resultActions = super.mvc.perform(get("/privacy")
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then

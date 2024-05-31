@@ -1,11 +1,10 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.ApiException;
+import com.gamemoonchul.common.exception.BadRequestException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,11 +29,11 @@ class S3ImageUploadServiceTest extends TestDataBase {
     void uploadWrongType() throws IOException {
         // given
         MultipartFile file;
-            byte[] content = Files.readAllBytes(Paths.get("src/test/resources/test.mp4"));
-            file = new MockMultipartFile(fileName, fileName, "video/mp4", content);
+        byte[] content = Files.readAllBytes(Paths.get("src/test/resources/test.mp4"));
+        file = new MockMultipartFile(fileName, fileName, "video/mp4", content);
 
         // when // then
-        assertThrows(ApiException.class, () -> {
+        assertThrows(BadRequestException.class, () -> {
             s3Service.uploadImage(file);
         });
     }

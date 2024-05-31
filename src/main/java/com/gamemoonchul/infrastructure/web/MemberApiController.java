@@ -6,12 +6,7 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @RestControllerWithEnvelopPattern
 @RequestMapping("/api/member")
@@ -19,12 +14,19 @@ import java.util.Optional;
 public class MemberApiController {
     private final MemberService memberService;
 
-    @PatchMapping("/change-nickname/{nickname}")
+    @PatchMapping("/nickname/{nickname}")
     public void changeNickname(
             @MemberSession Member member,
             @PathVariable(name = "nickname") String nickname
     ) {
         memberService.updateNickName(member, nickname);
+    }
+
+    @GetMapping("/nickname/{nickname}")
+    public boolean checkNicknameDuplicated(
+            @PathVariable(name = "nickname") String nickname
+    ) {
+        return memberService.checkDuplicated(nickname);
     }
 
     @GetMapping("/me")

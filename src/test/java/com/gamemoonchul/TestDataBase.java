@@ -54,9 +54,9 @@ public abstract class TestDataBase {
 
     static {
         container = (MySQLContainer) new MySQLContainer(MYSQL_VERSION)
-            .withDatabaseName("test")
-            .withUsername(ROOT)
-            .withPassword(ROOT_PASSWORD);
+                .withDatabaseName("test")
+                .withUsername(ROOT)
+                .withPassword(ROOT_PASSWORD);
         container.start();
     }
 

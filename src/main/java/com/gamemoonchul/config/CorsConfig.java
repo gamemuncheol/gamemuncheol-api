@@ -13,7 +13,8 @@ import java.util.Collections;
 @Component
 public class CorsConfig {
 
-    @Bean @Primary
+    @Bean
+    @Primary
     public CorsConfigurationSource customCorsConfig() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();

@@ -4,4 +4,5 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-public record TeamRecord(int teamId, boolean win) {}
+public record TeamRecord(int teamId, boolean win) {
+}

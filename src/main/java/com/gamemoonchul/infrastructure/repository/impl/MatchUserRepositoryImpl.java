@@ -14,6 +14,7 @@ import static com.gamemoonchul.domain.entity.riot.QMatchUser.matchUser;
 @Repository
 public class MatchUserRepositoryImpl implements MatchUserRepositoryIfs {
     JPAQueryFactory queryFactory;
+
     public MatchUserRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
