@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
-@Table(name = "MATCH_GAME", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"gameId"})
+@Table(name = "match_game", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"game_id"})
 })
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,13 +20,16 @@ public class MatchGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "gameId", nullable = false)
+    @Column(name = "game_id", nullable = false)
     private String gameId;
 
+    @Column(name = "game_creation")
     private String gameCreation;
 
+    @Column(name = "game_duration")
     private long gameDuration;
 
+    @Column(name = "game_mode")
     private String gameMode;
 
     @OneToMany(mappedBy = "matchGame", fetch = FetchType.EAGER)

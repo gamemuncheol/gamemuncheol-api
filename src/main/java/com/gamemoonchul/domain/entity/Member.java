@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@Entity(name = "MEMBER")
+@Entity(name = "member")
 @Getter
 @Setter
 public class Member extends BaseTimeEntity {
@@ -45,9 +45,11 @@ public class Member extends BaseTimeEntity {
     private String picture;
 
     @Setter
+    @Column(name = "privacy_agreed")
     private boolean privacyAgreed;
 
     @Setter
+    @Column(name = "privacy_agreed_at")
     private LocalDateTime privacyAgreedAt;
 
     @Column(nullable = false)

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Entity(name = "POST")
+@Entity
+@Table(name = "post")
 @Getter
 @SuperBuilder
 @AllArgsConstructor
@@ -23,22 +24,24 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Setter
-    @JoinColumn(name = "memberId", referencedColumnName = "id")
+    @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId")
+    @JoinColumn(name = "post_id")
     private List<VoteOptions> voteOptions;
 
     @Convert(converter = MapLongConverter.class)
     private HashMap<Long, Long> votes;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId")
+    @JoinColumn(name = "post_id")
     private List<Comment> comments;
 
+    @Column(name = "video_url")
     private String videoUrl;
 
+    @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
     private String title;
@@ -49,10 +52,13 @@ public class Post extends BaseTimeEntity {
     private List<String> tags;
 
     @Builder.Default
+    @Column(name = "view_count")
     private Long viewCount = 0L;
     @Builder.Default
+    @Column(name = "comment_count")
     private Long commentCount = 0L;
     @Builder.Default
+    @Column(name = "vote_count")
     private Long voteCount = 0L;
 
     @Column(name = "vote_ratio")

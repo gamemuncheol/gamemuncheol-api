@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
-@RequestMapping("/open-api/member")
+@RequestMapping("/open-api/members")
 @RestControllerWithEnvelopPattern
 public class MemberOpenApiController {
     private final MemberService memberService;
