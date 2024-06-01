@@ -7,7 +7,7 @@ import lombok.*;
 
 @Builder
 @Getter
-@Entity(name = "VOTE_OPTIONS")
+@Entity(name = "vote_options")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class VoteOptions {
@@ -16,10 +16,10 @@ public class VoteOptions {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "matchUserId")
+    @JoinColumn(name = "match_user_id")
     private MatchUser matchUser;
 }

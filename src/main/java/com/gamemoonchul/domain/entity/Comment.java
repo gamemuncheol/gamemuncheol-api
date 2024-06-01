@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@Entity(name = "COMMENT")
+@Entity(name = "comment")
 @Getter
 @Setter
 public class Comment extends BaseTimeEntity {
