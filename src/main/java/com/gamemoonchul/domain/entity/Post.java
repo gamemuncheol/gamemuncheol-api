@@ -60,9 +60,9 @@ public class Post extends BaseTimeEntity {
     @Builder.Default
     @Column(name = "vote_count")
     private Long voteCount = 0L;
-
+    @Builder.Default
     @Column(name = "vote_ratio")
-    private Double voteRatio;
+    private Double voteRatio = 0.0;
 
     public void commentCountDown() {
         this.commentCount--;
