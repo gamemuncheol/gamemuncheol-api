@@ -52,6 +52,7 @@ public class Post extends BaseTimeEntity {
     private List<String> tags;
 
     @Builder.Default
+    @Column(name = "view_count")
     private Long viewCount = 0L;
     @Builder.Default
     @Column(name = "comment_count")
