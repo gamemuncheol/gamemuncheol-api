@@ -31,7 +31,7 @@ class MemberOpenApiControllerTest extends TestDataBase {
 
         // when
         ResultActions resultActions =
-                super.mvc.perform(post("/open-api/member/renew")
+                super.mvc.perform(post("/open-api/members/renew")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(super.objectMapper.writeValueAsString(renewRequest))
                         .accept(MediaType.APPLICATION_JSON)
@@ -60,7 +60,7 @@ class MemberOpenApiControllerTest extends TestDataBase {
         ResultActions resultActions;
         try {
             resultActions =
-                    super.mvc.perform(post("/open-api/member/renew")
+                    super.mvc.perform(post("/open-api/members/renew")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(super.objectMapper.writeValueAsString(renewRequest))
                             .accept(MediaType.APPLICATION_JSON)
