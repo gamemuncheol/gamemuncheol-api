@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequestMapping("/api/file")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
 @RestControllerWithEnvelopPattern
 public class FileUploadController {

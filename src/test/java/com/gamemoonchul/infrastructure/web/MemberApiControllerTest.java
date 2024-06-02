@@ -42,7 +42,7 @@ class MemberApiControllerTest extends TestDataBase {
         String nickname = UUID.randomUUID().toString().substring(0, 8);
 
         // when
-        ResultActions resultActions = super.mvc.perform(patch("/api/member/nickname/" + nickname).header("Authorization", "Bearer " + tokenDto.getAccessToken()));
+        ResultActions resultActions = super.mvc.perform(patch("/api/members/nickname/" + nickname).header("Authorization", "Bearer " + tokenDto.getAccessToken()));
 
         // then
         resultActions.andExpect(status().isOk());
@@ -54,7 +54,7 @@ class MemberApiControllerTest extends TestDataBase {
         // given
 
         // when
-        ResultActions resultActions = super.mvc.perform(get("/api/member/me").header("Authorization", "Bearer " + tokenDto.getAccessToken()));
+        ResultActions resultActions = super.mvc.perform(get("/api/members/me").header("Authorization", "Bearer " + tokenDto.getAccessToken()));
 
         // then
         resultActions.andExpect(jsonPath("$.data.email").value(member.getEmail()));
@@ -68,7 +68,7 @@ class MemberApiControllerTest extends TestDataBase {
         memberRepository.delete(member);
 
         // when
-        ResultActions resultActions = super.mvc.perform(get("/api/member/me").header("Authorization", "Bearer " + accessToken));
+        ResultActions resultActions = super.mvc.perform(get("/api/members/me").header("Authorization", "Bearer " + accessToken));
 
         // then
         resultActions.andExpect(status().isForbidden());

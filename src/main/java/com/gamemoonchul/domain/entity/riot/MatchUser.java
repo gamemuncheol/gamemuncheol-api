@@ -3,7 +3,7 @@ package com.gamemoonchul.domain.entity.riot;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "MATCH_USER")
+@Entity(name = "match_user")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -13,13 +13,14 @@ public class MatchUser {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "gameId", referencedColumnName = "gameId")
+    @JoinColumn(name = "game_id", referencedColumnName = "game_id")
     private MatchGame matchGame;
     private String puuid;
     /**
      * summonerId + riotIdTagline
      */
     private String nickname;
+    @Column(name = "champion_thumbnail")
     private String championThumbnail;
     private boolean win;
 

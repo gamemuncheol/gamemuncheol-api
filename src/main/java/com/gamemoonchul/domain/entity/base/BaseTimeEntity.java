@@ -1,6 +1,7 @@
 package com.gamemoonchul.domain.entity.base;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
@@ -19,9 +20,11 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseTimeEntity {
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
 

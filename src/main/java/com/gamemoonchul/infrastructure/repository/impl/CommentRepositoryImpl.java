@@ -30,11 +30,9 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
     public Comment searchByIdOrThrow(Long commentId) {
         Comment result = queryFactory.select(comment)
                 .from(comment)
-                .join(member)
-                .on(comment.member.id.eq(member.id))
+                .join(comment.member, member)
                 .fetchJoin()
-                .join(post)
-                .on(comment.post.id.eq(post.id))
+                .join(comment.post, post)
                 .fetchJoin()
                 .where(comment.id.eq(commentId))
                 .fetchOne();
