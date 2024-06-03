@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p JOIN FETCH p.member ORDER BY p.createdAt DESC")
     Page<Post> findAllByOrderByCreatedAt(Pageable pageable);
+
+    Page<Post> findByVoteRatioGreaterThanEqual(Double ratio, Pageable pageable);
 }

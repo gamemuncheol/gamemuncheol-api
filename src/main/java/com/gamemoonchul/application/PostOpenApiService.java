@@ -8,6 +8,7 @@ import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,5 +40,21 @@ public class PostOpenApiService {
                 .collect(Collectors.toList());
 
         return new Pagination<PostResponseDto>(savedPage, responses);
+    }
+
+    public List<PostResponseDto> getHotPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Double standardRatio = 45.0;
+        return postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable)
+                .getContent()
+                .stream()
+                .map(post -> {
+                    List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
+                    return PostResponseDto.entityToResponse(post, voteRates);
+                })
+                .sorted(
+                        Comparator.comparing(PostResponseDto::getCreatedAt)
+                )
+                .toList();
     }
 }
