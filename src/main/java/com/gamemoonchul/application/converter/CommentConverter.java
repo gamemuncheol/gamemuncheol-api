@@ -5,6 +5,7 @@ import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.domain.model.dto.CommentSaveDto;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
@@ -21,7 +22,7 @@ public class CommentConverter {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public Comment requestToEntity(Member member, CommentRequest request) {
+    public Comment requestToEntity(Member member, CommentSaveDto request) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(
                         () -> {
@@ -31,6 +32,7 @@ public class CommentConverter {
                 );
 
         return Comment.builder()
+                .parentId(request.parentId())
                 .member(member)
                 .post(post)
                 .content(request.content())
