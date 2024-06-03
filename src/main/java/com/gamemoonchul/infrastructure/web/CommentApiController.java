@@ -25,7 +25,8 @@ public class CommentApiController {
     @PostMapping("/{parentId}")
     public void save(
             @PathVariable(name = "parentId") Long parentId,
-            CommentRequest request, @MemberSession Member member) {
+            @RequestBody  CommentRequest request,
+            @MemberSession Member member) {
         CommentSaveDto saveDto = new CommentSaveDto(parentId, request.content(), request.postId());
         commentService.save(saveDto, member);
     }
