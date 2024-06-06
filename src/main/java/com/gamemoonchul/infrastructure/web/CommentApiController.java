@@ -25,7 +25,7 @@ public class CommentApiController {
     @PostMapping("/{parentId}")
     public void save(
             @PathVariable(name = "parentId") Long parentId,
-            @RequestBody  CommentRequest request,
+            @RequestBody CommentRequest request,
             @MemberSession Member member) {
         CommentSaveDto saveDto = new CommentSaveDto(parentId, request.content(), request.postId());
         commentService.save(saveDto, member);
@@ -33,7 +33,7 @@ public class CommentApiController {
 
 
     @PatchMapping
-    public void fix(CommentFixRequest request, @MemberSession Member member) {
+    public void fix(@RequestBody CommentFixRequest request, @MemberSession Member member) {
         commentService.fix(request, member);
     }
 
