@@ -17,7 +17,7 @@ public class CommentApiController {
     private final CommentService commentService;
 
     @PostMapping
-    public void save(CommentRequest request, @MemberSession Member member) {
+    public void save(@RequestBody CommentRequest request, @MemberSession Member member) {
         CommentSaveDto saveDto = new CommentSaveDto(null, request.content(), request.postId());
         commentService.save(saveDto, member);
     }
