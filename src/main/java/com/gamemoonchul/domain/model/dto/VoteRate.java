@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 public class VoteRate {
     private Long matchUserId;
     private String nickname;
@@ -17,14 +18,12 @@ public class VoteRate {
             Long matchUserId,
             String nickname,
             String championThumbnail,
-            Long voteOptionsId,
-            Long ratio
+            Long voteOptionsId
     ) {
         this.matchUserId = matchUserId;
         this.nickname = nickname;
         this.championThumbnail = championThumbnail;
         this.voteOptionsId = voteOptionsId;
-        this.ratio = ratio == null ? 0. : ratio;
     }
 
     public void setRatio(Double ratio) {
