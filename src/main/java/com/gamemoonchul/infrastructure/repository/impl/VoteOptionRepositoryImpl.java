@@ -56,15 +56,6 @@ public class VoteOptionRepositoryImpl implements VoteOptionRepositoryIfs {
                 .where(voteOptions.post.id.eq(postId))
                 .groupBy(voteOptions.id)
                 .fetch();
-//        int sum = results.stream()
-//                .map(VoteRate::getRate)
-//                .mapToInt(Long::intValue)
-//                .sum();
-
-        results.forEach(voteRate -> {
-//            int rate = (int) ((double) voteRate.getRate() / sum * 100);
-//            voteRate.setRate((long) rate);
-        });
 
         return results;
     }
