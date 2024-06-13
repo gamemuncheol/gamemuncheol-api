@@ -31,6 +31,9 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private List<VoteOptions> voteOptions;
 
+    /**
+     * Key : 유저 ID, Value : VoteOptionId
+     */
     @Convert(converter = MapLongConverter.class)
     private HashMap<Long, Long> votes;
 
@@ -84,4 +87,7 @@ public class Post extends BaseTimeEntity {
         commentCount++;
     }
 
+    public boolean isVotesNull() {
+        return this.votes == null;
+    }
 }

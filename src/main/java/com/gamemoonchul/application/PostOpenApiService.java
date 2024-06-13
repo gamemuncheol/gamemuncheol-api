@@ -13,8 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -31,7 +30,8 @@ public class PostOpenApiService {
                 .stream()
                 .map(post -> {
                             List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
-                            return PostResponseDto.entityToResponse(post, voteRates);
+                            List<VoteRate> newVoteRates = calculateVoteRatio(post, voteRates);
+                            return PostResponseDto.entityToResponse(post, newVoteRates);
                         }
                 )
                 .sorted(
@@ -42,19 +42,55 @@ public class PostOpenApiService {
         return new Pagination<PostResponseDto>(savedPage, responses);
     }
 
-    public List<PostResponseDto> getHotPosts(int page, int size) {
+    public Pagination<PostResponseDto> getGrillPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Double standardRatio = 45.0;
-        return postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable)
+        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable);
+        List<PostResponseDto> responses = savedPage
                 .getContent()
                 .stream()
                 .map(post -> {
                     List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(post.getId());
-                    return PostResponseDto.entityToResponse(post, voteRates);
+                    List<VoteRate> newVoteRates = calculateVoteRatio(post, voteRates);
+                    return PostResponseDto.entityToResponse(post, newVoteRates);
                 })
                 .sorted(
                         Comparator.comparing(PostResponseDto::getCreatedAt)
                 )
                 .toList();
+        return new Pagination<PostResponseDto>(savedPage, responses);
+    }
+
+    private List<VoteRate> calculateVoteRatio(Post post, List<VoteRate> voteRates) {
+        // key : voteOptionsId, value : 전체 수량
+        HashMap<Long, Double> voteOptionsMap = new HashMap<>();
+        HashMap<Long, Double> voteOptionsRatio = new HashMap<>();
+        Double temp = 0.;
+        if (post.isVotesNull()) {
+            voteRates.forEach(voteRate -> voteRate.setRatio(0.));
+            return voteRates;
+        }
+        for (Map.Entry<Long, Long> e : post.getVotes()
+                .entrySet()) {
+            Double cur = voteOptionsMap.getOrDefault(e.getValue(), 0.);
+            cur++;
+            temp++;
+            voteOptionsMap.put(e.getValue(), cur);
+        }
+        final Double total = temp;
+        voteOptionsMap.entrySet()
+                .forEach(
+                        e -> {
+                            voteOptionsMap.values()
+                                    .forEach(i -> {
+                                        voteOptionsRatio.put(e.getKey(), i / total * 100.);
+                                    });
+                        }
+                );
+        voteRates.forEach(voteRate -> {
+            Double ratio = voteOptionsRatio.get(voteRate.getVoteOptionsId());
+            voteRate.setRatio(ratio);
+        });
+        return voteRates;
     }
 }
