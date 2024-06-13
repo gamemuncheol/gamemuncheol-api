@@ -142,6 +142,27 @@ class CommentServiceTest extends TestDataBase {
     }
 
     @Test
+    @DisplayName("부모 댓글 삭제시 대댓글도 삭제 되는지 테스트")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    void replyDeleteTest() throws InterruptedException {
+        // given
+        CommentSaveDto request = CommentDummy.createSaveDto(post.getId());
+        Comment savedComment = commentService.save(request, member);
+        CommentSaveDto replyRequest = CommentDummy.createSaveDto(savedComment.getId(), post.getId());
+        Comment savedReply = commentService.save(replyRequest, member);
+
+        // when
+        commentService.delete(savedComment.getId(), member);
+
+        // then
+        assertThatThrownBy(
+                () -> commentService.searchComment(savedReply.getId()))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
+    }
+
+
+    @Test
     @DisplayName("댓글 삭제시 Comment Count가 감소하는지 테스트")
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void shouldDecreaseCommentCountWhenCommentIsDeleted() throws InterruptedException {

@@ -32,4 +32,8 @@ public class Comment extends BaseTimeEntity {
     private Post post;
 
     private String content;
+
+    public Boolean parentExist() {
+        return this.parentId != null;
+    }
 }
