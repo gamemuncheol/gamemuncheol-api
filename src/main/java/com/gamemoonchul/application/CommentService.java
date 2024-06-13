@@ -19,6 +19,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -77,6 +79,11 @@ public class CommentService {
     public void delete(Long commentId, Member authMember) {
         Comment savedComment = this.searchComment(commentId);
         validateSameMemberId(savedComment.getMember(), authMember);
+
+        if(!savedComment.parentExist()) { // 대댓글이 아닐경우 자기 자신의 대댓글들 삭제
+            List<Comment> children = commentRepository.findByParentId(savedComment.getId());
+            commentRepository.deleteAll(children);
+        }
         commentCountDown(savedComment.getPost());
         commentRepository.delete(savedComment);
     }
