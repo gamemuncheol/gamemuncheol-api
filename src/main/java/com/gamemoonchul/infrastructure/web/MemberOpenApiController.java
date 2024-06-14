@@ -23,6 +23,6 @@ public class MemberOpenApiController {
 
     @PostMapping("/register")
     public TokenDto register(@RequestBody RegisterRequest request) {
-        return memberService.signUp(request);
+        return memberService.register(request);
     }
 }

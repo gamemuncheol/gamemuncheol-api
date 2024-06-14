@@ -21,7 +21,6 @@ public class MemberOpenApiService {
     private final TokenHelper tokenHelper;
     private final RedisMemberService redisMemberService;
     private final MemberRepository memberRepository;
-
     public TokenDto renew(String refreshToken) {
         tokenHelper.validateToken(refreshToken, TokenType.REFRESH);
         TokenInfo tokenInfo = tokenHelper.getTokenInfo(refreshToken);
@@ -29,7 +28,7 @@ public class MemberOpenApiService {
         return newToken;
     }
 
-    public TokenDto signUp(RegisterRequest request) {
+    public TokenDto register(RegisterRequest request) {
         if (!request.privacyAgree()) {
             throw new UnauthorizedException(MemberStatus.CONSENT_REQUIRED);
         }
