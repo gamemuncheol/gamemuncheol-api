@@ -28,7 +28,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final TokenHelper tokenHelper;
     private final MemberConverter memberConverter;
 
     public void signIn(Member member) {
@@ -63,13 +62,6 @@ public class MemberService {
     public boolean checkDuplicated(String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
         return !savedMember.isEmpty();
-    }
-
-    public TokenDto renew(String refreshToken) {
-        tokenHelper.validateToken(refreshToken, TokenType.REFRESH);
-        TokenInfo tokenInfo = tokenHelper.getTokenInfo(refreshToken);
-        TokenDto newToken = tokenHelper.generateToken(tokenInfo);
-        return newToken;
     }
 
     public MemberResponseDto me(Member member) {
