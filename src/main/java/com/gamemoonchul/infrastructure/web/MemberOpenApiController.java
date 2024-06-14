@@ -4,7 +4,7 @@ import com.gamemoonchul.MemberOpenApiService;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.RenewRequest;
-import com.gamemoonchul.infrastructure.web.dto.TemporaryMemberRequest;
+import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,7 @@ public class MemberOpenApiController {
     }
 
     @PostMapping("/register")
-    public TokenDto register(@RequestBody TemporaryMemberRequest request) {
+    public TokenDto register(@RequestBody RegisterRequest request) {
         return memberService.signUp(request);
     }
 }
