@@ -4,6 +4,7 @@ import com.gamemoonchul.application.MemberService;
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.InternalServerException;
+import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.common.util.CookieUtils;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
@@ -11,8 +12,10 @@ import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestReposit
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
+import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.Oauth2Status;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -82,25 +85,41 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             log.error(Oauth2Status.LOGIN_FAILED.getMessage());
             throw new InternalServerException(Oauth2Status.LOGIN_FAILED);
         }
+        OAuth2UserInfo oAuth2UserInfo = principal.getUserInfo();
 
         String mode = CookieUtils.getCookie(request, MODE_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue)
                 .orElse("");
 
         if ("login".equalsIgnoreCase(mode)) {
-            try {
-                System.out.println(principal.getUserInfo().getIdentifier().getBytes("UTF-8").length);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
-            TokenDto tokenDto = signIn(principal);
-            request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
+            signUpOrIn(request, principal, oAuth2UserInfo);
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
         } else {
             log.error(Oauth2Status.LOGIN_FAILED.getMessage());
             throw new BadRequestException(Oauth2Status.LOGIN_FAILED);
         }
+    }
+
+    private void signUpOrIn(HttpServletRequest request, OAuth2UserPrincipal principal, OAuth2UserInfo oAuth2UserInfo) {
+        try {
+            System.out.println(principal.getUserInfo()
+                    .getIdentifier()
+                    .getBytes("UTF-8").length);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        if (canSignIn(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getIdentifier())) {
+            TokenDto tokenDto = signIn(principal);
+            request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
+        } else {
+            throw new UnauthorizedException(MemberStatus.MEMBER_NOT_FOUND);
+        }
+    }
+
+    private boolean canSignIn(OAuth2Provider provider, String identifier) {
+        Optional<Member> registered = memberService.findByProviderAndIdentifier(provider, identifier);
+        return registered.isPresent();
     }
 
     // 리다이렉트될 대상 URL을 결정
@@ -114,26 +133,35 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("accessToken", tokenDto.getAccessToken())
                     .queryParam("refreshToken", tokenDto.getRefreshToken())
-                    .build().toUriString();
+                    .build()
+                    .toUriString();
         }
         return targetUrl;
     }
 
     private void unlink(OAuth2UserPrincipal principal) {
-        String accessToken = principal.getUserInfo().getAccessToken();
-        OAuth2Provider provider = principal.getUserInfo().getProvider();
+        String accessToken = principal.getUserInfo()
+                .getAccessToken();
+        OAuth2Provider provider = principal.getUserInfo()
+                .getProvider();
 
         // TODO: Redis 리프레시 토큰 삭제
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberService.deactivateAccount(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
+        memberService.deactivateAccount(principal.getUserInfo()
+                .getEmail(), provider, principal.getUserInfo()
+                .getIdentifier());
     }
 
     private TokenDto signIn(OAuth2UserPrincipal principal) {
         // TODO: 리프레시 토큰 DB 저장
-        log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo().getEmail(),
-                principal.getUserInfo().getName(),
-                principal.getUserInfo().getNickname(),
-                principal.getUserInfo().getAccessToken()
+        log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo()
+                        .getEmail(),
+                principal.getUserInfo()
+                        .getName(),
+                principal.getUserInfo()
+                        .getNickname(),
+                principal.getUserInfo()
+                        .getAccessToken()
         );
         Member member = MemberConverter.toEntity(principal.getUserInfo());
         memberService.signIn(member);

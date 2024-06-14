@@ -32,10 +32,14 @@ public class MemberService {
     private final MemberConverter memberConverter;
 
     public void signIn(Member member) {
-        Optional<Member> alreadyExistMember = memberRepository.findTop1ByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
+        Optional<Member> alreadyExistMember = findByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
         if (alreadyExistMember.isEmpty()) {
             memberRepository.save(member);
         }
+    }
+
+    public Optional<Member> findByProviderAndIdentifier(OAuth2Provider provider, String identifier) {
+        return memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
     }
 
     public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
