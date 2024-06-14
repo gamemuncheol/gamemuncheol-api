@@ -19,6 +19,11 @@ lol:
     key: ${RIOT_API}
 
 spring:
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PW}
   security:
     oauth2:
       client:
