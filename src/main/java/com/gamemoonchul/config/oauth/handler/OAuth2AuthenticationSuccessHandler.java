@@ -4,7 +4,6 @@ import com.gamemoonchul.application.MemberService;
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.InternalServerException;
-import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.common.util.CookieUtils;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.config.jwt.TokenHelper;
@@ -15,8 +14,9 @@ import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.domain.status.MemberStatus;
+import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.status.Oauth2Status;
+import com.gamemoonchul.infrastructure.repository.redis.RedisMemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -52,8 +52,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
     private final TokenHelper tokenProvider;
     private final MemberService memberService;
+    private final RedisMemberRepository redisMemberRepository;
 
     private final String TOKEN_DTO = "tokenDto";
+    private final String TEMPORARY_USER_KEY = "temporaryUserKey";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -113,7 +115,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             TokenDto tokenDto = signIn(principal);
             request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
         } else {
-            throw new UnauthorizedException(MemberStatus.MEMBER_NOT_FOUND);
+            RedisMember redisMember = redisMemberRepository.save(MemberConverter.toRedisMember(oAuth2UserInfo));
+            request.setAttribute(TEMPORARY_USER_KEY, redisMember.getUniqueKey());
         }
     }
 
@@ -129,10 +132,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         TokenDto tokenDto = (TokenDto) request.getAttribute(TOKEN_DTO);
+        String tempKey = (String) request.getAttribute(TEMPORARY_USER_KEY);
         if (tokenDto != null) {
             targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("accessToken", tokenDto.getAccessToken())
                     .queryParam("refreshToken", tokenDto.getRefreshToken())
+                    .build()
+                    .toUriString();
+        } else if(tempKey != null) {
+            targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam(TEMPORARY_USER_KEY, tempKey)
                     .build()
                     .toUriString();
         }
