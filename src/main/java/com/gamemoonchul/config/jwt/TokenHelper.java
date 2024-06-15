@@ -25,6 +25,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.*;
 
 @Slf4j
@@ -32,8 +33,8 @@ import java.util.*;
 @Component
 public class TokenHelper {
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 120; // 2h
-    private static final long REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 1000 * 60 * 24 * 7; // 7d
+    private static final long ACCESS_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 60 * 60 * 2; // 2h
+    private static final long REFRESH_TOKEN_EXPIRE_TIME_IN_MILLISECONDS = 60 * 60 * 24 * 7; // 7d
 
     @Value("${jwt.secret}")
     private String secret;
@@ -100,11 +101,13 @@ public class TokenHelper {
                 .build();
     }
 
-    private String createToken(Map<String, String> claims, long expirationTimeInMilliseconds) {
+    private String createToken(Map<String, String> claims, long expirationMinutes) {
+        Instant now = Instant.now();
+        Date expiredTime = Date.from(now.plusSeconds(expirationMinutes));
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expirationTimeInMilliseconds))
+                .setExpiration(expiredTime)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
