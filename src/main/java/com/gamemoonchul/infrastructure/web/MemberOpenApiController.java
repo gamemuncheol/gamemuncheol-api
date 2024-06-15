@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/open-api/members")
 @RestControllerWithEnvelopPattern
 public class MemberOpenApiController {
-    private final MemberOpenApiService memberService;
+    private final MemberOpenApiService memberOpenApiService;
 
     @PostMapping("/renew")
     public TokenDto renew(@RequestBody RenewRequest request) {
-        return memberService.renew(request.refreshToken());
+        return memberOpenApiService.renew(request.refreshToken());
     }
 
     @PostMapping("/register")
     public TokenDto register(@RequestBody RegisterRequest request) {
-        return memberService.register(request);
+        return memberOpenApiService.register(request);
     }
 }
