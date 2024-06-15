@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
@@ -59,7 +58,7 @@ class PostServiceTest extends TestDataBase {
                 .size()).isEqualTo(1);
         assertThat(response.getCreatedAt()).isNotNull();
         assertThat(response.getUpdatedAt()).isNotNull();
-        assertThat(response.getVoteRates().size()).isEqualTo(2);
+        assertThat(response.getVoteOptionDetails().size()).isEqualTo(2);
         assertThat(response.getViewCount()).isEqualTo(0);
     }
 
