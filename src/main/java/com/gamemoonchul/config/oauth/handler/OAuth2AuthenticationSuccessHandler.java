@@ -95,7 +95,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if ("login".equalsIgnoreCase(mode)) {
             Optional<Member> savedMember = memberService.findByProviderAndIdentifier(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getIdentifier());
             if (savedMember.isPresent()) {
-                signIn(request, principal);
+                signIn(request, savedMember.get());
             } else {
                 signUp(request, oAuth2UserInfo);
             }
@@ -107,8 +107,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
     }
 
-    private void signIn(HttpServletRequest request, OAuth2UserPrincipal principal) {
-        TokenDto tokenDto = signIn(principal);
+    private void signIn(HttpServletRequest request, Member member) {
+        TokenDto tokenDto = tokenProvider.generateToken(member);
         request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
     }
 
@@ -150,14 +150,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         memberService.deactivateAccount(principal.getUserInfo()
                 .getEmail(), provider, principal.getUserInfo()
                 .getIdentifier());
-    }
-
-    private TokenDto signIn(OAuth2UserPrincipal principal) {
-        Member member = MemberConverter.toEntity(principal.getUserInfo());
-        memberService.signIn(member);
-
-        TokenDto tokenDto = tokenProvider.generateToken(principal.getUserInfo());
-        return tokenDto;
     }
 
     private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {

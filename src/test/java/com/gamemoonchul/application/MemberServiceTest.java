@@ -23,23 +23,6 @@ class MemberServiceTest extends TestDataBase {
     @Autowired
     private MemberService memberService;
 
-    @Test
-    @DisplayName("회원 중복된 값 있어도 한 번만 생성되는지 테스트 ")
-    void alreadyExistMember() {
-        // given
-        Member member = MemberDummy.create();
-        memberRepository.save(member);
-
-        // when
-        memberService.signIn(member);
-        memberService.signIn(member);
-        memberService.signIn(member);
-        List<Member>
-                members = memberRepository.findAllByEmailAndProviderAndIdentifier(member.getEmail(), member.getProvider(), member.getIdentifier());
-
-        // then
-        assertThat(members.size()).isEqualTo(1);
-    }
 
     @Test
     @DisplayName("닉네임 변경이 정상적으로 되는지 테스트")

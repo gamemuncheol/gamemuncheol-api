@@ -30,13 +30,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberConverter memberConverter;
 
-    public void signIn(Member member) {
-        Optional<Member> alreadyExistMember = findByProviderAndIdentifier(member.getProvider(), member.getIdentifier());
-        if (alreadyExistMember.isEmpty()) {
-            memberRepository.save(member);
-        }
-    }
-
     public Optional<Member> findByProviderAndIdentifier(OAuth2Provider provider, String identifier) {
         return memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
     }
