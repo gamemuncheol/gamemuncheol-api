@@ -1,13 +1,11 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.PostConverter;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.VoteOptions;
-import com.gamemoonchul.domain.model.dto.VoteRate;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
@@ -33,15 +31,12 @@ public class PostService {
         Post entity = PostConverter.requestToEntity(request, member);
         Post savedPost = postRepository.save(entity);
 
-        savedPost = saveVoteOptions(request.matchUserIds(), savedPost);
-        List<VoteRate> voteRates = voteOptionRepository.getVoteRateByPostId(savedPost.getId());
+        saveVoteOptions(request.matchUserIds(), savedPost);
 
-        PostResponseDto response = PostResponseDto.entityToResponse(savedPost, voteRates);
-
-        return response;
+        return PostResponseDto.entityToResponse(savedPost);
     }
 
-    private Post saveVoteOptions(List<Long> matchUserIds, Post post) {
+    private void saveVoteOptions(List<Long> matchUserIds, Post post) {
         List<VoteOptions> voteOptions = matchUserIds.stream()
                 .map(matchUserService::findById)
                 .map(
@@ -55,7 +50,6 @@ public class PostService {
                 .toList();
         List<VoteOptions> savedVoteOptions = voteOptionRepository.saveAll(voteOptions);
         post.addVoteOptions(voteOptions);
-        return post;
     }
 
     @Transactional
