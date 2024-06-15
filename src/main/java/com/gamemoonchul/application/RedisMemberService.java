@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class RedisMemberService {
     private final RedisMemberRepository memberRepository;
 
-    public RedisMember findByUniqueKey(String uniqueKey) {
+    public RedisMember findByTemporaryKey(String uniqueKey) {
         RedisMember redisMember = memberRepository.findRedisMemberByUniqueKey(uniqueKey)
                 .orElseThrow(
                         () ->

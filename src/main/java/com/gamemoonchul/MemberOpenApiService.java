@@ -21,6 +21,7 @@ public class MemberOpenApiService {
     private final TokenHelper tokenHelper;
     private final RedisMemberService redisMemberService;
     private final MemberRepository memberRepository;
+
     public TokenDto renew(String refreshToken) {
         tokenHelper.validateToken(refreshToken, TokenType.REFRESH);
         TokenInfo tokenInfo = tokenHelper.getTokenInfo(refreshToken);
@@ -32,7 +33,7 @@ public class MemberOpenApiService {
         if (!request.privacyAgree()) {
             throw new UnauthorizedException(MemberStatus.CONSENT_REQUIRED);
         }
-        RedisMember redisMember = redisMemberService.findByUniqueKey(request.temporaryKey());
+        RedisMember redisMember = redisMemberService.findByTemporaryKey(request.temporaryKey());
 
         Member member = MemberConverter.redisMemberToEntity(redisMember);
         memberRepository.save(member);
