@@ -29,7 +29,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 import static com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
@@ -94,7 +93,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .orElse("");
 
         if ("login".equalsIgnoreCase(mode)) {
-            signUpOrIn(request, principal, oAuth2UserInfo);
+            Optional<Member> savedMember = memberService.findByProviderAndIdentifier(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getIdentifier());
+            if (savedMember.isPresent()) {
+                signIn(request, principal);
+            } else {
+                signUp(request, oAuth2UserInfo);
+            }
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
         } else {
@@ -103,26 +107,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
     }
 
-    private void signUpOrIn(HttpServletRequest request, OAuth2UserPrincipal principal, OAuth2UserInfo oAuth2UserInfo) {
-        try {
-            System.out.println(principal.getUserInfo()
-                    .getIdentifier()
-                    .getBytes("UTF-8").length);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        if (canSignIn(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getIdentifier())) {
-            TokenDto tokenDto = signIn(principal);
-            request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
-        } else {
-            RedisMember redisMember = redisMemberRepository.save(MemberConverter.toRedisMember(oAuth2UserInfo));
-            request.setAttribute(TEMPORARY_USER_KEY, redisMember.getUniqueKey());
-        }
+    private void signIn(HttpServletRequest request, OAuth2UserPrincipal principal) {
+        TokenDto tokenDto = signIn(principal);
+        request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
     }
 
-    private boolean canSignIn(OAuth2Provider provider, String identifier) {
-        Optional<Member> registered = memberService.findByProviderAndIdentifier(provider, identifier);
-        return registered.isPresent();
+    private void signUp(HttpServletRequest request, OAuth2UserInfo oAuth2UserInfo) {
+        RedisMember redisMember = redisMemberRepository.save(MemberConverter.toRedisMember(oAuth2UserInfo));
+        request.setAttribute(TEMPORARY_USER_KEY, redisMember.getUniqueKey());
     }
 
     // 리다이렉트될 대상 URL을 결정
@@ -139,7 +131,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .queryParam("refreshToken", tokenDto.getRefreshToken())
                     .build()
                     .toUriString();
-        } else if(tempKey != null) {
+        } else if (tempKey != null) {
             targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam(TEMPORARY_USER_KEY, tempKey)
                     .build()
@@ -154,7 +146,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2Provider provider = principal.getUserInfo()
                 .getProvider();
 
-        // TODO: Redis 리프레시 토큰 삭제
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
         memberService.deactivateAccount(principal.getUserInfo()
                 .getEmail(), provider, principal.getUserInfo()
@@ -162,16 +153,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private TokenDto signIn(OAuth2UserPrincipal principal) {
-        // TODO: 리프레시 토큰 DB 저장
-        log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo()
-                        .getEmail(),
-                principal.getUserInfo()
-                        .getName(),
-                principal.getUserInfo()
-                        .getNickname(),
-                principal.getUserInfo()
-                        .getAccessToken()
-        );
         Member member = MemberConverter.toEntity(principal.getUserInfo());
         memberService.signIn(member);
 
