@@ -59,22 +59,36 @@ public class TokenHelper {
             }
             return true;
         } catch (SignatureException exception) {
-            log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
+            log.error(exception.getMessage() + "\n" + exception.getStackTrace()
+                    .toString());
             throw new BadRequestException(JwtStatus.SIGNATURE_NOT_MATCH);
         } catch (ExpiredJwtException exception) {
-            log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
+            log.error(exception.getMessage() + "\n" + exception.getStackTrace()
+                    .toString());
             throw new BadRequestException(JwtStatus.EXPIRED_TOKEN);
         } catch (Exception exception) {
-            log.error(exception.getMessage() + "\n" + exception.getStackTrace().toString());
+            log.error(exception.getMessage() + "\n" + exception.getStackTrace()
+                    .toString());
             throw new UnauthorizedException(JwtStatus.NOT_VALID_TOKEN);
         }
+    }
+
+    public TokenDto generateToken(Member member) {
+        Map<String, String> claims = Map.of(
+                "email", member.getEmail(),
+                "identifier", member.getIdentifier(),
+                "provider", member.getProvider()
+                        .toString()
+        );
+        return createTokenDto(claims);
     }
 
     public TokenDto generateToken(OAuth2UserInfo oAuth2UserInfo) {
         Map<String, String> claims = Map.of(
                 "email", oAuth2UserInfo.getEmail(),
                 "identifier", oAuth2UserInfo.getIdentifier(),
-                "provider", oAuth2UserInfo.getProvider().toString()
+                "provider", oAuth2UserInfo.getProvider()
+                        .toString()
         );
         return createTokenDto(claims);
     }
@@ -122,7 +136,9 @@ public class TokenHelper {
         TokenInfo tokenInfo = getTokenInfo(token);
         Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier());
         if (member.isPresent()) {
-            authorities.add(new SimpleGrantedAuthority(member.get().getRole().getKey()));
+            authorities.add(new SimpleGrantedAuthority(member.get()
+                    .getRole()
+                    .getKey()));
 
         }
         return authorities;
@@ -141,7 +157,8 @@ public class TokenHelper {
                 identifier(claims.get("identifier", String.class)).
                 tokenType(TokenType.valueOf(claims.get("type", String.class)))
                 .iat(claims.getIssuedAt())
-                .exp(claims.getExpiration()).build();
+                .exp(claims.getExpiration())
+                .build();
         return tokenInfo;
     }
 }

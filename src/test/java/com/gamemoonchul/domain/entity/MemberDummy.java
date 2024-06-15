@@ -1,6 +1,7 @@
 package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
+import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.enums.MemberRole;
 
 import java.util.ArrayList;
@@ -30,6 +31,18 @@ public class MemberDummy {
                 .picture("https://www.naver.com")
                 .score(0.0)
                 .role(MemberRole.USER)
+                .build();
+    }
+
+    public static RedisMember createRedisMember(String id) {
+        return RedisMember.builder()
+                .name(id)
+                .provider(OAuth2Provider.GOOGLE)
+                .identifier(id)
+                .nickname(id)
+                .email(id + "@gmail.com")
+                .picture("https://www.naver.com")
+                .birth(null)
                 .build();
     }
 

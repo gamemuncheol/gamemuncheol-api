@@ -11,9 +11,12 @@ import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestReposit
 import com.gamemoonchul.config.oauth.OAuth2UserPrincipal;
 import com.gamemoonchul.config.oauth.user.AppleOAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
+import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2UserUnlinkManager;
 import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.status.Oauth2Status;
+import com.gamemoonchul.infrastructure.repository.redis.RedisMemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +29,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 import static com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
@@ -49,8 +51,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
     private final TokenHelper tokenProvider;
     private final MemberService memberService;
+    private final RedisMemberRepository redisMemberRepository;
 
     private final String TOKEN_DTO = "tokenDto";
+    private final String TEMPORARY_USER_KEY = "temporaryUserKey";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -82,25 +86,35 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             log.error(Oauth2Status.LOGIN_FAILED.getMessage());
             throw new InternalServerException(Oauth2Status.LOGIN_FAILED);
         }
+        OAuth2UserInfo oAuth2UserInfo = principal.getUserInfo();
 
         String mode = CookieUtils.getCookie(request, MODE_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue)
                 .orElse("");
 
         if ("login".equalsIgnoreCase(mode)) {
-            try {
-                System.out.println(principal.getUserInfo().getIdentifier().getBytes("UTF-8").length);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+            Optional<Member> savedMember = memberService.findByProviderAndIdentifier(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getIdentifier());
+            if (savedMember.isPresent()) {
+                signIn(request, savedMember.get());
+            } else {
+                signUp(request, oAuth2UserInfo);
             }
-            TokenDto tokenDto = signIn(principal);
-            request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
         } else if ("unlink".equalsIgnoreCase(mode)) {
             unlink(principal);
         } else {
             log.error(Oauth2Status.LOGIN_FAILED.getMessage());
             throw new BadRequestException(Oauth2Status.LOGIN_FAILED);
         }
+    }
+
+    private void signIn(HttpServletRequest request, Member member) {
+        TokenDto tokenDto = tokenProvider.generateToken(member);
+        request.setAttribute(TOKEN_DTO, tokenDto);  // 리다이렉트 URL에 토큰 정보 추가
+    }
+
+    private void signUp(HttpServletRequest request, OAuth2UserInfo oAuth2UserInfo) {
+        RedisMember redisMember = redisMemberRepository.save(MemberConverter.toRedisMember(oAuth2UserInfo));
+        request.setAttribute(TEMPORARY_USER_KEY, redisMember.getUniqueKey());
     }
 
     // 리다이렉트될 대상 URL을 결정
@@ -110,36 +124,32 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         TokenDto tokenDto = (TokenDto) request.getAttribute(TOKEN_DTO);
+        String tempKey = (String) request.getAttribute(TEMPORARY_USER_KEY);
         if (tokenDto != null) {
             targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("accessToken", tokenDto.getAccessToken())
                     .queryParam("refreshToken", tokenDto.getRefreshToken())
-                    .build().toUriString();
+                    .build()
+                    .toUriString();
+        } else if (tempKey != null) {
+            targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam(TEMPORARY_USER_KEY, tempKey)
+                    .build()
+                    .toUriString();
         }
         return targetUrl;
     }
 
     private void unlink(OAuth2UserPrincipal principal) {
-        String accessToken = principal.getUserInfo().getAccessToken();
-        OAuth2Provider provider = principal.getUserInfo().getProvider();
+        String accessToken = principal.getUserInfo()
+                .getAccessToken();
+        OAuth2Provider provider = principal.getUserInfo()
+                .getProvider();
 
-        // TODO: Redis 리프레시 토큰 삭제
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberService.deactivateAccount(principal.getUserInfo().getEmail(), provider, principal.getUserInfo().getIdentifier());
-    }
-
-    private TokenDto signIn(OAuth2UserPrincipal principal) {
-        // TODO: 리프레시 토큰 DB 저장
-        log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo().getEmail(),
-                principal.getUserInfo().getName(),
-                principal.getUserInfo().getNickname(),
-                principal.getUserInfo().getAccessToken()
-        );
-        Member member = MemberConverter.toEntity(principal.getUserInfo());
-        memberService.signIn(member);
-
-        TokenDto tokenDto = tokenProvider.generateToken(principal.getUserInfo());
-        return tokenDto;
+        memberService.deactivateAccount(principal.getUserInfo()
+                .getEmail(), provider, principal.getUserInfo()
+                .getIdentifier());
     }
 
     private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {

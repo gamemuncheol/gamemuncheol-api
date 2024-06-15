@@ -59,6 +59,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 apple:
   clientId: ${APPLE_CLIENT_ID}
