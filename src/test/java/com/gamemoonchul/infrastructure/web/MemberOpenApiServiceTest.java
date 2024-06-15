@@ -1,5 +1,7 @@
-package com.gamemoonchul;
+package com.gamemoonchul.infrastructure.web;
 
+import com.gamemoonchul.MemberOpenApiService;
+import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;

@@ -13,13 +13,14 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import(DBInitializer.class)
+@Import({DBInitializer.class})
 @TestPropertySource(locations = "classpath:application.yaml")
 @AutoConfigureMockMvc
 @Transactional
@@ -29,6 +30,10 @@ public abstract class TestDataBase {
     private static final String ROOT = "test";
     private static final String ROOT_PASSWORD = "1234";
     private static final String MYSQL_VERSION = "mysql:8.0.37";
+    private static final String REDIS_IMAGE = "redis:7.0.8-alpine";
+    private static final int REDIS_PORT = 6379;
+    private static final GenericContainer REDIS_CONTAINER;
+
 
     @LocalServerPort
     protected int port;
@@ -40,16 +45,27 @@ public abstract class TestDataBase {
     protected ObjectMapper objectMapper;
 
     @Autowired
-    private DBInitializer dataInitializer;
+    private DBInitializer dbInitializer;
 
     @Container
     protected static MySQLContainer container;
 
     @DynamicPropertySource
     private static void configureProperties(final DynamicPropertyRegistry registry) {
+        configureMySQLProperties(registry);
+        configureRedisProperties(registry);
+    }
+
+    private static void configureMySQLProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", container::getJdbcUrl);
         registry.add("spring.datasource.username", () -> ROOT);
         registry.add("spring.datasource.password", () -> ROOT_PASSWORD);
+    }
+
+    private static void configureRedisProperties(final DynamicPropertyRegistry registry) {
+        registry.add("spring.data.redis.host", REDIS_CONTAINER::getHost);
+        registry.add("spring.data.redis.port", () -> REDIS_CONTAINER.getMappedPort(REDIS_PORT)
+                .toString());
     }
 
     static {
@@ -58,6 +74,11 @@ public abstract class TestDataBase {
                 .withUsername(ROOT)
                 .withPassword(ROOT_PASSWORD);
         container.start();
+
+        REDIS_CONTAINER = new GenericContainer(REDIS_IMAGE)
+                .withExposedPorts(REDIS_PORT)
+                .withReuse(true);
+        REDIS_CONTAINER.start();
     }
 
     @BeforeEach
@@ -65,6 +86,6 @@ public abstract class TestDataBase {
         if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
             RestAssured.port = port;
         }
-        dataInitializer.clear();
+        dbInitializer.clear();
     }
 }
