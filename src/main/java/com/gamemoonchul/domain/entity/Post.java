@@ -1,14 +1,12 @@
 package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.application.converter.JsonStringListConverter;
-import com.gamemoonchul.application.converter.MapLongConverter;
 import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -30,12 +28,6 @@ public class Post extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private List<VoteOptions> voteOptions;
-
-    /**
-     * Key : 유저 ID, Value : VoteOptionId
-     */
-    @Convert(converter = MapLongConverter.class)
-    private HashMap<Long, Long> votes;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -63,7 +55,7 @@ public class Post extends BaseTimeEntity {
     @Builder.Default
     @Column(name = "vote_count")
     private Long voteCount = 0L;
-  
+
     @Builder.Default
     @Column(name = "vote_ratio")
     private Double voteRatio = 0.0;
@@ -87,7 +79,14 @@ public class Post extends BaseTimeEntity {
         commentCount++;
     }
 
-    public boolean isVotesNull() {
-        return this.votes == null;
+    public Double getMinVoteRatio() {
+        int totalVoteCount = voteOptions.stream()
+                .mapToInt(voteOption -> voteOption.getVotes().size())
+                .sum();
+        if (totalVoteCount == 0) {
+            return 0.0;
+        }
+        double firstIndexVoteRatio = (double) voteOptions.get(0).getVotes().size() / (double) totalVoteCount * 100;
+        return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
     }
 }
