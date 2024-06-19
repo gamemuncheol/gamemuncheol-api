@@ -1,8 +1,6 @@
 package com.gamemoonchul.infrastructure.repository.impl;
 
 import com.gamemoonchul.domain.entity.VoteOptions;
-import com.gamemoonchul.domain.model.dto.QVoteRate;
-import com.gamemoonchul.domain.model.dto.VoteRate;
 import com.gamemoonchul.infrastructure.repository.ifs.VoteOptionRepositoryIfs;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -35,29 +33,6 @@ public class VoteOptionRepositoryImpl implements VoteOptionRepositoryIfs {
                 .fetchJoin()
                 .where(voteOptions.post.id.eq(searchPostId))
                 .fetch();
-    }
-
-    /**
-     * matchUser(투표 정보)와 해당 matchUser의 투표수를 가져오는 쿼리 입니다.
-     */
-    @Override
-    public List<VoteRate> getVoteRateByPostId(Long postId) {
-        List<VoteRate> results = queryFactory
-                .select(
-                        new QVoteRate(
-                                matchUser.id,
-                                matchUser.nickname,
-                                matchUser.championThumbnail,
-                                voteOptions.id
-                        )
-                )
-                .from(voteOptions)
-                .join(voteOptions.matchUser, matchUser)
-                .where(voteOptions.post.id.eq(postId))
-                .groupBy(voteOptions.id)
-                .fetch();
-
-        return results;
     }
 
 }
