@@ -23,7 +23,7 @@ public class MemberOpenApiController {
     public boolean checkNicknameDuplicated(
             @PathVariable(name = "nickname") String nickname
     ) {
-        return memberOpenApiService.checkDuplicatedNickname(nickname);
+        return memberOpenApiService.isExistNickname(nickname);
     }
 
 

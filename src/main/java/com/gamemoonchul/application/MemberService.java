@@ -40,14 +40,14 @@ public class MemberService {
     }
 
     public void updateNickName(Member member, String nickName) {
-        if (checkDuplicatedNickname(nickName)) {
+        if (isExistNickname(nickName)) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
         Member updatedMember = member.updateNickname(nickName);
         memberRepository.save(updatedMember);
     }
 
-    private boolean checkDuplicatedNickname(String nickName) {
+    private boolean isExistNickname(String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
         return !savedMember.isEmpty();
     }

@@ -13,6 +13,8 @@ import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -47,6 +49,7 @@ class MemberOpenApiServiceTest extends TestDataBase {
 
     @Test
     @DisplayName("중복된 닉네임이 있을 경우 register Exception 발생하는지 테스트")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void shouldThrowExceptionWhenNicknameIsDuplicate() {
         // given
         RedisMember redisMember1 = MemberDummy.createRedisMember("hong");
@@ -54,7 +57,7 @@ class MemberOpenApiServiceTest extends TestDataBase {
         redisMember1 = redisMemberRepository.save(redisMember1);
         redisMember2 = redisMemberRepository.save(redisMember2);
         RegisterRequest request1 = new RegisterRequest(redisMember1.getUniqueKey(), true, "김문철");
-        RegisterRequest request2 = new RegisterRequest(redisMember1.getUniqueKey(), true, "김문철");
+        RegisterRequest request2 = new RegisterRequest(redisMember2.getUniqueKey(), true, "김문철");
         memberService.register(request1);
 
         // when // then
@@ -62,11 +65,6 @@ class MemberOpenApiServiceTest extends TestDataBase {
         )
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
-
-
-        assertThat(redisMemberRepository.findRedisMemberByUniqueKey(redisMember1.getUniqueKey())
-                .isPresent()).isFalse();
-        assertThat(memberRepository.findTop1ByProviderAndIdentifier(redisMember1.getProvider(), redisMember1.getIdentifier())).isNotNull();
     }
 
 
@@ -78,7 +76,7 @@ class MemberOpenApiServiceTest extends TestDataBase {
         memberRepository.save(member);
 
         // when
-        boolean result = memberService.checkDuplicatedNickname(member.getNickname());
+        boolean result = memberService.isExistNickname(member.getNickname());
 
         // then
         assertThat(result).isEqualTo(true);

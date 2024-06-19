@@ -32,7 +32,7 @@ public class MemberOpenApiService {
         return newToken;
     }
 
-    public boolean checkDuplicatedNickname(String nickName) {
+    public boolean isExistNickname(String nickName) {
         List<Member> savedMember = memberRepository.findByNickname(nickName);
         return !savedMember.isEmpty();
     }
@@ -41,11 +41,12 @@ public class MemberOpenApiService {
         if (!request.privacyAgree()) {
             throw new UnauthorizedException(MemberStatus.CONSENT_REQUIRED);
         }
-        if (checkDuplicatedNickname(request.nickname())) {
+        if (isExistNickname(request.nickname())) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
 
         RedisMember redisMember = redisMemberService.findByTemporaryKey(request.temporaryKey());
+        redisMember.setNickname(request.nickname());
 
 
         Member member = MemberConverter.redisMemberToEntity(redisMember);
