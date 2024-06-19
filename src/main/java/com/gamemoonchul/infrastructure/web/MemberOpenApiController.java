@@ -6,9 +6,7 @@ import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPatte
 import com.gamemoonchul.infrastructure.web.dto.RenewRequest;
 import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/open-api/members")
@@ -20,6 +18,14 @@ public class MemberOpenApiController {
     public TokenDto renew(@RequestBody RenewRequest request) {
         return memberOpenApiService.renew(request.refreshToken());
     }
+
+        @GetMapping("/nickname/{nickname}")
+    public boolean checkNicknameDuplicated(
+            @PathVariable(name = "nickname") String nickname
+    ) {
+        return memberOpenApiService.checkDuplicatedNickname(nickname);
+    }
+
 
     @PostMapping("/register")
     public TokenDto register(@RequestBody RegisterRequest request) {
