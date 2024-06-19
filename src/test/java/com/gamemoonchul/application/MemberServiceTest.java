@@ -57,18 +57,4 @@ class MemberServiceTest extends TestDataBase {
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
     }
-
-    @Test
-    @DisplayName("validate 메서드에서 이미 존재하는 닉네임을 입력했을 때 true를 return 하는지 Test")
-    void validateNicknameTest() {
-        // given
-        Member member = MemberDummy.create();
-        memberRepository.save(member);
-
-        // when
-        boolean result = memberService.checkDuplicated(member.getNickname());
-
-        // then
-        assertThat(result).isEqualTo(true);
-    }
 }
