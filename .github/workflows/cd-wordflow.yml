@@ -31,6 +31,7 @@ jobs:
         run: |
           rm -rf ./build.gradle
           mv ./aws.build.gradle ./build.gradle
+          touch ./src/main/resources/localhost.p12
           echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./src/main/resources/localhost.p12
         shell: bash
 
