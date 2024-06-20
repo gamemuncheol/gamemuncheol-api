@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -34,11 +35,11 @@ class MemberServiceTest extends TestDataBase {
 
         // when
         memberService.updateNickName(member, nickname);
-        List<Member> savedMember = memberRepository.findByNickname(nickname);
+        Optional<Member> savedMember = memberRepository.findByNickname(nickname);
 
         // then
-        assertThat(savedMember.size()).isEqualTo(1);
-        assertThat(savedMember.get(0).getNickname()).isEqualTo(nickname);
+        assertThat(savedMember.get()
+                .getNickname()).isEqualTo(nickname);
     }
 
     @Test

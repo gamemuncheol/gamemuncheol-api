@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +34,8 @@ public class MemberOpenApiService {
     }
 
     public boolean isExistNickname(String nickName) {
-        List<Member> savedMember = memberRepository.findByNickname(nickName);
-        return !savedMember.isEmpty();
+        Optional<Member> savedMember = memberRepository.findByNickname(nickName);
+        return savedMember.isPresent();
     }
 
     public TokenDto register(RegisterRequest request) {

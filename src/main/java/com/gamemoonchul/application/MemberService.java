@@ -48,8 +48,8 @@ public class MemberService {
     }
 
     private boolean isExistNickname(String nickName) {
-        List<Member> savedMember = memberRepository.findByNickname(nickName);
-        return !savedMember.isEmpty();
+        Optional<Member> savedMember = memberRepository.findByNickname(nickName);
+        return savedMember.isPresent();
     }
 
 
