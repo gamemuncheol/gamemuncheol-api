@@ -62,13 +62,4 @@ public class MemberService {
         MemberResponseDto response = memberConverter.toResponseDto(member);
         return response;
     }
-
-    public MemberResponseDto privacyAgree(Member member) {
-        member.setPrivacyAgreed(true);
-        member.setPrivacyAgreedAt(LocalDateTime.now());
-        member.setRole(MemberRole.USER);
-        Member result = memberRepository.save(member);
-        MemberResponseDto response = memberConverter.toResponseDto(result);
-        return response;
-    }
 }

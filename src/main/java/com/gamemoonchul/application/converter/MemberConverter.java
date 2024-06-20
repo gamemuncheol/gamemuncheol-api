@@ -21,27 +21,6 @@ public class MemberConverter {
                 .substring(0, 30);
     }
 
-    public static Member toEntity(OAuth2UserInfo userInfo) {
-        String nickname = ifNicknameNotExistGetRandom(userInfo
-                .getNickname());
-        Member member = Member.builder()
-                .role(MemberRole.PRIVACY_NOT_AGREED)
-                .name(userInfo.getName())
-                .identifier(userInfo.getIdentifier())
-                .provider(userInfo.getProvider())
-                .nickname(nickname)
-                .privacyAgreed(false)
-                .privacyAgreedAt(null)
-                .score(0.0)
-                .email(userInfo
-                        .getEmail())
-                .picture(userInfo
-                        .getProfileImageUrl())
-                .birth(null)
-                .build();
-        return member;
-    }
-
     public static RedisMember toRedisMember(OAuth2UserInfo userInfo) {
         return RedisMember.builder()
                 .name(userInfo.getName())
@@ -82,23 +61,6 @@ public class MemberConverter {
         return nickname.get();
     }
 
-    public static Member toEntity(AppleCredential userInfo) {
-        Member member = Member.builder()
-                .role(MemberRole.PRIVACY_NOT_AGREED)
-                .name(userInfo.getName())
-                .identifier(userInfo.getSub())
-                .provider(OAuth2Provider.APPLE)
-                .nickname(randomNickname())
-                .score(0.0)
-                .privacyAgreed(false)
-                .privacyAgreedAt(null)
-                .email(userInfo.getEmail())
-                .picture(null)
-                .birth(null)
-                .build();
-        return member;
-    }
-
     public static MemberResponseDto toResponseDto(Member entity) {
         return MemberResponseDto.builder()
                 .name(entity.getName())
@@ -109,5 +71,4 @@ public class MemberConverter {
                 .score(entity.getScore())
                 .build();
     }
-
 }
