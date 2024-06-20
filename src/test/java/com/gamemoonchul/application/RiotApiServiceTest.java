@@ -7,17 +7,24 @@ import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import com.gamemoonchul.infrastructure.adapter.RiotApiAdapter;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class RiotApiServiceTest extends TestDataBase {
-    private RiotApiAdapter mockRiotApi = mock(RiotApiAdapter.class);
+    @Mock
+    private RiotApiAdapter mockRiotApi;
 
     @Autowired
     private MatchGameService matchGameService;
@@ -27,13 +34,17 @@ class RiotApiServiceTest extends TestDataBase {
 
     private RiotApiService riotApiService;
 
+    @BeforeEach
+    void setUp() {
+        riotApiService = new RiotApiService(matchGameService, matchUserService, mockRiotApi);
+    }
+
     @Test
     @DisplayName("이미 저장된 게임이 있을 때 lolSearchAdapter를 통해서 검색하지 않는다")
     void searchAlreadySavedGame() {
         // given
         MatchRecord vo = MatchDummy.create();
         MatchGame game = matchGameService.save(vo);
-        riotApiService = new RiotApiService(matchGameService, matchUserService, mockRiotApi);
         List<ParticipantRecord> participantVO = vo.info()
                 .participants();
         matchUserService.saveAll(participantVO, game);
@@ -52,7 +63,6 @@ class RiotApiServiceTest extends TestDataBase {
         String gameId = "KR_6980800844";
         MatchRecord match = MatchDummy.create();
         when(mockRiotApi.searchMatch(gameId)).thenReturn(match);
-        riotApiService = new RiotApiService(matchGameService, matchUserService, mockRiotApi);
 
         // when
         MatchGameResponse response = riotApiService.searchMatch(gameId);
