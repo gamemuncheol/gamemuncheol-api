@@ -16,10 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class S3VideoUploadServiceTest extends TestDataBase {
-    @Autowired
-    private S3Service s3Service;
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    private S3Service s3Service = super.s3Service();
 
     private String fileName = "test.mp4";
 

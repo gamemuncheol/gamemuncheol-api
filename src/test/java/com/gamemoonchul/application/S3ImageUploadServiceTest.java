@@ -1,12 +1,17 @@
 package com.gamemoonchul.application;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.common.exception.BadRequestException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import org.testcontainers.containers.localstack.LocalStackContainer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,10 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class S3ImageUploadServiceTest extends TestDataBase {
-    @Autowired
-    private S3Service s3Service;
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+
+    private S3Service s3Service = super.s3Service();
 
     private String fileName = "iu.png";
 
