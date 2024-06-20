@@ -19,7 +19,7 @@ public class MemberOpenApiController {
         return memberOpenApiService.renew(request.refreshToken());
     }
 
-        @GetMapping("/nickname/{nickname}")
+    @GetMapping("/nickname/{nickname}")
     public boolean checkNicknameDuplicated(
             @PathVariable(name = "nickname") String nickname
     ) {
