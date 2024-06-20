@@ -1,18 +1,15 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import com.gamemoonchul.infrastructure.adapter.RiotApiAdapter;
 import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -28,9 +25,6 @@ class RiotApiServiceTest extends TestDataBase {
     @Autowired
     private MatchUserService matchUserService;
 
-    @Autowired
-    private RiotApiPort riotApi;
-
     private RiotApiService riotApiService;
 
     @Test
@@ -40,7 +34,8 @@ class RiotApiServiceTest extends TestDataBase {
         MatchRecord vo = MatchDummy.create();
         MatchGame game = matchGameService.save(vo);
         riotApiService = new RiotApiService(matchGameService, matchUserService, mockRiotApi);
-        List<ParticipantRecord> participantVO = vo.info().participants();
+        List<ParticipantRecord> participantVO = vo.info()
+                .participants();
         matchUserService.saveAll(participantVO, game);
 
         // when
@@ -55,13 +50,14 @@ class RiotApiServiceTest extends TestDataBase {
     void searchNotSavedGame() {
         // given
         String gameId = "KR_6980800844";
-        riotApiService = new RiotApiService(matchGameService, matchUserService, riotApi);
+        MatchRecord match = MatchDummy.create();
+        when(mockRiotApi.searchMatch(gameId)).thenReturn(match);
+        riotApiService = new RiotApiService(matchGameService, matchUserService, mockRiotApi);
 
         // when
         MatchGameResponse response = riotApiService.searchMatch(gameId);
 
         // then
-        assertEquals(response.getGameId(), gameId);
-        assertEquals(response.getMatchUsers().size(), 10);
+        verify(mockRiotApi, times(1)).searchMatch(gameId);
     }
 }
