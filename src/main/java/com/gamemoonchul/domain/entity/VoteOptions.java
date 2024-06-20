@@ -9,7 +9,7 @@ import java.util.List;
 
 @Builder
 @Getter
-@Entity(name = "vote_options")
+@Entity(name = "vote_option")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class VoteOptions {

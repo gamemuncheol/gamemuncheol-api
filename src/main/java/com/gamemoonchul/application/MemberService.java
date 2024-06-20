@@ -1,10 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.BadRequestException;
-import com.gamemoonchul.config.jwt.TokenDto;
-import com.gamemoonchul.config.jwt.TokenHelper;
-import com.gamemoonchul.config.jwt.TokenInfo;
-import com.gamemoonchul.config.jwt.TokenType;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Member;
@@ -44,18 +40,18 @@ public class MemberService {
     }
 
     public void updateNickName(Member member, String nickName) {
-        if (checkDuplicated(nickName)) {
-            log.error(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
+        if (isExistNickname(nickName)) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
         Member updatedMember = member.updateNickname(nickName);
         memberRepository.save(updatedMember);
     }
 
-    public boolean checkDuplicated(String nickName) {
-        List<Member> savedMember = memberRepository.findByNickname(nickName);
-        return !savedMember.isEmpty();
+    private boolean isExistNickname(String nickName) {
+        Optional<Member> savedMember = memberRepository.findByNickname(nickName);
+        return savedMember.isPresent();
     }
+
 
     public MemberResponseDto me(Member member) {
         MemberResponseDto response = memberConverter.toResponseDto(member);

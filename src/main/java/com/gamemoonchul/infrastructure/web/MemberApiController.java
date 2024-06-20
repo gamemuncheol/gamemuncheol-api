@@ -22,12 +22,6 @@ public class MemberApiController {
         memberService.updateNickName(member, nickname);
     }
 
-    @GetMapping("/nickname/{nickname}")
-    public boolean checkNicknameDuplicated(
-            @PathVariable(name = "nickname") String nickname
-    ) {
-        return memberService.checkDuplicated(nickname);
-    }
 
     @GetMapping("/me")
     public MemberResponseDto me(

@@ -27,4 +27,8 @@ public class RedisMember {
     private String email;
     private String picture;
     private LocalDateTime birth;
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
