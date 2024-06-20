@@ -69,18 +69,4 @@ public class MemberDummy {
         return result;
     }
 
-
-    public static Member createPrivacyRole() {
-        return Member.builder()
-                .provider(OAuth2Provider.GOOGLE)
-                .email("test1@gmail.com")
-                .nickname("홍길동")
-                .identifier("test1")
-                .name("홍길동")
-                .picture("https://www.naver.com")
-                .score(0.0)
-                .role(MemberRole.PRIVACY_NOT_AGREED)
-                .build();
-    }
-
 }
