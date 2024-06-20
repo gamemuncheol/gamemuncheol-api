@@ -1,22 +1,22 @@
 jwt:
-  secret: ${JWT_SECRET}
+  secret: dsjkfldsjklfssakRJLKASjdkldjklJSaklfajDLASjdklASJkljasklhDALShdlkadhLAJSdklAAWIdjakdsjLADadDAdAd
 
 cloud:
   aws:
     s3:
-      bucket: ${S3_BUCKET}
+      bucket: test
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+      access-key: adsadsadsa
+      secret-key: adsadsadsa
     stack:
       auto: false
     region:
-      static: ${S3_REGION}
+      static: adsadsadsa
       auto: false
 
 lol:
   api:
-    key: ${RIOT_API}
+    key: apisdhsjkdhfkjdhfjkdhfkjewrsdfsdfsdfafds
 
 spring:
   security:
@@ -24,13 +24,13 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: adsadsadsa
+            client-secret: adsadsadsa
             scope:
               - email
               - profile
           apple:
-            client-id: ${APPLE_CLIENT_ID} # input apple client id
+            client-id: adsadsadsa # input apple client id
             redirect-uri: '${baseUrl}/login/oauth2/code/apple'
             authorization-grant-type: authorization_code
             client-authentication-method: POST
@@ -55,20 +55,20 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
     # jdbc:mysql://localhost:3306/[TABLE NAME]?userSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
-    url: ${DB_URL}
+    url:
     driver-class-name: com.mysql.jdbc.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username:
+    password:
   data:
     redis:
       host: localhost
       port: 6379
 
 apple:
-  clientId: ${APPLE_CLIENT_ID}
-  keyId: ${APPLE_KEY_ID}
-  teamId: ${APPLE_TEAM_ID}
-  privateKey: ${APPLE_PRIVATE_KEY}
+  clientId: adsadsadsa
+  keyId: adsadsadsa
+  teamId: adsadsadsa
+  privateKey: adsadsadsa
 
 logging:
   level:

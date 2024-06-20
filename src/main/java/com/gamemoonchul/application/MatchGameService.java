@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class MatchGameService {
     private final MatchGameRepository matchGameRepository;
@@ -23,7 +23,6 @@ public class MatchGameService {
         return matchGameRepository.findByGameId(gameId);
     }
 
-    @Transactional
     public MatchGame save(MatchRecord vo) {
         MatchGame matchGame = matchConverter.toMatchGame(vo);
         return matchGameRepository.save(matchGame);
