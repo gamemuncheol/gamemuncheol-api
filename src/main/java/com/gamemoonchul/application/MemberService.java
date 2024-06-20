@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.application.validation.ValidNickname;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.application.converter.MemberConverter;
@@ -43,7 +44,7 @@ public class MemberService {
         memberRepository.delete(member.get());
     }
 
-    public void updateNickName(Member member, @Valid @Max(10) String nickName) {
+    public void updateNickName(Member member, @ValidNickname String nickName) {
         if (isExistNickname(nickName)) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }

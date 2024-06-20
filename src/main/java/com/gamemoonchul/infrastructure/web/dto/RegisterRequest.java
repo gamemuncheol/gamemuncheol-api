@@ -1,4 +1,6 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
-public record RegisterRequest(String temporaryKey, boolean privacyAgree, String nickname) {
+import com.gamemoonchul.application.validation.ValidNickname;
+
+public record RegisterRequest(String temporaryKey, boolean privacyAgree, @ValidNickname String nickname) {
 }
