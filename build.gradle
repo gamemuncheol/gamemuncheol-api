@@ -39,7 +39,6 @@ dependencies {
     // aws s3를 위한 설정 - start
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     testImplementation 'org.testcontainers:localstack'
-
     // aws s3를 위한 설정 - end
 
 
