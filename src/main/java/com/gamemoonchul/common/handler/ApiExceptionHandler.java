@@ -3,6 +3,7 @@ package com.gamemoonchul.common.handler;
 import com.gamemoonchul.common.exception.*;
 import com.gamemoonchul.common.status.ApiStatus;
 import com.gamemoonchul.infrastructure.web.common.ApiResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,4 +42,24 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.ERROR(ApiStatus.BAD_REQUEST, errorMessageList));
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse> handleConstraintViolationException(
+            ConstraintViolationException exception
+    ) {
+        log.error("ConstraintViolationException: ", exception);
+
+        List<String> errorMessageList = exception.getConstraintViolations()
+                .stream()
+                .map(
+                        constraintViolation -> {
+                            String format = "%s : { %s } 은 %s";
+                            return String.format(format, constraintViolation.getPropertyPath(), constraintViolation.getInvalidValue(), constraintViolation.getMessage());
+                        })
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.ERROR(ApiStatus.BAD_REQUEST, errorMessageList));
+    }
+
 }
