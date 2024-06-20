@@ -1,6 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gamemoonchul.common.exception.BadRequestException;
@@ -9,6 +10,7 @@ import com.gamemoonchul.domain.status.S3Status;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,9 +30,14 @@ public class S3Service {
 
 
     private final AmazonS3Client amazonS3Client;
+    private final String bucket;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    @Autowired
+    public S3Service(@Value("${cloud.aws.s3.bucket}") String bucket, AmazonS3Client amazonS3Client) {
+        this.amazonS3Client = amazonS3Client;
+        this.bucket = bucket;
+    }
+
 
     public String uploadVideo(MultipartFile file) {
         checkFileTypeOrThrow(file.getContentType(), FileType.VIDEO);
