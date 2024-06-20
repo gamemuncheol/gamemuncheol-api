@@ -9,9 +9,12 @@ import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Validated
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
@@ -39,7 +43,7 @@ public class MemberService {
         memberRepository.delete(member.get());
     }
 
-    public void updateNickName(Member member, String nickName) {
+    public void updateNickName(Member member, @Valid @Max(10) String nickName) {
         if (isExistNickname(nickName)) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
