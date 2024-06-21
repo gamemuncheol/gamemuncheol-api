@@ -26,6 +26,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberConverter memberConverter;
 
+    public void delete(Member member) {
+        memberRepository.delete(member);
+    }
+
     public Optional<Member> findByProviderAndIdentifier(OAuth2Provider provider, String identifier) {
         return memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
     }

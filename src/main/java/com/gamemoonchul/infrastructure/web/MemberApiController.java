@@ -29,4 +29,11 @@ public class MemberApiController {
     ) {
         return memberService.me(member);
     }
+
+    @DeleteMapping
+    public void delete(
+            @MemberSession Member member
+    ) {
+        memberService.delete(member);
+    }
 }
