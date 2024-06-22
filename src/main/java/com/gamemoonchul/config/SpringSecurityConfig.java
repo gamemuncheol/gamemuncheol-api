@@ -34,10 +34,6 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
-    private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
-    //private List<String> EXCEPTION = List.of("/test/**");
-    private List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**");
-
     private final CustomOAuth2UserService customOauth;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
@@ -45,6 +41,8 @@ public class SpringSecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final AppleClientSecretGenerator appleClientSecretGenerator;
     private final CorsConfigurationSource corsConfig;
+    private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
+    private List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**", "/metrics/**", "/health/**", "/loki/**");
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -84,7 +82,8 @@ public class SpringSecurityConfig {
                                 .userInfoEndpoint(config -> config.userService(customOauth))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
-                ).cors(corsCustomizer -> {
+                )
+                .cors(corsCustomizer -> {
                     corsCustomizer.configurationSource(corsConfig);
                 });
 
