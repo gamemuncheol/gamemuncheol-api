@@ -29,7 +29,7 @@ public class PostOpenApiController {
     }
 
     @GetMapping("/page/grill")
-    public Pagination<PostMainPageResponse> getGrillPosts(
+    public Pagination<PostMainPageResponse> fetchGrillPosts(
             @RequestParam(value = "cursor", required = false) Double cursor,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
