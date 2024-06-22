@@ -84,11 +84,15 @@ apple:
   teamId: ${APPLE_TEAM_ID}
   privateKey: ${APPLE_PRIVATE_KEY}
 
+# Prometheus 설정
 management:
   endpoints:
     web:
       exposure:
-        include: "prometheus"
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
 
 logging:
   level:
