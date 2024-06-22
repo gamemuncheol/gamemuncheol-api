@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+
 @RequestMapping("/open-api/posts")
 @RestControllerWithEnvelopPattern
 @RequiredArgsConstructor
@@ -19,18 +21,19 @@ public class PostOpenApiController {
 
     @GetMapping("/page/new")
     public Pagination<PostMainPageResponse> fetchByLatest(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "cursor", required = false) LocalDateTime cursor
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postService.fetchByLatest(pageable);
+        Pageable pageable = PageRequest.of(0, size);
+        return postService.fetchByLatest(cursor, pageable);
     }
 
     @GetMapping("/page/grill")
     public Pagination<PostMainPageResponse> getGrillPosts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "cursor", required = false) Double cursor,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        return postService.getGrillPosts(page, size);
+        Pageable pageable = PageRequest.of(0, size);
+        return postService.getGrillPosts(cursor, pageable);
     }
 }

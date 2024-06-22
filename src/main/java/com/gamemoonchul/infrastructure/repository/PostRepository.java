@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+import java.time.LocalDateTime;
 
-    Page<Post> findByVoteRatioGreaterThanEqualOrderByVoteCountDesc(Double ratio, Pageable pageable);
+public interface PostRepository extends JpaRepository<Post, Long> {
+    Page<Post> findByCreatedAtLessThanOrderByCreatedAtDesc(LocalDateTime createdAt, Pageable pageable);
+
+    Page<Post> findByVoteRatioGreaterThanEqualAndVoteRatioLessThanOrderByVoteCountDesc(Double ratio, Double cursor, Pageable pageable);
 }

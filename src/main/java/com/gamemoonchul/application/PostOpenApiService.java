@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,8 @@ public class PostOpenApiService {
     private final PostRepository postRepository;
     private final VoteOptionRepository voteOptionRepository;
 
-    public Pagination<PostMainPageResponse> fetchByLatest(Pageable pageable) {
-        Page<Post> savedPage = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+    public Pagination<PostMainPageResponse> fetchByLatest(LocalDateTime cursor, Pageable pageable) {
+        Page<Post> savedPage = postRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(cursor, pageable);
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse
@@ -34,10 +35,9 @@ public class PostOpenApiService {
         return new Pagination<PostMainPageResponse>(savedPage, responses);
     }
 
-    public Pagination<PostMainPageResponse> getGrillPosts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Pagination<PostMainPageResponse> getGrillPosts(double cursor, Pageable pageable) {
         Double standardRatio = 45.0;
-        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqualOrderByVoteCountDesc(standardRatio, pageable);
+        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqualAndVoteRatioLessThanOrderByVoteCountDesc(standardRatio, cursor, pageable);
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse)
