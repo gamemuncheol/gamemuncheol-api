@@ -4,7 +4,7 @@ import com.gamemoonchul.application.PostService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ public class PostApiController {
     private final PostService postService;
 
     @PostMapping
-    public PostResponseDto upload(
+    public PostMainPageResponse upload(
             @Valid
             @RequestBody PostUploadRequest request,
             @MemberSession Member member
     ) {
-        PostResponseDto response = postService.upload(request, member);
+        PostMainPageResponse response = postService.upload(request, member);
         return response;
     }
 

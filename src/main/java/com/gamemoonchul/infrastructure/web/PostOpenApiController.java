@@ -3,7 +3,7 @@ package com.gamemoonchul.infrastructure.web;
 import com.gamemoonchul.application.PostOpenApiService;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.PostMainPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ public class PostOpenApiController {
     private final PostOpenApiService postService;
 
     @GetMapping("/page/new")
-    public Pagination<PostResponseDto> fetchByLatest(
+    public Pagination<PostMainPageResponse> fetchByLatest(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
@@ -27,7 +27,7 @@ public class PostOpenApiController {
     }
 
     @GetMapping("/page/grill")
-    public Pagination<PostResponseDto> getGrillPosts(
+    public Pagination<PostMainPageResponse> getGrillPosts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {

@@ -12,7 +12,7 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.MatchUserRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,20 +45,22 @@ class PostServiceTest extends TestDataBase {
         List<MatchUser> matchUsers = new ArrayList<>(List.of(MatchUserDummy.createDummy("1"), MatchUserDummy.createDummy("2")));
         List<MatchUser> savedMatchUsers = matchUserRepository.saveAll(matchUsers);
         // request 생성
-        PostUploadRequest request = PostDummy.createRequest(savedMatchUsers.stream().map(
-                MatchUser::getId
-        ).collect(Collectors.toList()));
+        PostUploadRequest request = PostDummy.createRequest(savedMatchUsers.stream()
+                .map(
+                        MatchUser::getId
+                )
+                .collect(Collectors.toList()));
 
         // when
-        PostResponseDto response = postService.upload(request, member);
+        PostMainPageResponse response = postService.upload(request, member);
         List<Post> allSavedPost = postRepository.findAll();
 
         // then
         assertThat(allSavedPost
                 .size()).isEqualTo(1);
-        assertThat(response.getCreatedAt()).isNotNull();
-        assertThat(response.getUpdatedAt()).isNotNull();
-        assertThat(response.getVoteOptionDetails().size()).isEqualTo(2);
+        assertThat(response.getTimesAgo()).isNotNull();
+        assertThat(response.getVoteRatio()
+                .size()).isEqualTo(2);
         assertThat(response.getViewCount()).isEqualTo(0);
     }
 
@@ -72,7 +74,7 @@ class PostServiceTest extends TestDataBase {
         PostUploadRequest request = PostDummy.createRequest();
 
         // when
-        PostResponseDto response = postService.upload(PostDummy.createRequest(), member1);
+        PostMainPageResponse response = postService.upload(PostDummy.createRequest(), member1);
 
         // then
         assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(UnauthorizedException.class)

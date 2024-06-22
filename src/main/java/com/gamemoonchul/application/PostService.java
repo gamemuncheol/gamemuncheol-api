@@ -9,7 +9,7 @@ import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ public class PostService {
     private final MatchUserService matchUserService;
     private final VoteOptionRepository voteOptionRepository;
 
-    public PostResponseDto upload(PostUploadRequest request, Member member) {
+    public PostMainPageResponse upload(PostUploadRequest request, Member member) {
         Post entity = PostConverter.requestToEntity(request, member);
         Post savedPost = postRepository.save(entity);
 
         saveVoteOptions(request.matchUserIds(), savedPost);
 
-        return PostResponseDto.entityToResponse(savedPost);
+        return PostMainPageResponse.entityToResponse(savedPost);
     }
 
     private void saveVoteOptions(List<Long> matchUserIds, Post post) {

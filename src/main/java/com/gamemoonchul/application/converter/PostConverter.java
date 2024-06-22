@@ -2,15 +2,15 @@ package com.gamemoonchul.application.converter;
 
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PostConverter {
 
-    public static PostResponseDto toResponse(Post entity) {
-        return PostResponseDto.builder()
+    public static PostMainPageResponse toResponse(Post entity) {
+        return PostMainPageResponse.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .member(MemberConverter.toResponseDto(entity.getMember()))
