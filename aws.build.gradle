@@ -67,8 +67,9 @@ dependencies {
     // Process Executor
 
     // prometheus + grafana
+    implementation 'io.micrometer:micrometer-core:1.11.0'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.11.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
 
     // JPA start
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

@@ -70,8 +70,10 @@ dependencies {
     // Process Executor
 
     // prometheus + grafana
+    implementation 'io.micrometer:micrometer-core:1.11.0'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.11.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
 
     // JPA start
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
