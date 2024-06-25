@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByCreatedAtLessThanOrderByCreatedAtDesc(LocalDateTime createdAt, Pageable pageable);
 
-    Page<Post> findByVoteRatioGreaterThanEqualAndVoteRatioLessThanOrderByVoteCountDesc(Double ratio, Double cursor, Pageable pageable);
+    Page<Post> findByVoteRatioGreaterThanEqualAndVoteRatioLessThanOrderByVoteRatioDescVoteCountDesc(Double ratio, Double cursor, Pageable pageable);
 }

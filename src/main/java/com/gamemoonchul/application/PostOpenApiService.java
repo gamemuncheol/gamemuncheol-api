@@ -35,9 +35,12 @@ public class PostOpenApiService {
         return new Pagination<PostMainPageResponse>(savedPage, responses);
     }
 
-    public Pagination<PostMainPageResponse> getGrillPosts(double cursor, Pageable pageable) {
+    public Pagination<PostMainPageResponse> getGrillPosts(Double cursor, Pageable pageable) {
+        if (cursor == null) {
+            cursor = 50.0;
+        }
         Double standardRatio = 45.0;
-        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqualAndVoteRatioLessThanOrderByVoteCountDesc(standardRatio, cursor, pageable);
+        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqualAndVoteRatioLessThanOrderByVoteRatioDescVoteCountDesc(standardRatio, cursor, pageable);
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse)
