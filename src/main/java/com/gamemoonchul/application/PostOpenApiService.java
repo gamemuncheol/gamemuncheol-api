@@ -25,8 +25,13 @@ public class PostOpenApiService {
     private final PostRepository postRepository;
     private final VoteOptionRepository voteOptionRepository;
 
-    public Pagination<PostMainPageResponse> fetchByLatest(LocalDateTime cursor, Pageable pageable) {
-        Page<Post> savedPage = postRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(cursor, pageable);
+    public Pagination<PostMainPageResponse> fetchByLatest(Long id, Pageable pageable) {
+        Page<Post> savedPage;
+        if (id == null) {
+            savedPage = postRepository.findByOrderByCreatedAtDesc(pageable);
+        } else {
+            savedPage = postRepository.findByIdLessThanOrderByCreatedAtDesc(id, pageable);
+        }
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse

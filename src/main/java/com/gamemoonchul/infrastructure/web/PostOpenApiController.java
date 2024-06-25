@@ -22,18 +22,18 @@ public class PostOpenApiController {
     @GetMapping("/page/new")
     public Pagination<PostMainPageResponse> fetchByLatest(
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "cursor", required = false) LocalDateTime cursor
+            @RequestParam(value = "id", required = false) Long id
     ) {
         Pageable pageable = PageRequest.of(0, size);
-        return postService.fetchByLatest(cursor, pageable);
+        return postService.fetchByLatest(id, pageable);
     }
 
     @GetMapping("/page/grill")
     public Pagination<PostMainPageResponse> fetchGrillPosts(
-            @RequestParam(value = "cursor", required = false) Double cursor,
+            @RequestParam(value = "voteRatio", required = false) Double voteRatio,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(0, size);
-        return postService.getGrillPosts(cursor, pageable);
+        return postService.getGrillPosts(voteRatio, pageable);
     }
 }
