@@ -13,13 +13,17 @@ import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class MemberOpenApiService {
     private final TokenHelper tokenHelper;
@@ -33,12 +37,12 @@ public class MemberOpenApiService {
         return newToken;
     }
 
-    public boolean isExistNickname(String nickName) {
+    public boolean isExistNickname(@NotEmpty @Max(10) String nickName) {
         Optional<Member> savedMember = memberRepository.findByNickname(nickName);
         return savedMember.isPresent();
     }
 
-    public TokenDto register(RegisterRequest request) {
+    public TokenDto register(@Valid RegisterRequest request) {
         if (!request.privacyAgree()) {
             throw new UnauthorizedException(MemberStatus.CONSENT_REQUIRED);
         }
