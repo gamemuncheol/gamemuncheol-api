@@ -1,24 +1,20 @@
 package com.gamemoonchul.application;
 
-import com.gamemoonchul.application.validation.ValidNickname;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -44,7 +40,7 @@ public class MemberService {
         memberRepository.delete(member.get());
     }
 
-    public void updateNickName(Member member, @ValidNickname String nickName) {
+    public void updateNickName(Member member, @NotEmpty @Max(10) String nickName) {
         if (isExistNickname(nickName)) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }

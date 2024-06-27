@@ -1,6 +1,12 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
-import com.gamemoonchul.application.validation.ValidNickname;
 
-public record RegisterRequest(String temporaryKey, boolean privacyAgree, @ValidNickname String nickname) {
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+
+public record RegisterRequest(
+        String temporaryKey,
+        boolean privacyAgree,
+        @NotEmpty @Max(10) String nickname
+) {
 }
