@@ -10,11 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "post")
 @Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "post", indexes = {
+        @Index(name = "idx_vote_ratio", columnList = "vote_ratio DESC"),
+        @Index(name = "idx_vote_count", columnList = "vote_count DESC"),
+        @Index(name = "idx_post_created_at_desc", columnList = "created_at DESC")
+})
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,12 +85,15 @@ public class Post extends BaseTimeEntity {
 
     public Double getMinVoteRatio() {
         int totalVoteCount = voteOptions.stream()
-                .mapToInt(voteOption -> voteOption.getVotes().size())
+                .mapToInt(voteOption -> voteOption.getVotes()
+                        .size())
                 .sum();
         if (totalVoteCount == 0) {
             return 0.0;
         }
-        double firstIndexVoteRatio = (double) voteOptions.get(0).getVotes().size() / (double) totalVoteCount * 100;
+        double firstIndexVoteRatio = (double) voteOptions.get(0)
+                .getVotes()
+                .size() / (double) totalVoteCount * 100;
         return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
     }
 }
