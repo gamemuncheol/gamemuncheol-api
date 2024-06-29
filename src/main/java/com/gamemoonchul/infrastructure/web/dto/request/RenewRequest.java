@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.web.dto;
+package com.gamemoonchul.infrastructure.web.dto.request;
 
 public record RenewRequest(
         String refreshToken

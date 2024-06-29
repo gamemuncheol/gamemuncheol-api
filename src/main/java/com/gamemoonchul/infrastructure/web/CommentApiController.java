@@ -5,8 +5,8 @@ import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.model.dto.CommentSaveDto;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.CommentFixRequest;
-import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.entity;
 
-import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

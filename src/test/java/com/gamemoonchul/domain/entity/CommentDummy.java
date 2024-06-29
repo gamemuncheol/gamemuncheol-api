@@ -1,7 +1,7 @@
 package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.domain.model.dto.CommentSaveDto;
-import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentRequest;
 
 public class CommentDummy {
     public static CommentRequest createRequest(Long postId) {

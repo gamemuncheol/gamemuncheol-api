@@ -2,8 +2,8 @@ package com.gamemoonchul.application.converter;
 
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
-import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
+import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
 import org.springframework.stereotype.Service;
 
 @Service

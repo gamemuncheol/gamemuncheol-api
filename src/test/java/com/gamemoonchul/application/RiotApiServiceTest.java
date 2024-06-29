@@ -6,16 +6,14 @@ import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.model.vo.riot.ParticipantRecord;
 import com.gamemoonchul.infrastructure.adapter.RiotApiAdapter;
-import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.redis.RedisMemberRepository;
-import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.RegisterRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

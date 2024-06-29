@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.web.dto;
+package com.gamemoonchul.infrastructure.web.dto.response;
 
 import com.gamemoonchul.domain.entity.VoteOptions;
 import lombok.Builder;
@@ -15,9 +15,12 @@ public class VoteOptionDetail {
 
     public static VoteOptionDetail entityToResponse(VoteOptions entity) {
         return VoteOptionDetail.builder()
-                .matchUserId(entity.getMatchUser().getId())
-                .nickname(entity.getMatchUser().getNickname())
-                .championThumbnail(entity.getMatchUser().getChampionThumbnail())
+                .matchUserId(entity.getMatchUser()
+                        .getId())
+                .nickname(entity.getMatchUser()
+                        .getNickname())
+                .championThumbnail(entity.getMatchUser()
+                        .getChampionThumbnail())
                 .voteOptionsId(entity.getId())
                 .build();
     }

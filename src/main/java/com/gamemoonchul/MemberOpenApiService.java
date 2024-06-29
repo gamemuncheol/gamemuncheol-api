@@ -12,7 +12,7 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.RegisterRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;

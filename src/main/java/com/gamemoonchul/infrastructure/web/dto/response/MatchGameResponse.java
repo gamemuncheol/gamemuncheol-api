@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.web.dto;
+package com.gamemoonchul.infrastructure.web.dto.response;
 
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;
@@ -29,7 +29,8 @@ public class MatchGameResponse {
                 .gameCreation(matchGame.getGameCreation())
                 .gameDuration(matchGame.getGameDuration())
                 .gameMode(matchGame.getGameMode())
-                .matchUsers(matchGame.getMatchUsers().stream()
+                .matchUsers(matchGame.getMatchUsers()
+                        .stream()
                         .map(matchUser
                                 -> MatchUserResponse.toResponse(matchUser, properties))
                         .toList())
@@ -38,7 +39,8 @@ public class MatchGameResponse {
 
     private static Properties loadProperties(Properties properties) {
         try {
-            InputStream inputStream = MatchUserResponse.class.getClassLoader().getResourceAsStream("lolchampion.properties");
+            InputStream inputStream = MatchUserResponse.class.getClassLoader()
+                    .getResourceAsStream("lolchampion.properties");
             InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             properties = new Properties();
             properties.load(reader);
@@ -70,7 +72,9 @@ public class MatchGameResponse {
         }
 
         private static String getKoChampName(Properties properties, MatchUser matchUser) {
-            String engChampName = matchUser.getChampionThumbnail().replace("https://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/", "").replace(".png", "");
+            String engChampName = matchUser.getChampionThumbnail()
+                    .replace("https://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/", "")
+                    .replace(".png", "");
             String koChampName;
             try {
                 // 이후 properties를 사용하여 작업을 수행합니다.

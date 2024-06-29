@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.web.dto;
+package com.gamemoonchul.infrastructure.web.dto.response;
 
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Post;
