@@ -15,9 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post", indexes = {
-        @Index(name = "idx_vote_ratio", columnList = "vote_ratio DESC"),
-        @Index(name = "idx_vote_count", columnList = "vote_count DESC"),
-        @Index(name = "idx_post_created_at_desc", columnList = "created_at DESC")
+        @Index(name = "idx_vote_ratio_vote_count", columnList = "vote_ratio DESC, vote_count DESC"),
+        @Index(name = "idx_post_created_at_desc", columnList = "created_at DESC"),
+        @Index(name = "idx_view_count", columnList = "view_count DESC")
 })
 public class Post extends BaseTimeEntity {
     @Id
