@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 public class OAuth2UserUnlinkManager {
 
     private final GoogleOAuth2UserUnlink googleOAuth2UserUnlink;
+    private final AppleUnlinkService appleUnlinkService;
 
     public void unlink(OAuth2Provider provider, String accessToken) {
         if (OAuth2Provider.GOOGLE.equals(provider)) {
             googleOAuth2UserUnlink.unlink(accessToken);
+        } else if (OAuth2Provider.APPLE.equals(provider)) {
+            appleUnlinkService.unlink(accessToken);
         } else {
             log.error(Oauth2Status.UNLINK_FAILED.getMessage());
             throw new InternalServerException(Oauth2Status.UNLINK_FAILED);

@@ -18,6 +18,7 @@ public enum Oauth2Status implements ApiStatusIfs {
     NOT_FOUND_EMAIL(1003, "이메일을 찾을 수 없습니다."),
     UNKNOWN_EXCEPTION(1500, "알 수 없는 예외가 발생하였습니다."),
     NOT_FOUND_PROVIDER(1404, "지원하지 않는 제공자입니다."),
+    APPLE_UNLINK_FAILED(1004, "애플 연동 해제에 실패하였습니다."),
     ;
     private final Integer statusCode;
     private final String message;
