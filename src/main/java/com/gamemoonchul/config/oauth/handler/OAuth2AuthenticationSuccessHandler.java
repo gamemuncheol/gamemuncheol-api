@@ -158,7 +158,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if (principal instanceof OAuth2UserPrincipal) {
             return (OAuth2UserPrincipal) principal;
         } else if (principal instanceof OidcUser) {
-            AppleOAuth2UserInfo appleOAuth2UserInfo = new AppleOAuth2UserInfo(((OidcUser) principal).getAttributes());
+            AppleOAuth2UserInfo appleOAuth2UserInfo = new AppleOAuth2UserInfo(((OidcUser) principal));
             return new OAuth2UserPrincipal(appleOAuth2UserInfo);
         }
         return null;
