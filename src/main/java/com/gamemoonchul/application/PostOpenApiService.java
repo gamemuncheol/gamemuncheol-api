@@ -24,7 +24,8 @@ public class PostOpenApiService {
     private final PostRepository postRepository;
     private final VoteOptionRepository voteOptionRepository;
 
-    public Pagination<PostResponseDto> fetchByLatest(Pageable pageable) {
+    public Pagination<PostResponseDto> getLatestPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<Post> savedPage = postRepository.findAllByOrderByCreatedAt(pageable);
         List<PostResponseDto> responses = savedPage.getContent()
                 .stream()
@@ -51,5 +52,24 @@ public class PostOpenApiService {
                 )
                 .toList();
         return new Pagination<PostResponseDto>(savedPage, responses);
+    }
+
+    public Pagination<PostResponseDto> getHotPosts(int page, int size) {
+        Pageable pageable = getPageable(page, size);
+        Page<Post> savedPage = postRepository.findAllByOrderByViewCountDesc(pageable);
+        List<PostResponseDto> responses = savedPage
+                .getContent()
+                .stream()
+                .map(PostResponseDto::entityToResponse)
+                .sorted(
+                        Comparator.comparing(PostResponseDto::getCreatedAt)
+                )
+                .toList();
+        return new Pagination<PostResponseDto>(savedPage, responses);
+    }
+
+    private Pageable getPageable(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return pageable;
     }
 }
