@@ -1,9 +1,11 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
+import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,48 +26,39 @@ public class PostOpenApiService {
     private final PostRepository postRepository;
     private final VoteOptionRepository voteOptionRepository;
 
-    public Pagination<PostResponseDto> getLatestPosts(int page, int size) {
+    public Pagination<PostMainPageResponse> getLatestPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> savedPage = postRepository.findAllByOrderByCreatedAt(pageable);
-        List<PostResponseDto> responses = savedPage.getContent()
+        List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
-                .map(PostResponseDto::entityToResponse
-                )
-                .sorted(
-                        Comparator.comparing(PostResponseDto::getCreatedAt)
+                .map(PostConverter::toMainResponse
                 )
                 .collect(Collectors.toList());
 
-        return new Pagination<PostResponseDto>(savedPage, responses);
+        return new Pagination<>(savedPage, responses);
     }
 
-    public Pagination<PostResponseDto> getGrillPosts(int page, int size) {
+    public Pagination<PostMainPageResponse> getGrillPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Double standardRatio = 45.0;
         Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable);
-        List<PostResponseDto> responses = savedPage
+        List<PostMainPageResponse> responses = savedPage
                 .getContent()
                 .stream()
-                .map(PostResponseDto::entityToResponse)
-                .sorted(
-                        Comparator.comparing(PostResponseDto::getCreatedAt)
-                )
+                .map(PostConverter::toMainResponse)
                 .toList();
-        return new Pagination<PostResponseDto>(savedPage, responses);
+        return new Pagination<PostMainPageResponse>(savedPage, responses);
     }
 
-    public Pagination<PostResponseDto> getHotPosts(int page, int size) {
+    public Pagination<PostMainPageResponse> getHotPosts(int page, int size) {
         Pageable pageable = getPageable(page, size);
         Page<Post> savedPage = postRepository.findAllByOrderByViewCountDesc(pageable);
-        List<PostResponseDto> responses = savedPage
+        List<PostMainPageResponse> responses = savedPage
                 .getContent()
                 .stream()
-                .map(PostResponseDto::entityToResponse)
-                .sorted(
-                        Comparator.comparing(PostResponseDto::getCreatedAt)
-                )
+                .map(PostConverter::toMainResponse)
                 .toList();
-        return new Pagination<PostResponseDto>(savedPage, responses);
+        return new Pagination<>(savedPage, responses);
     }
 
     private Pageable getPageable(int page, int size) {
