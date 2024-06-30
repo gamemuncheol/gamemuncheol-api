@@ -33,7 +33,6 @@ public class PostMainPageResponse {
                 .content(entity.getContent())
                 .viewCount(entity.getViewCount())
                 .timesAgo(getTimeAgo(entity.getCreatedAt()))
-
                 .voteRatio(voteRatio)
                 .build();
     }

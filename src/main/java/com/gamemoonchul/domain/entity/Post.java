@@ -34,7 +34,7 @@ public class Post extends BaseTimeEntity {
     private List<VoteOptions> voteOptions;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", updatable = false)
     private List<Comment> comments;
 
     @Column(name = "video_url")

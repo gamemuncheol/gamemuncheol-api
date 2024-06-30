@@ -24,11 +24,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostOpenApiService {
     private final PostRepository postRepository;
-    private final VoteOptionRepository voteOptionRepository;
 
     public Pagination<PostMainPageResponse> getLatestPosts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Post> savedPage = postRepository.findAllByOrderByCreatedAt(pageable);
+        Page<Post> savedPage = postRepository.findAllByOrderByCreatedAt(PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostConverter::toMainResponse
@@ -39,9 +37,8 @@ public class PostOpenApiService {
     }
 
     public Pagination<PostMainPageResponse> getGrillPosts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
         Double standardRatio = 45.0;
-        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable);
+        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqual(standardRatio, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage
                 .getContent()
                 .stream()
@@ -51,18 +48,12 @@ public class PostOpenApiService {
     }
 
     public Pagination<PostMainPageResponse> getHotPosts(int page, int size) {
-        Pageable pageable = getPageable(page, size);
-        Page<Post> savedPage = postRepository.findAllByOrderByViewCountDesc(pageable);
+        Page<Post> savedPage = postRepository.findAllByOrderByViewCountDesc(PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage
                 .getContent()
                 .stream()
                 .map(PostConverter::toMainResponse)
                 .toList();
         return new Pagination<>(savedPage, responses);
-    }
-
-    private Pageable getPageable(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return pageable;
     }
 }
