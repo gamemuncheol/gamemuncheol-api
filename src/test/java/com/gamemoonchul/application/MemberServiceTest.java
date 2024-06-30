@@ -1,6 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
+import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

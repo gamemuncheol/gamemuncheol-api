@@ -1,6 +1,6 @@
 package com.gamemoonchul.infrastructure.web;
 
-import com.gamemoonchul.application.MemberService;
+import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;

@@ -1,15 +1,13 @@
-package com.gamemoonchul.application;
+package com.gamemoonchul.application.member;
 
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,16 +33,7 @@ public class MemberService {
         return memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
     }
 
-    public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
-        Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
-        if (member.isEmpty()) {
-            log.error(MemberStatus.MEMBER_NOT_FOUND.getMessage());
-            throw new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
-        }
-        memberRepository.delete(member.get());
-    }
-
-    public void updateNickName(Member member, @NotEmpty @Max(10) String nickName) {
+    public void updateNickName(Member member, @Size(max = 10) String nickName) {
         if (isExistNickname(nickName)) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }

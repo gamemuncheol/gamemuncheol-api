@@ -1,4 +1,4 @@
-package com.gamemoonchul.application.converter;
+package com.gamemoonchul.application.member;
 
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;

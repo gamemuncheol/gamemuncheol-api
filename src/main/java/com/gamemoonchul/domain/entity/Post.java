@@ -26,7 +26,7 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Setter
-    @JoinColumn(name = "member_id", referencedColumnName = "id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(fetch = FetchType.LAZY)

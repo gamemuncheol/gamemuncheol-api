@@ -1,7 +1,7 @@
 package com.gamemoonchul;
 
 import com.gamemoonchul.application.RedisMemberService;
-import com.gamemoonchul.application.converter.MemberConverter;
+import com.gamemoonchul.application.member.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.config.jwt.TokenDto;
@@ -14,8 +14,8 @@ import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.RegisterRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +37,7 @@ public class MemberOpenApiService {
         return newToken;
     }
 
-    public boolean isExistNickname(@NotEmpty @Max(10) String nickName) {
+    public boolean isExistNickname(@NotEmpty @Size(max = 10) String nickName) {
         Optional<Member> savedMember = memberRepository.findByNickname(nickName);
         return savedMember.isPresent();
     }
