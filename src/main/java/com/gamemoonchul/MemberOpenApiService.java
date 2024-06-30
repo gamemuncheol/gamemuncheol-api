@@ -15,8 +15,8 @@ import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -37,7 +37,7 @@ public class MemberOpenApiService {
         return newToken;
     }
 
-    public boolean isExistNickname(@NotEmpty @Length(max = 10) String nickName) {
+    public boolean isExistNickname(@NotEmpty @Size(max = 10) String nickName) {
         Optional<Member> savedMember = memberRepository.findByNickname(nickName);
         return savedMember.isPresent();
     }
