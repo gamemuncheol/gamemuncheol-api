@@ -22,7 +22,7 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Setter
-    @JoinColumn(name = "member_id", referencedColumnName = "id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -30,7 +30,7 @@ public class Post extends BaseTimeEntity {
     private List<VoteOptions> voteOptions;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", updatable = false)
     private List<Comment> comments;
 
     @Column(name = "video_url")
@@ -81,12 +81,15 @@ public class Post extends BaseTimeEntity {
 
     public Double getMinVoteRatio() {
         int totalVoteCount = voteOptions.stream()
-                .mapToInt(voteOption -> voteOption.getVotes().size())
+                .mapToInt(voteOption -> voteOption.getVotes()
+                        .size())
                 .sum();
         if (totalVoteCount == 0) {
             return 0.0;
         }
-        double firstIndexVoteRatio = (double) voteOptions.get(0).getVotes().size() / (double) totalVoteCount * 100;
+        double firstIndexVoteRatio = (double) voteOptions.get(0)
+                .getVotes()
+                .size() / (double) totalVoteCount * 100;
         return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
     }
 }

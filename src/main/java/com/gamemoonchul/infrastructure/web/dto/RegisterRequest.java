@@ -1,12 +1,11 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public record RegisterRequest(
         String temporaryKey,
         boolean privacyAgree,
-        @NotEmpty @Max(10) String nickname
+        @Size(max = 10) String nickname
 ) {
 }

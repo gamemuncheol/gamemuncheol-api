@@ -28,7 +28,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiResponse> validexception(
             MethodArgumentNotValidException exception
     ) {
-        log.error("", exception);
 
         List<String> errorMessageList = exception.getFieldErrors()
                 .stream()
@@ -47,7 +46,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiResponse> handleConstraintViolationException(
             ConstraintViolationException exception
     ) {
-        log.error("ConstraintViolationException: ", exception);
 
         List<String> errorMessageList = exception.getConstraintViolations()
                 .stream()
