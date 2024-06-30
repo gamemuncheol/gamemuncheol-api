@@ -23,4 +23,8 @@ public class MemberBan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ban_member_id")
     private Member banMember;
+
+    public Member getBanMember() {
+        return banMember;
+    }
 }

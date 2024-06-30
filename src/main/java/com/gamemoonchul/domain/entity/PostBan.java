@@ -23,4 +23,8 @@ public class PostBan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ban_post_id")
     private Post banPost;
+
+    public Post getBanPost() {
+        return banPost;
+    }
 }
