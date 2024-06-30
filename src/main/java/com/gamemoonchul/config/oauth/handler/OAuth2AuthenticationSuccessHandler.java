@@ -1,7 +1,8 @@
 package com.gamemoonchul.config.oauth.handler;
 
-import com.gamemoonchul.application.MemberService;
-import com.gamemoonchul.application.converter.MemberConverter;
+import com.gamemoonchul.application.member.MemberDeactivateService;
+import com.gamemoonchul.application.member.MemberService;
+import com.gamemoonchul.application.member.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.common.util.CookieUtils;
@@ -51,6 +52,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
     private final TokenHelper tokenProvider;
     private final MemberService memberService;
+    private final MemberDeactivateService memberDeactivateService;
     private final RedisMemberRepository redisMemberRepository;
 
     private final String TOKEN_DTO = "tokenDto";
@@ -147,7 +149,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .getProvider();
 
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberService.deactivateAccount(principal.getUserInfo()
+        memberDeactivateService.deactivateAccount(principal.getUserInfo()
                 .getEmail(), provider, principal.getUserInfo()
                 .getIdentifier());
     }
