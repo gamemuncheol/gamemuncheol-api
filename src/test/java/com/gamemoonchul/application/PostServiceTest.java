@@ -12,8 +12,8 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.MatchUserRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
-import com.gamemoonchul.infrastructure.web.dto.PostUploadRequest;
+import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +45,11 @@ class PostServiceTest extends TestDataBase {
         List<MatchUser> matchUsers = new ArrayList<>(List.of(MatchUserDummy.createDummy("1"), MatchUserDummy.createDummy("2")));
         List<MatchUser> savedMatchUsers = matchUserRepository.saveAll(matchUsers);
         // request 생성
-        PostUploadRequest request = PostDummy.createRequest(savedMatchUsers.stream().map(
-                MatchUser::getId
-        ).collect(Collectors.toList()));
+        PostUploadRequest request = PostDummy.createRequest(savedMatchUsers.stream()
+                .map(
+                        MatchUser::getId
+                )
+                .collect(Collectors.toList()));
 
         // when
         PostResponseDto response = postService.upload(request, member);
@@ -58,7 +60,8 @@ class PostServiceTest extends TestDataBase {
                 .size()).isEqualTo(1);
         assertThat(response.getCreatedAt()).isNotNull();
         assertThat(response.getUpdatedAt()).isNotNull();
-        assertThat(response.getVoteOptionDetails().size()).isEqualTo(2);
+        assertThat(response.getVoteOptionDetails()
+                .size()).isEqualTo(2);
         assertThat(response.getViewCount()).isEqualTo(0);
     }
 

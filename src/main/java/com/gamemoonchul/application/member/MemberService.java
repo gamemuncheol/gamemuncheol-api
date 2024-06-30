@@ -5,7 +5,7 @@ import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import com.gamemoonchul.infrastructure.web.dto.MemberResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;

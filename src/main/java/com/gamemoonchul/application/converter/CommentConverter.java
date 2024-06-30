@@ -1,6 +1,5 @@
 package com.gamemoonchul.application.converter;
 
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
@@ -9,8 +8,7 @@ import com.gamemoonchul.domain.model.dto.CommentSaveDto;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.web.dto.CommentFixRequest;
-import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

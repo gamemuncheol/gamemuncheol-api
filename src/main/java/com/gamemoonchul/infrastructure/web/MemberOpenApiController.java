@@ -3,8 +3,8 @@ package com.gamemoonchul.infrastructure.web;
 import com.gamemoonchul.MemberOpenApiService;
 import com.gamemoonchul.config.jwt.TokenDto;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.RenewRequest;
-import com.gamemoonchul.infrastructure.web.dto.RegisterRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.RenewRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

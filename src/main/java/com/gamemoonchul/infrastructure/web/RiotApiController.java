@@ -2,7 +2,7 @@ package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.RiotApiService;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

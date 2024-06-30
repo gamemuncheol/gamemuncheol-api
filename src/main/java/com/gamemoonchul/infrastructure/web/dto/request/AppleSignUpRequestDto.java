@@ -1,4 +1,4 @@
-package com.gamemoonchul.infrastructure.web.dto;
+package com.gamemoonchul.infrastructure.web.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

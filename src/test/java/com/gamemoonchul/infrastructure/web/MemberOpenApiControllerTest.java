@@ -3,7 +3,7 @@ package com.gamemoonchul.infrastructure.web;
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.config.jwt.*;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
-import com.gamemoonchul.infrastructure.web.dto.RenewRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.RenewRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +32,11 @@ class MemberOpenApiControllerTest extends TestDataBase {
         // when
         ResultActions resultActions =
                 super.mvc.perform(post("/open-api/members/renew")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(super.objectMapper.writeValueAsString(renewRequest))
-                        .accept(MediaType.APPLICATION_JSON)
-                ).andDo(print());
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(super.objectMapper.writeValueAsString(renewRequest))
+                                .accept(MediaType.APPLICATION_JSON)
+                        )
+                        .andDo(print());
 
         // then
         resultActions.andExpect(status().isOk())
@@ -61,10 +62,11 @@ class MemberOpenApiControllerTest extends TestDataBase {
         try {
             resultActions =
                     super.mvc.perform(post("/open-api/members/renew")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(super.objectMapper.writeValueAsString(renewRequest))
-                            .accept(MediaType.APPLICATION_JSON)
-                    ).andDo(print());
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(super.objectMapper.writeValueAsString(renewRequest))
+                                    .accept(MediaType.APPLICATION_JSON)
+                            )
+                            .andDo(print());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

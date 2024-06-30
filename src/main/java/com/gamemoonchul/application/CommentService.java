@@ -13,8 +13,7 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.web.dto.CommentFixRequest;
-import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -80,7 +79,7 @@ public class CommentService {
         Comment savedComment = this.searchComment(commentId);
         validateSameMemberId(savedComment.getMember(), authMember);
 
-        if(!savedComment.parentExist()) { // 대댓글이 아닐경우 자기 자신의 대댓글들 삭제
+        if (!savedComment.parentExist()) { // 대댓글이 아닐경우 자기 자신의 대댓글들 삭제
             List<Comment> children = commentRepository.findByParentId(savedComment.getId());
             commentRepository.deleteAll(children);
         }

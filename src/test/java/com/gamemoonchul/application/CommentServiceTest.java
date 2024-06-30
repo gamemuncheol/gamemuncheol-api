@@ -11,20 +11,19 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.web.dto.CommentFixRequest;
-import com.gamemoonchul.infrastructure.web.dto.CommentRequest;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class CommentServiceTest extends TestDataBase {
+    Post post;
+    Member member;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -35,9 +34,6 @@ class CommentServiceTest extends TestDataBase {
     private CommentRepository commentRepository;
     @Autowired
     private EntityManager em;
-
-    Post post;
-    Member member;
 
     @BeforeEach
     void setUp() {

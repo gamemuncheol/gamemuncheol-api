@@ -1,10 +1,12 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
-import com.gamemoonchul.infrastructure.web.dto.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,34 +24,36 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostOpenApiService {
     private final PostRepository postRepository;
-    private final VoteOptionRepository voteOptionRepository;
 
-    public Pagination<PostResponseDto> fetchByLatest(Pageable pageable) {
-        Page<Post> savedPage = postRepository.findAllByOrderByCreatedAt(pageable);
-        List<PostResponseDto> responses = savedPage.getContent()
+    public Pagination<PostMainPageResponse> getLatestPosts(int page, int size) {
+        Page<Post> savedPage = postRepository.findAllByOrderByCreatedAt(PageRequest.of(page, size));
+        List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
-                .map(PostResponseDto::entityToResponse
-                )
-                .sorted(
-                        Comparator.comparing(PostResponseDto::getCreatedAt)
+                .map(PostConverter::toMainResponse
                 )
                 .collect(Collectors.toList());
 
-        return new Pagination<PostResponseDto>(savedPage, responses);
+        return new Pagination<>(savedPage, responses);
     }
 
-    public Pagination<PostResponseDto> getGrillPosts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Pagination<PostMainPageResponse> getGrillPosts(int page, int size) {
         Double standardRatio = 45.0;
-        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqual(standardRatio, pageable);
-        List<PostResponseDto> responses = savedPage
+        Page<Post> savedPage = postRepository.findByVoteRatioGreaterThanEqual(standardRatio, PageRequest.of(page, size));
+        List<PostMainPageResponse> responses = savedPage
                 .getContent()
                 .stream()
-                .map(PostResponseDto::entityToResponse)
-                .sorted(
-                        Comparator.comparing(PostResponseDto::getCreatedAt)
-                )
+                .map(PostConverter::toMainResponse)
                 .toList();
-        return new Pagination<PostResponseDto>(savedPage, responses);
+        return new Pagination<PostMainPageResponse>(savedPage, responses);
+    }
+
+    public Pagination<PostMainPageResponse> getHotPosts(int page, int size) {
+        Page<Post> savedPage = postRepository.findAllByOrderByViewCountDesc(PageRequest.of(page, size));
+        List<PostMainPageResponse> responses = savedPage
+                .getContent()
+                .stream()
+                .map(PostConverter::toMainResponse)
+                .toList();
+        return new Pagination<>(savedPage, responses);
     }
 }

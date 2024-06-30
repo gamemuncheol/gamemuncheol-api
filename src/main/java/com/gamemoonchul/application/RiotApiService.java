@@ -3,7 +3,7 @@ package com.gamemoonchul.application;
 import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
-import com.gamemoonchul.infrastructure.web.dto.MatchGameResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
