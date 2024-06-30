@@ -66,6 +66,12 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "member")
+    private List<MemberBan> memberBans;
+
+    @OneToMany(mappedBy = "member")
+    private List<PostBan> postBans;
+
     public Member update(String name, String nickname) {
         this.name = name;
         this.picture = picture;
