@@ -13,18 +13,6 @@ import java.util.List;
 @Service
 public class PostConverter {
 
-    public static PostMainPageResponse toMainResponse(Post entity) {
-        return PostMainPageResponse.builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .member(MemberConverter.toResponseDto(entity.getMember()))
-                .thumbnailUrl(entity.getThumbnailUrl())
-                .videoUrl(entity.getVideoUrl())
-                .viewCount(entity.getViewCount())
-                .voteRatio(List.of(100 - entity.getVoteRatio(), entity.getVoteRatio()))
-                .build();
-    }
-
     public static PostResponseDto toResponse(Post entity) {
         return PostResponseDto.builder()
                 .id(entity.getId())
