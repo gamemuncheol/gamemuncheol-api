@@ -9,9 +9,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findAllByOrderByCreatedAt(Pageable pageable);
+    // 최신
+    Page<Post> findAllByIdNotInOrderByCreatedAtDesc(List<Long> postsIds, Pageable pageable);
 
-    Page<Post> findByVoteRatioGreaterThanEqual(Double ratio, Pageable pageable);
+    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    // 불판
+    Page<Post> findAllByIdNotInAndVoteRatioGreaterThanEqual(List<Long> postIds, Double ratio, Pageable pageable);
+
+    Page<Post> findAllByVoteRatioGreaterThanEqual(Double ratio, Pageable pageable);
+
+    // Hot
+    Page<Post> findAllByIdNotInOrderByViewCountDesc(List<Long> postsIds, Pageable pageable);
 
     Page<Post> findAllByOrderByViewCountDesc(Pageable pageable);
 
