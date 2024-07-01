@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.web;
 
+import com.gamemoonchul.application.MemberBanService;
 import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberApiController {
     private final MemberService memberService;
+    private final MemberBanService memberBanService;
 
     @PatchMapping("/nickname/{nickname}")
     public void changeNickname(
@@ -35,5 +37,21 @@ public class MemberApiController {
             @MemberSession Member member
     ) {
         memberService.delete(member);
+    }
+
+    @PostMapping("/ban/{banMemberId}")
+    public void ban(
+            @MemberSession Member member,
+            @PathVariable(name = "banMemberId") Long banMemberId
+    ) {
+        memberBanService.ban(member, banMemberId);
+    }
+
+    @DeleteMapping("/ban/{banMemberId}")
+    public void deleteBan(
+            @MemberSession Member member,
+            @PathVariable(name = "banMemberId") Long banMemberId
+    ) {
+        memberBanService.deleteBan(member, banMemberId);
     }
 }
