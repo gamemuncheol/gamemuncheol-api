@@ -18,6 +18,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -39,16 +41,24 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
 
     @Override
     @Nullable
-    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
-        RequestAttributes requestContext = RequestContextHolder.getRequestAttributes();
-        TokenInfo tokenInfo = (TokenInfo) requestContext.getAttribute("tokenInfo", RequestAttributes.SCOPE_REQUEST);
+    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+        return getTokenInfo()
+                .map(this::findMember)
+                .orElse(null);
+    }
 
-        Member entity = memberRepository.findTop1ByProviderAndIdentifier(
+    private Optional<TokenInfo> getTokenInfo() {
+        return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
+                .map(attributes -> (TokenInfo) attributes.getAttribute("tokenInfo", RequestAttributes.SCOPE_REQUEST));
+    }
+
+    private Member findMember(TokenInfo tokenInfo) {
+        return memberRepository.findTop1ByProviderAndIdentifier(
                         OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier())
                 .orElseThrow(() -> {
                     log.error(MemberStatus.MEMBER_NOT_FOUND.getMessage());
                     return new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
                 });
-        return entity;
     }
 }
