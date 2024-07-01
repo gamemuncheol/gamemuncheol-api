@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Table(name = "member_ban")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member_ban",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "ban_member_id"})
+)
 public class MemberBan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
