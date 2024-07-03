@@ -12,16 +12,6 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends PostRepositoryIfs, JpaRepository<Post, Long> {
-    // 최신
-    Page<Post> findAllByIdNotInOrderByCreatedAtDesc(List<Long> postsIds, Pageable pageable);
-
-    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
-
-    // 불판
-    Page<Post> findAllByIdNotInAndVoteRatioGreaterThanEqual(List<Long> postIds, Double ratio, Pageable pageable);
-
-    Page<Post> findAllByVoteRatioGreaterThanEqual(Double ratio, Pageable pageable);
-
     void deleteAllByMember(Member member);
 
     List<Post> findByMember(Member member);

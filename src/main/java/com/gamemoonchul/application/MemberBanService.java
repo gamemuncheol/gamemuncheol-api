@@ -21,19 +21,6 @@ public class MemberBanService {
     private final MemberBanRepository memberBanRepository;
     private final MemberRepository memberRepository;
 
-    public List<Long> getBanPostIds(Member member) {
-        List<Long> banPostIds = new ArrayList<>();
-        if (member != null) {
-            List<MemberBan> memberBans = memberBanRepository.findAllByMember(member);
-            for (MemberBan memberBan : memberBans) {
-                memberBan.getBanMember()
-                        .getPosts()
-                        .forEach(post -> banPostIds.add(post.getId()));
-            }
-        }
-        return banPostIds;
-    }
-
     public void ban(Member member, Long banMemberId) {
         Member banMember = getBanMember(banMemberId);
         memberBanRepository.findByMemberAndBanMember(member, banMember)
@@ -46,11 +33,10 @@ public class MemberBanService {
     public void deleteBan(Member member, Long banMemberId) {
         Member banMember = getBanMember(banMemberId);
 
-        MemberBan memberBan = memberBanRepository.findByMemberAndBanMember(member, banMember)
-                .orElseThrow(
-                        () -> new BadRequestException(MemberStatus.MEMBER_NOT_FOUND)
+        memberBanRepository.findByMemberAndBanMember(member, banMember)
+                .ifPresent(
+                        memberBanRepository::delete
                 );
-        memberBanRepository.delete(memberBan);
     }
 
     private Member getBanMember(Long banMemberId) {

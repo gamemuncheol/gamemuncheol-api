@@ -7,5 +7,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PostRepositoryIfs {
+    Page<Post> searchGrillPostsWithoutBanPosts(Long memberId, Pageable pageable);
+
+    Page<Post> searchNewPostsWithoutBanPosts(Long memberId, Pageable pageable);
+
     Page<Post> searchHotPostWithoutBanPosts(Long memberId, Pageable pageable);
 }

@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,18 +21,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostOpenApiService {
     private final PostRepository postRepository;
-    private final PostBanService postBanService;
-    private final MemberBanService memberBanService;
 
     public Pagination<PostMainPageResponse> getLatestPosts(Member member, int page, int size) {
-        List<Long> banPostIds = getBannedPostIds(member);
-
-        Page<Post> savedPage;
-        if (banPostIds.isEmpty()) {
-            savedPage = postRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
-        } else {
-            savedPage = postRepository.findAllByIdNotInOrderByCreatedAtDesc(banPostIds, PageRequest.of(page, size));
-        }
+        Page<Post> savedPage = postRepository.searchNewPostsWithoutBanPosts(Optional.ofNullable(member)
+                .map(Member::getId)
+                .orElse(null), PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse)
@@ -43,15 +35,9 @@ public class PostOpenApiService {
     }
 
     public Pagination<PostMainPageResponse> getGrillPosts(Member member, int page, int size) {
-        Double standardRatio = 45.0;
-        List<Long> banPostIds = postBanService.getBanPostIds(member);
-
-        Page<Post> savedPage;
-        if (banPostIds.isEmpty()) {
-            savedPage = postRepository.findAllByVoteRatioGreaterThanEqual(standardRatio, PageRequest.of(page, size));
-        } else {
-            savedPage = postRepository.findAllByIdNotInAndVoteRatioGreaterThanEqual(banPostIds, standardRatio, PageRequest.of(page, size));
-        }
+        Page<Post> savedPage = postRepository.searchGrillPostsWithoutBanPosts(Optional.ofNullable(member)
+                .map(Member::getId)
+                .orElse(null), PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse)
@@ -69,20 +55,5 @@ public class PostOpenApiService {
                 .map(PostMainPageResponse::entityToResponse)
                 .toList();
         return new Pagination<>(savedPage, responses);
-    }
-
-    private List<Long> getBannedPostIds(Member member) {
-        List<Long> banPostIds = new ArrayList<>();
-        if (member != null) {
-            postBanService.getBanPostIds(member);
-            memberBanService.getBanPostIds(member)
-                    .forEach(bannedId -> {
-                        if (!banPostIds.contains(bannedId)) {
-                            banPostIds.add(bannedId);
-                        }
-                    });
-
-        }
-        return banPostIds;
     }
 }
