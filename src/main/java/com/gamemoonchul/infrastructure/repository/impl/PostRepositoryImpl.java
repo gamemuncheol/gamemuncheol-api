@@ -31,8 +31,23 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
 
     @Override
     public Page<Post> searchHotPostWithoutBanPosts(Long memberId, Pageable pageable) {
-        BooleanBuilder builder = new BooleanBuilder();
+        BooleanBuilder isNotBanned = isNotBanned(memberId);
 
+        JPAQuery<Post> query = queryFactory.selectFrom(post)
+                .where(isNotBanned)
+                .orderBy(post.viewCount.desc());
+
+        long total = query.stream()
+                .count();
+        List<Post> content = query.offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    BooleanBuilder isNotBanned(Long memberId) {
+        BooleanBuilder builder = new BooleanBuilder();
         if (memberId != null) {
             builder.and(post.id.notIn(
                     JPAExpressions.select(postBan.banPost.id)
@@ -45,17 +60,6 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
                             .where(memberBan.member.id.eq(memberId))
             ));
         }
-
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(builder)
-                .orderBy(post.viewCount.desc());
-
-        long total = query.stream()
-                .count();
-        List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        return new PageImpl<>(content, pageable, total);
+        return builder;
     }
 }

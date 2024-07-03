@@ -22,11 +22,6 @@ public interface PostRepository extends PostRepositoryIfs, JpaRepository<Post, L
 
     Page<Post> findAllByVoteRatioGreaterThanEqual(Double ratio, Pageable pageable);
 
-    // Hot
-    Page<Post> findAllByIdNotInOrderByViewCountDesc(List<Long> postsIds, Pageable pageable);
-
-    Page<Post> findAllByOrderByViewCountDesc(Pageable pageable);
-
     void deleteAllByMember(Member member);
 
     List<Post> findByMember(Member member);
