@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -59,14 +60,9 @@ public class PostOpenApiService {
     }
 
     public Pagination<PostMainPageResponse> getHotPosts(int page, int size, Member member) {
-        List<Long> banPostIds = getBannedPostIds(member);
-
-        Page<Post> savedPage;
-        if (banPostIds.isEmpty()) {
-            savedPage = postRepository.findAllByOrderByViewCountDesc(PageRequest.of(page, size));
-        } else {
-            savedPage = postRepository.findAllByIdNotInOrderByViewCountDesc(banPostIds, PageRequest.of(page, size));
-        }
+        Page<Post> savedPage = postRepository.searchHotPostWithoutBanPosts(Optional.ofNullable(member)
+                .map(Member::getId)
+                .orElse(null), PageRequest.of(page, size));
 
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()

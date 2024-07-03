@@ -2,13 +2,16 @@ package com.gamemoonchul.infrastructure.repository;
 
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.infrastructure.repository.ifs.PostRepositoryIfs;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+@Repository
+public interface PostRepository extends PostRepositoryIfs, JpaRepository<Post, Long> {
     // 최신
     Page<Post> findAllByIdNotInOrderByCreatedAtDesc(List<Long> postsIds, Pageable pageable);
 
