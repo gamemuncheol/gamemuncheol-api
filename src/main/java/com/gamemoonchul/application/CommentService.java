@@ -11,7 +11,6 @@ import com.gamemoonchul.domain.model.dto.CommentSaveDto;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
-import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import jakarta.transaction.Transactional;
@@ -19,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,7 +27,12 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final CommentConverter commentConverter;
-    private final MemberRepository memberRepository;
+
+    public List<Comment> searchByPostId(Long postId, Member member) {
+        return commentRepository.searchByPostId(postId, Optional.ofNullable(member)
+                .map(Member::getId)
+                .orElse(null));
+    }
 
     /**
      * 테스트를 하기 위해서 실제 Post, Member가 객체맵핑 되있어야 합니다.

@@ -3,16 +3,25 @@ package com.gamemoonchul.infrastructure.repository.impl;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.Comment;
+import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.ifs.CommentRepositoryIfs;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static com.gamemoonchul.domain.entity.QComment.comment;
 import static com.gamemoonchul.domain.entity.QMember.member;
+import static com.gamemoonchul.domain.entity.QMemberBan.memberBan;
 import static com.gamemoonchul.domain.entity.QPost.post;
+import static com.gamemoonchul.domain.entity.QPostBan.postBan;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepositoryIfs {
@@ -42,5 +51,28 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
         }
 
         return result;
+    }
+
+    @Override
+    public List<Comment> searchByPostId(Long postId, Long memberId) {
+        BooleanBuilder isNotBanned = isNotBanned(memberId);
+                List<Comment> result = queryFactory.selectFrom(comment)
+                .where(isNotBanned)
+                .orderBy(comment.createdAt.desc()).fetch();
+
+
+        return result;
+    }
+
+    BooleanBuilder isNotBanned(Long memberId) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (memberId != null) {
+            builder.and(comment.member.id.notIn(
+                    JPAExpressions.select(memberBan.banMember.id)
+                            .from(memberBan)
+                            .where(memberBan.member.id.eq(memberId))
+            ));
+        }
+        return builder;
     }
 }
