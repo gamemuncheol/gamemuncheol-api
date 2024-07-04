@@ -39,8 +39,9 @@ public class CommentService {
                 .orElseThrow(
                         () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
                 );
-        post.addComment(comment);
+        post.commentCountUp();
         postRepository.save(post);
+
         return commentRepository.save(comment);
     }
 

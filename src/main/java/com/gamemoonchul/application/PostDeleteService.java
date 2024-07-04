@@ -2,6 +2,7 @@ package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
+import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.status.PostStatus;
@@ -10,6 +11,8 @@ import com.gamemoonchul.infrastructure.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +40,9 @@ public class PostDeleteService {
     }
 
     private void deleteComments(Post post) {
-        if (!post.getComments()
-                .isEmpty()) {
-            commentRepository.deleteAll(post.getComments());
+        List<Comment> comments = commentRepository.findAllByPost(post);
+        if (!comments.isEmpty()) {
+            commentRepository.deleteAll(comments);
         }
     }
 }

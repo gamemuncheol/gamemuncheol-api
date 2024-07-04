@@ -33,10 +33,6 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private List<VoteOptions> voteOptions;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", updatable = false)
-    private List<Comment> comments;
-
     @Column(name = "video_url")
     private String videoUrl;
 
@@ -68,19 +64,16 @@ public class Post extends BaseTimeEntity {
         this.commentCount--;
     }
 
+    public void commentCountUp() {
+        this.commentCount++;
+    }
+
+
     public void addVoteOptions(List<VoteOptions> voteOptions) {
         if (this.voteOptions == null) {
             this.voteOptions = new ArrayList<VoteOptions>();
         }
         this.voteOptions.addAll(voteOptions);
-    }
-
-    public void addComment(Comment comment) {
-        if (this.comments == null) {
-            this.comments = new ArrayList<Comment>();
-        }
-        this.comments.add(comment);
-        commentCount++;
     }
 
     public Double getMinVoteRatio() {
