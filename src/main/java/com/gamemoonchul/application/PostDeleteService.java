@@ -25,6 +25,8 @@ public class PostDeleteService {
                         }
                 );
 
+        deleteComments(post);
+
         if (member.getId()
                 .equals(post.getMember()
                         .getId())) {
@@ -32,5 +34,12 @@ public class PostDeleteService {
             return "Delete Complete";
         }
         throw new UnauthorizedException(PostStatus.UNAUTHORIZED_REQUEST);
+    }
+
+    private void deleteComments(Post post) {
+        if (!post.getComments()
+                .isEmpty()) {
+            commentRepository.deleteAll(post.getComments());
+        }
     }
 }

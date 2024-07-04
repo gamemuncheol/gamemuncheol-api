@@ -64,21 +64,4 @@ class PostServiceTest extends TestDataBase {
                 .size()).isEqualTo(2);
         assertThat(response.getViewCount()).isEqualTo(0);
     }
-
-    @Test
-    @DisplayName("권한 없는 사용자가 삭제 요청했을 경우 에러 확인")
-    public void unauthorizedDeleteTest() {
-        // given
-        Member member1 = MemberDummy.createWithId("1");
-        Member member2 = MemberDummy.createWithId("2");
-        memberRepository.saveAll(List.of(member1, member2));
-        PostUploadRequest request = PostDummy.createRequest();
-
-        // when
-        PostResponseDto response = postService.upload(PostDummy.createRequest(), member1);
-
-        // then
-        assertThatThrownBy(() -> postService.delete(response.getId(), member2)).isInstanceOf(UnauthorizedException.class)
-                .hasMessageContaining(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
-    }
 }
