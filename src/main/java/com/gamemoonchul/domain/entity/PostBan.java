@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post_ban",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "ban_post_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "ban_post_id"}),
+        indexes = {
+                @Index(name = "idx_post_ban_member_id", columnList = "member_id"),
+        }
+
 )
 public class PostBan {
     @Id
