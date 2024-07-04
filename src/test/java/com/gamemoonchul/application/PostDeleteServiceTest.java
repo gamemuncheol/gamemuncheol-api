@@ -8,16 +8,14 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.web.dto.request.CommentRequest;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
-import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +43,7 @@ class PostDeleteServiceTest extends TestDataBase {
         PostUploadRequest request = PostDummy.createRequest();
 
         // when
-        PostResponseDto response = postService.upload(PostDummy.createRequest(), member1);
+        PostDetailResponse response = postService.upload(PostDummy.createRequest(), member1);
 
         // then
         assertThatThrownBy(() -> postDeleteService.delete(response.getId(), member2)).isInstanceOf(UnauthorizedException.class)
@@ -58,7 +56,7 @@ class PostDeleteServiceTest extends TestDataBase {
     public void deletePostAndComment() {
         // given
         Member member = memberRepository.save(MemberDummy.create());
-        PostResponseDto response = postService.upload(PostDummy.createRequest(), member);
+        PostDetailResponse response = postService.upload(PostDummy.createRequest(), member);
         Post savedPost = postRepository.findById(response.getId())
                 .orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
         Comment comment = CommentDummy.create(savedPost, member);

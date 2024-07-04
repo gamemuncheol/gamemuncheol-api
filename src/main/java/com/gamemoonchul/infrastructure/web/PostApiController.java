@@ -5,7 +5,7 @@ import com.gamemoonchul.application.PostService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ public class PostApiController {
     private final PostDeleteService postDeleteService;
 
     @PostMapping
-    public PostResponseDto upload(
+    public PostDetailResponse upload(
             @Valid
             @RequestBody PostUploadRequest request,
             @MemberSession Member member
     ) {
-        PostResponseDto response = postService.upload(request, member);
+        PostDetailResponse response = postService.upload(request, member);
         return response;
     }
 

@@ -29,9 +29,7 @@ public class CommentService {
     private final CommentConverter commentConverter;
 
     public List<Comment> searchByPostId(Long postId, Member member) {
-        return commentRepository.searchByPostId(postId, Optional.ofNullable(member)
-                .map(Member::getId)
-                .orElse(null));
+        return commentRepository.searchByPostId(postId, member);
     }
 
     /**

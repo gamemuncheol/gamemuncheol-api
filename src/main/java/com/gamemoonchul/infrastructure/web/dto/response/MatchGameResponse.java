@@ -23,7 +23,7 @@ public class MatchGameResponse {
     private List<MatchUserResponse> matchUsers;
 
     public static MatchGameResponse toResponse(MatchGame matchGame) {
-        Properties properties = loadProperties(new Properties());
+        Properties properties = loadProperties();
         return MatchGameResponse.builder()
                 .gameId(matchGame.getGameId())
                 .gameCreation(matchGame.getGameCreation())
@@ -31,13 +31,13 @@ public class MatchGameResponse {
                 .gameMode(matchGame.getGameMode())
                 .matchUsers(matchGame.getMatchUsers()
                         .stream()
-                        .map(matchUser
-                                -> MatchUserResponse.toResponse(matchUser, properties))
+                        .map(MatchUserResponse::toResponse)
                         .toList())
                 .build();
     }
 
-    private static Properties loadProperties(Properties properties) {
+    public static Properties loadProperties() {
+        Properties properties = new Properties();
         try {
             InputStream inputStream = MatchUserResponse.class.getClassLoader()
                     .getResourceAsStream("lolchampion.properties");
@@ -59,22 +59,24 @@ public class MatchGameResponse {
         private String championThumbnail;
         private boolean win;
 
-        public static MatchUserResponse toResponse(MatchUser matchUser, Properties properties) {
-            String koChampName = getKoChampName(loadProperties(properties), matchUser);
+        public static MatchUserResponse toResponse(MatchUser matchUser) {
+            String koChampName = getKoChampName(loadProperties(), matchUser);
 
             return MatchUserResponse.builder()
                     .id(matchUser.getId())
                     .nickname(matchUser.getNickname())
                     .championName(koChampName)
-                    .championThumbnail(matchUser.getChampionThumbnail())
+                    .championThumbnail(getChampThumbnail(matchUser.getChampionName()))
                     .win(matchUser.isWin())
                     .build();
         }
 
+        public static String getChampThumbnail(String championName) {
+            return "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + championName + "_0.jpg";
+        }
+
         private static String getKoChampName(Properties properties, MatchUser matchUser) {
-            String engChampName = matchUser.getChampionThumbnail()
-                    .replace("https://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/", "")
-                    .replace(".png", "");
+            String engChampName = matchUser.getChampionName();
             String koChampName;
             try {
                 // 이후 properties를 사용하여 작업을 수행합니다.

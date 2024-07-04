@@ -5,8 +5,8 @@ import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
-import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class PostOpenApiController {
     private final PostOpenApiService postService;
+
+    @GetMapping
+    public PostDetailResponse getPostDetail(
+            @RequestParam(value = "id") Long id,
+            @MemberSession Member member
+    ) {
+        return postService.getPostDetails(id, member);
+    }
 
     @GetMapping("/page/new")
     public Pagination<PostMainPageResponse> getLatestPosts(
