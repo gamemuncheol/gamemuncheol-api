@@ -13,7 +13,7 @@ public class MatchUserConverter {
                 .puuid(participant.puuid())
                 .win(participant.win())
                 .nickname(getNickname(participant))
-                .championThumbnail(getChampionThumbnail(participant.championName()))
+                .championName(participant.championName())
                 .build();
         entity.setMatchGame(matchGame);
         return entity;
@@ -26,5 +26,4 @@ public class MatchUserConverter {
     private String getChampionThumbnail(String championName) {
         return "https://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/" + championName + ".png";
     }
-
 }
