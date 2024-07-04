@@ -19,7 +19,10 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "member", uniqueConstraints = {@UniqueConstraint(columnNames = "nickname")})
+@Table(name = "member", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "nickname"
+        ), @UniqueConstraint(columnNames = {"provider", "identifier"})
+})
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
