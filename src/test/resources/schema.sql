@@ -23,20 +23,20 @@ CREATE TABLE if not exists member
 CREATE TABLE if not exists match_game
 (
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
-    game_id       VARCHAR(255) unique,
-    game_creation VARCHAR(255),
+    game_id       VARCHAR(20) unique,
+    game_creation VARCHAR(100),
     game_duration BIGINT,
-    game_mode     VARCHAR(255),
+    game_mode     VARCHAR(100),
     unique (game_id)
 );
 
 CREATE TABLE if not exists match_user
 (
     id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-    game_id            VARCHAR(255) not null,
-    puuid              VARCHAR(255),
-    nickname           VARCHAR(255),
-    champion_thumbnail VARCHAR(255),
+    game_id            VARCHAR(20) not null,
+    puuid              VARCHAR(100),
+    nickname           VARCHAR(50),
+    champion_name      VARCHAR(30),
     win                BOOLEAN
 );
 
