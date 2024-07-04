@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Builder
@@ -45,11 +46,9 @@ public class PostDetailResponse {
         post.getVoteOptions()
                 .forEach(vo -> {
                     voteRatioMap.put(vo.getId(), 0.0);
-                    vo.getVotes()
-                            .forEach(v -> {
-                                Double cnt = voteRatioMap.get(v.getId());
-                                cnt++;
-                                voteRatioMap.put(v.getId(), cnt);
+                    Optional.ofNullable(vo.getVotes())
+                            .ifPresent(votes -> {
+                                votes.forEach(v -> voteRatioMap.put(v.getId(), 0.0));
                             });
                 });
 
