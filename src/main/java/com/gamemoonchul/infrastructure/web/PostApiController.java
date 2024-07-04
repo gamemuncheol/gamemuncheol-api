@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.web;
 
+import com.gamemoonchul.application.PostDeleteService;
 import com.gamemoonchul.application.PostService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PostApiController {
     private final PostService postService;
+    private final PostDeleteService postDeleteService;
 
     @PostMapping
     public PostResponseDto upload(
@@ -30,6 +32,6 @@ public class PostApiController {
     public String delete(
             @MemberSession Member member, @PathVariable("id") Long id
     ) {
-        return postService.delete(id, member);
+        return postDeleteService.delete(id, member);
     }
 }
