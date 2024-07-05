@@ -2,11 +2,11 @@ jwt:
   secret: ${JWT_SECRET}
 baseUrl: ${BASE_URL}
 
-#server:
-#  ssl:
-#    key-store: classpath:localhost.p12
-#    key-store-type: PKCS12
-#    key-store-password: df159357
+server:
+  ssl:
+    key-store: classpath:localhost.p12
+    key-store-type: PKCS12
+    key-store-password: df159357
 
 cloud:
   aws:
@@ -84,11 +84,11 @@ apple:
   teamId: ${APPLE_TEAM_ID}
   privateKey: ${APPLE_PRIVATE_KEY}
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "prometheus"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
 
 logging:
   level:

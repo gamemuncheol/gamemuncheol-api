@@ -1,6 +1,5 @@
 package com.gamemoonchul.application;
 
-import com.gamemoonchul.application.converter.CommentConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
@@ -15,6 +14,10 @@ import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.StaleObjectStateException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +30,6 @@ import java.util.List;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final CommentConverter commentConverter;
 
     public List<Comment> searchByPostId(Long postId, Member member) {
         return commentRepository.searchByPostId(postId, member);
@@ -40,8 +42,12 @@ public class CommentService {
         validatePostNotReplied(request);
         Post post = postRepository.findByIdForUpdate(request.postId())
                 .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
-        Comment comment = commentConverter.requestToEntity(member, request);
-
+        Comment comment = Comment.builder()
+                .parentId(request.parentId())
+                .member(member)
+                .post(post)
+                .content(request.content())
+                .build();
 
         post.commentCountUp();
         postRepository.save(post);
@@ -68,7 +74,9 @@ public class CommentService {
 
 
     public Comment fix(CommentFixRequest request, Member authMember) {
-        Comment fixedComment = commentConverter.requestToEntity(request);
+        Comment fixedComment = commentRepository.findById(request.commentId())
+                .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
+        fixedComment.setContent(request.contents());
         // 글 작성자
         validateSameMemberId(fixedComment.getMember(), authMember);
         return commentRepository.save(fixedComment);
