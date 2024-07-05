@@ -14,10 +14,6 @@ import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.StaleObjectStateException;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
