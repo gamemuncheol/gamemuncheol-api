@@ -46,15 +46,16 @@ public class CommentService {
     @Transactional
     public Comment save(CommentSaveDto request, Member member) {
         validatePostNotReplied(request);
-        Comment comment = commentConverter.requestToEntity(member, request);
         Post post = postRepository.findByIdForUpdate(request.postId())
                 .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
+        Comment comment = commentConverter.requestToEntity(member, request);
+
         log.info("[CUSTOM LOG] PESSIMISTIC_WRITE 락 획득: commentCount = {}", post.getCommentCount());
 
         long count = post.getCommentCount();
         count++;
         post.setCommentCount(count);
-        postRepository.saveAndFlush(post);
+        postRepository.save(post);
         log.info("[CUSTOM LOG] post 저장 : commentCount = {}", post.getCommentCount());
 
         return commentRepository.save(comment);
