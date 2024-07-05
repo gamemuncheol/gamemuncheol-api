@@ -22,6 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
@@ -35,28 +36,15 @@ public class CommentService {
     /**
      * 테스트를 하기 위해서 실제 Post, Member가 객체맵핑 되있어야 합니다.
      */
-//    @Retryable(
-//            retryFor = {
-//                    ObjectOptimisticLockingFailureException.class,
-//                    StaleObjectStateException.class,
-//                    ObjectOptimisticLockingFailureException.class},
-//            maxAttempts = 1000, // 최대 시도 횟수
-//            backoff = @Backoff(1000) // 재시도 간의 대기 시간 (1000ms)
-//    )
-    @Transactional
     public Comment save(CommentSaveDto request, Member member) {
         validatePostNotReplied(request);
         Post post = postRepository.findByIdForUpdate(request.postId())
                 .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
         Comment comment = commentConverter.requestToEntity(member, request);
 
-        log.info("[CUSTOM LOG] PESSIMISTIC_WRITE 락 획득: commentCount = {}", post.getCommentCount());
 
-        long count = post.getCommentCount();
-        count++;
-        post.setCommentCount(count);
+        post.commentCountUp();
         postRepository.save(post);
-        log.info("[CUSTOM LOG] post 저장 : commentCount = {}", post.getCommentCount());
 
         return commentRepository.save(comment);
     }
@@ -78,10 +66,6 @@ public class CommentService {
         }
     }
 
-    public Comment searchComment(Long commentId) {
-        Comment result = commentRepository.searchByIdOrThrow(commentId);
-        return result;
-    }
 
     public Comment fix(CommentFixRequest request, Member authMember) {
         Comment fixedComment = commentConverter.requestToEntity(request);
@@ -100,6 +84,17 @@ public class CommentService {
         }
         commentCountDown(savedComment.getPost());
         commentRepository.delete(savedComment);
+    }
+
+    /**
+     * 테스트 용이성을 위해서 분리
+     */
+    public Comment searchComment(Long commentId) {
+        Comment result = commentRepository.findByIdForUpdate(commentId)
+                .orElseThrow(() -> {
+                    throw new NotFoundException(PostStatus.COMMENT_NOT_FOUND);
+                });
+        return result;
     }
 
     private void commentCountDown(Post post) {

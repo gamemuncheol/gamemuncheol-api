@@ -52,7 +52,6 @@ public class Post extends BaseTimeEntity {
     @Column(name = "view_count")
     private Long viewCount = 0L;
 
-    //    @Version
     @Builder.Default
     @Column(name = "comment_count")
     private Long commentCount = 0L;
@@ -66,7 +65,7 @@ public class Post extends BaseTimeEntity {
     private Double voteRatio = 0.0;
 
     public void commentCountDown() {
-        this.commentCount++;
+        this.commentCount--;
     }
 
     public void commentCountUp() {
