@@ -13,15 +13,15 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
@@ -35,15 +35,27 @@ public class CommentService {
     /**
      * 테스트를 하기 위해서 실제 Post, Member가 객체맵핑 되있어야 합니다.
      */
+//    @Retryable(
+//            retryFor = {
+//                    ObjectOptimisticLockingFailureException.class,
+//                    StaleObjectStateException.class,
+//                    ObjectOptimisticLockingFailureException.class},
+//            maxAttempts = 1000, // 최대 시도 횟수
+//            backoff = @Backoff(1000) // 재시도 간의 대기 시간 (1000ms)
+//    )
+    @Transactional
     public Comment save(CommentSaveDto request, Member member) {
         validatePostNotReplied(request);
         Comment comment = commentConverter.requestToEntity(member, request);
-        Post post = postRepository.findById(request.postId())
-                .orElseThrow(
-                        () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
-                );
-        post.commentCountUp();
-        postRepository.save(post);
+        Post post = postRepository.findByIdForUpdate(request.postId())
+                .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
+        log.info("[CUSTOM LOG] PESSIMISTIC_WRITE 락 획득: commentCount = {}", post.getCommentCount());
+
+        long count = post.getCommentCount();
+        count++;
+        post.setCommentCount(count);
+        postRepository.saveAndFlush(post);
+        log.info("[CUSTOM LOG] post 저장 : commentCount = {}", post.getCommentCount());
 
         return commentRepository.save(comment);
     }
@@ -54,9 +66,7 @@ public class CommentService {
     private void validatePostNotReplied(CommentSaveDto request) {
         if (request.parentId() != null) {
             Comment parentComment = commentRepository.findById(request.parentId())
-                    .orElseThrow(
-                            () -> new BadRequestException(PostStatus.COMMENT_NOT_FOUND)
-                    );
+                    .orElseThrow(() -> new BadRequestException(PostStatus.COMMENT_NOT_FOUND));
             if (parentComment.getParentId() != null) {
                 throw new BadRequestException(PostStatus.COMMENT_CANT_HAVE_GRANDMOTHER);
             } else if (!parentComment.getPost()

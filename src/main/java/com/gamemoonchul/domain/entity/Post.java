@@ -5,9 +5,11 @@ import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.repository.Lock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Getter
@@ -49,9 +51,12 @@ public class Post extends BaseTimeEntity {
     @Builder.Default
     @Column(name = "view_count")
     private Long viewCount = 0L;
+
+    //    @Version
     @Builder.Default
     @Column(name = "comment_count")
     private Long commentCount = 0L;
+
     @Builder.Default
     @Column(name = "vote_count")
     private Long voteCount = 0L;
@@ -61,7 +66,7 @@ public class Post extends BaseTimeEntity {
     private Double voteRatio = 0.0;
 
     public void commentCountDown() {
-        this.commentCount--;
+        this.commentCount++;
     }
 
     public void commentCountUp() {
@@ -88,5 +93,9 @@ public class Post extends BaseTimeEntity {
                 .getVotes()
                 .size() / (double) totalVoteCount * 100;
         return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
+    }
+
+    public void setCommentCount(Long commentCount) {
+        this.commentCount = commentCount;
     }
 }
