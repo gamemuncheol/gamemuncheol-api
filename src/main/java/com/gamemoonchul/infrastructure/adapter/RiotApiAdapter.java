@@ -2,6 +2,7 @@ package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.common.exception.NotFoundException;
+import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +24,15 @@ public class RiotApiAdapter implements RiotApiPort {
     }
 
     // 유저 검색 API
-//    public AccountRecord searchUser(String gameName, String tagLine) {
-//        AccountRecord result = restTemplate.getForObject(
-//                "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + gameName + "/" + tagLine + "?api_key=" + apiKey,
-//                AccountRecord.class
-//        );
-//
-//        return result;
-//    }
+    @Deprecated
+    public AccountRecord searchUser(String gameName, String tagLine) {
+        AccountRecord result = restTemplate.getForObject(
+                "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + gameName + "/" + tagLine + "?api_key=" + apiKey,
+                AccountRecord.class
+        );
+
+        return result;
+    }
 
     /**
      * User의 게임 목록을 가져옴

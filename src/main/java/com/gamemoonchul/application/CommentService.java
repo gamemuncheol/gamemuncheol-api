@@ -70,12 +70,12 @@ public class CommentService {
 
 
     public Comment fix(CommentFixRequest request, Member authMember) {
-        Comment fixedComment = commentRepository.findById(request.commentId())
+        Comment modifiedComment = commentRepository.findById(request.commentId())
                 .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
-        fixedComment.setContent(request.contents());
+        modifiedComment.setContent(request.contents());
         // 글 작성자
-        validateSameMemberId(fixedComment.getMember(), authMember);
-        return commentRepository.save(fixedComment);
+        validateSameMemberId(modifiedComment.getMember(), authMember);
+        return commentRepository.save(modifiedComment);
     }
 
     public void delete(Long commentId, Member authMember) {
@@ -94,11 +94,9 @@ public class CommentService {
      * 테스트 용이성을 위해서 분리
      */
     public Comment searchComment(Long commentId) {
-        Comment result = commentRepository.findByIdForUpdate(commentId)
-                .orElseThrow(() -> {
-                    throw new NotFoundException(PostStatus.COMMENT_NOT_FOUND);
-                });
-        return result;
+        Comment comment = commentRepository.findByIdForUpdate(commentId)
+                .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
+        return comment;
     }
 
     private void commentCountDown(Post post) {

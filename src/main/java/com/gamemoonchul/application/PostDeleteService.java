@@ -23,10 +23,7 @@ public class PostDeleteService {
     @Transactional
     public String delete(Long postId, Member member) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> {
-                            return new NotFoundException(PostStatus.POST_NOT_FOUND);
-                        }
-                );
+                .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
 
         deleteComments(post);
 

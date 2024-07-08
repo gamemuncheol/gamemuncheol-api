@@ -14,8 +14,6 @@ public enum SearchStatus implements ApiStatusIfs {
     FAILED_PARSE_JSON(3503, "JSON 파싱에 실패하였습니다."),
     SEARCH_RESULT_NOT_FOUND(3404, "검색 결과를 찾을 수 없습니다."),
     RIOT_API_STATUS_400(3405, "Riot API 응답이 없습니다."),
-
-
     ;
 
     private final Integer statusCode;
