@@ -5,7 +5,7 @@ public class MatchUserDummy {
         return MatchUser.builder()
                 .puuid(puuid)
                 .nickname(puuid)
-                .championThumbnail(puuid)
+                .championName(puuid)
                 .win(true)
                 .build();
     }

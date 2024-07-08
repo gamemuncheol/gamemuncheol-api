@@ -61,6 +61,7 @@ public class MemberConverter {
 
     public static MemberResponseDto toResponseDto(Member entity) {
         return MemberResponseDto.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .nickname(entity.getNickname())
                 .email(entity.getEmail())

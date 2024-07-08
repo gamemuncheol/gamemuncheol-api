@@ -20,13 +20,14 @@ public class MatchUser {
      * summonerId + riotIdTagline
      */
     private String nickname;
-    @Column(name = "champion_thumbnail")
-    private String championThumbnail;
+    @Column(name = "champion_name")
+    private String championName;
     private boolean win;
 
     public void setMatchGame(MatchGame matchGame) {
         if (this.matchGame != null) {
-            this.matchGame.getMatchUsers().remove(this);
+            this.matchGame.getMatchUsers()
+                    .remove(this);
         }
         this.matchGame = matchGame;
         matchGame.addMatchUser(this);

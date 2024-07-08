@@ -44,7 +44,7 @@ class CommentServiceTest extends TestDataBase {
     }
 
     @Test
-    @DisplayName("코멘트 저장이 잘 되는지, post의 comment 개수가 정상적으로 업데이트 되는지 테스트")
+    @DisplayName("코트 저장이 잘 되는지, post의 comment 개수가 정상적으로 업데이트 되는지 테스트")
     void saveTest() {
         // given
         CommentSaveDto request = CommentDummy.createSaveDto(post.getId());

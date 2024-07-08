@@ -9,13 +9,14 @@ import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
-import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -27,13 +28,14 @@ public class PostService {
     private final MatchUserService matchUserService;
     private final VoteOptionRepository voteOptionRepository;
 
-    public PostResponseDto upload(PostUploadRequest request, Member member) {
+
+    public PostDetailResponse upload(PostUploadRequest request, Member member) {
         Post entity = PostConverter.requestToEntity(request, member);
         Post savedPost = postRepository.save(entity);
 
         saveVoteOptions(request.matchUserIds(), savedPost);
 
-        return PostResponseDto.entityToResponse(savedPost);
+        return PostDetailResponse.toResponse(savedPost, Collections.emptyList());
     }
 
     private void saveVoteOptions(List<Long> matchUserIds, Post post) {
@@ -50,23 +52,5 @@ public class PostService {
                 .toList();
         List<VoteOptions> savedVoteOptions = voteOptionRepository.saveAll(voteOptions);
         post.addVoteOptions(voteOptions);
-    }
-
-    @Transactional
-    public String delete(Long postId, Member member) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> {
-                            log.error(PostStatus.POST_NOT_FOUND.getMessage());
-                            return new NotFoundException(PostStatus.POST_NOT_FOUND);
-                        }
-                );
-        if (member.getId()
-                .equals(post.getMember()
-                        .getId())) {
-            postRepository.delete(post);
-            return "Delete Complete";
-        }
-        log.error(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
-        throw new UnauthorizedException(PostStatus.UNAUTHORIZED_REQUEST);
     }
 }

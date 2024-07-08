@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.gamemoonchul.domain.entity.QComment.comment;
 import static com.gamemoonchul.domain.entity.QMemberBan.memberBan;
 import static com.gamemoonchul.domain.entity.QPost.post;
 import static com.gamemoonchul.domain.entity.QPostBan.postBan;
@@ -61,6 +62,15 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
                 .fetch();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    public List<Post> searchByPostIdWithComment(Long postId) {
+        JPAQuery<Post> query = queryFactory.selectFrom(post)
+                .where(post.id.eq(postId))
+                .leftJoin(post, comment.post)
+                .on(post.id.eq(comment.post.id))
+                .fetchJoin();
+        return query.fetch();
     }
 
     @Override

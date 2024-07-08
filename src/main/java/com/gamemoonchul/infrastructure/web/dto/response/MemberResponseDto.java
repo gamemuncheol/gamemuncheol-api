@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class MemberResponseDto {
+    private Long id;
     private String name;
     private String nickname;
     private String email;

@@ -14,15 +14,17 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 public class RiotApiAdapter implements RiotApiPort {
+    private final RestTemplate restTemplate;
     @Value("${lol.api.key}")
     private String apiKey;
-    private final RestTemplate restTemplate;
 
     @Autowired
     RiotApiAdapter(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
+    // 유저 검색 API
+    @Deprecated
     public AccountRecord searchUser(String gameName, String tagLine) {
         AccountRecord result = restTemplate.getForObject(
                 "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + gameName + "/" + tagLine + "?api_key=" + apiKey,
@@ -47,7 +49,8 @@ public class RiotApiAdapter implements RiotApiPort {
             );
             return result;
         } catch (Exception e) {
-            throw new NotFoundException(SearchStatus.SEARCH_RESULT_NOT_FOUND);
+            log.error("Riot API 응답이 없습니다. \n" + e.getMessage());
+            throw new NotFoundException(SearchStatus.RIOT_API_STATUS_400);
         }
     }
 }
