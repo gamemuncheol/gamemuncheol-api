@@ -9,8 +9,8 @@ import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
-import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
+import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,5 +68,10 @@ public class PostService {
         }
         log.error(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
         throw new UnauthorizedException(PostStatus.UNAUTHORIZED_REQUEST);
+    }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
     }
 }
