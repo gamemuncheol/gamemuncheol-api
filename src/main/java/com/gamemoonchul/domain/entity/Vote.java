@@ -21,10 +21,20 @@ public class Vote extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_options_id")
-    private VoteOptions voteOptions;
+    private VoteOptions voteOption;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    
+
+    public void updateVoteOption(VoteOptions voteOption) {
+        this.voteOption.deleteVote(this);
+        voteOption.addVote(this);
+        this.voteOption = voteOption;
+    }
+
 }
