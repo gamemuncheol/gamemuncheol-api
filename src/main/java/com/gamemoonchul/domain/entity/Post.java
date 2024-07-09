@@ -96,4 +96,8 @@ public class Post extends BaseTimeEntity {
                 .size() / (double) totalVoteCount * 100;
         return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
     }
+
+    public void updateVoteRatio(double voteRatio) {
+        this.voteRatio = voteRatio;
+    }
 }
