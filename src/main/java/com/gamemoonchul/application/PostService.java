@@ -10,7 +10,6 @@ import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
-import com.gamemoonchul.infrastructure.web.dto.response.PostResponseDto;
 import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
