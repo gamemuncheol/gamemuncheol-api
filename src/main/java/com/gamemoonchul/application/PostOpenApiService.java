@@ -4,9 +4,11 @@ import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.domain.entity.PostView;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
+import com.gamemoonchul.infrastructure.repository.PostViewRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
@@ -28,10 +30,15 @@ import java.util.stream.Collectors;
 public class PostOpenApiService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final PostViewRepository postViewRepository;
 
     public Post getPostDetails(Long postId, Member member) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
+        post.viewCountUp();
+        PostView postView = PostView.builder()
+                .post(post)
+                .build();
+        postViewRepository.save(postView);
 
         return post;
     }

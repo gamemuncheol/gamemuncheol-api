@@ -76,6 +76,9 @@ public class Post extends BaseTimeEntity {
         this.commentCount++;
     }
 
+    public void viewCountUp() {
+        this.viewCount++;
+    }
 
     public void addVoteOptions(List<VoteOptions> voteOptions) {
         if (this.voteOptions == null) {
