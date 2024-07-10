@@ -109,9 +109,7 @@ CREATE TABLE if not exists post_view
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     post_id    BIGINT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_post_view_created_at_post_id (created_at, post_id)
 );
-
-drop table post_view;
