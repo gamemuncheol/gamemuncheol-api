@@ -8,10 +8,7 @@ import com.gamemoonchul.domain.entity.PostView;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.repository.PostViewRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
-import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
-import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,15 +27,12 @@ import java.util.stream.Collectors;
 public class PostOpenApiService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final PostViewRepository postViewRepository;
+    private final PostViewService postViewService;
 
     public Post getPostDetails(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
         post.viewCountUp();
-        PostView postView = PostView.builder()
-                .post(post)
-                .build();
-        postViewRepository.save(postView);
+        postViewService.save(post);
 
         return post;
     }
