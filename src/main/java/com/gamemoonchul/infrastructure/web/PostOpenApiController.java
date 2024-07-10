@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.web;
 
+import com.gamemoonchul.application.CommentService;
 import com.gamemoonchul.application.PostOpenApiService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Comment;
@@ -22,14 +23,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostOpenApiController {
     private final PostOpenApiService postService;
+    private final CommentService commentService;
 
     @GetMapping
     public PostDetailResponse getPostDetail(
             @RequestParam(value = "id") Long id,
             @MemberSession Member member
     ) {
-        Post post = postService.getPostDetails(id, member);
-        List<CommentResponse> comments = postService.getComments(id, member).stream()
+        Post post = postService.getPostDetails(id);
+        List<CommentResponse> comments = commentService.searchByPostId(post.getId(), member).stream()
                 .map(CommentResponse::entityToResponse)
                 .toList();
         return PostDetailResponse.toResponse(post, comments);

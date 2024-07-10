@@ -26,22 +26,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostOpenApiService {
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
     private final PostViewService postViewService;
 
-    public Post getPostDetails(Long postId, Member member) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
+    public Post getPostDetails(Long postId) {
+        Post post = postRepository.searchByPostId(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
         post.viewCountUp();
         postViewService.save(post);
 
         return post;
-    }
-
-    public List<Comment> getComments(Long postId, Member member) {
-        List<Comment> comments = commentRepository.searchByPostId(postId, member)
-                .stream()
-                .toList();
-        return comments;
     }
 
     public Pagination<PostMainPageResponse> getLatestPosts(Member member, int page, int size) {
