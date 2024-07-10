@@ -1,14 +1,14 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.domain.entity.PostView;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
-import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
-import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,20 +27,21 @@ import java.util.stream.Collectors;
 public class PostOpenApiService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final PostViewService postViewService;
 
-    public PostDetailResponse getPostDetails(Long postId, Member member) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
-        PostDetailResponse response = PostDetailResponse.toResponse(post, getComments(postId, member));
-        return response;
+    public Post getPostDetails(Long postId, Member member) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
+        post.viewCountUp();
+        postViewService.save(post);
+
+        return post;
     }
 
-    private List<CommentResponse> getComments(Long postId, Member member) {
-        List<CommentResponse> response = commentRepository.searchByPostId(postId, member)
+    public List<Comment> getComments(Long postId, Member member) {
+        List<Comment> comments = commentRepository.searchByPostId(postId, member)
                 .stream()
-                .map(CommentResponse::entityToResponse)
                 .toList();
-        return response;
+        return comments;
     }
 
     public Pagination<PostMainPageResponse> getLatestPosts(Member member, int page, int size) {

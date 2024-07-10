@@ -2,15 +2,20 @@ package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.PostOpenApiService;
 import com.gamemoonchul.common.annotation.MemberSession;
+import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
+import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @RequestMapping("/open-api/posts")
 @RestControllerWithEnvelopPattern
@@ -23,7 +28,11 @@ public class PostOpenApiController {
             @RequestParam(value = "id") Long id,
             @MemberSession Member member
     ) {
-        return postService.getPostDetails(id, member);
+        Post post = postService.getPostDetails(id, member);
+        List<CommentResponse> comments = postService.getComments(id, member).stream()
+                .map(CommentResponse::entityToResponse)
+                .toList();
+        return PostDetailResponse.toResponse(post, comments);
     }
 
     @GetMapping("/page/new")

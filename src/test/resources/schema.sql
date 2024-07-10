@@ -1,4 +1,5 @@
 CREATE DATABASE gamemuncheol;
+USE gamemuncheol;
 
 CREATE TABLE if not exists member
 (
@@ -32,12 +33,12 @@ CREATE TABLE if not exists match_game
 
 CREATE TABLE if not exists match_user
 (
-    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-    game_id            VARCHAR(20) not null,
-    puuid              VARCHAR(100),
-    nickname           VARCHAR(50),
-    champion_name      VARCHAR(30),
-    win                BOOLEAN
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    game_id       VARCHAR(20) not null,
+    puuid         VARCHAR(100),
+    nickname      VARCHAR(50),
+    champion_name VARCHAR(30),
+    win           BOOLEAN
 );
 
 CREATE TABLE if not exists post
@@ -95,11 +96,20 @@ CREATE TABLE if not exists member_ban # 사용자 차단
     INDEX idx_member_ban_member_id (member_id)
 );
 
-CREATE TABLE post_ban
+CREATE TABLE if not exists post_ban
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id   BIGINT,
     ban_post_id BIGINT,
     UNIQUE (member_id, ban_post_id), # 중복 차단 방지
     INDEX idx_post_ban_member_id (member_id)
+);
+
+CREATE TABLE if not exists post_view
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    post_id    BIGINT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_post_view_created_at_post_id (created_at, post_id)
 );

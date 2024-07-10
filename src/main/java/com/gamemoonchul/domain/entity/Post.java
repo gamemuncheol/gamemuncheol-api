@@ -35,6 +35,10 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private List<VoteOptions> voteOptions;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private List<PostView> postViews;
+
     @Column(name = "video_url")
     private String videoUrl;
 
@@ -72,6 +76,9 @@ public class Post extends BaseTimeEntity {
         this.commentCount++;
     }
 
+    public void viewCountUp() {
+        this.viewCount++;
+    }
 
     public void addVoteOptions(List<VoteOptions> voteOptions) {
         if (this.voteOptions == null) {
