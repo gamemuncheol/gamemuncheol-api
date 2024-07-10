@@ -13,11 +13,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.gamemoonchul.domain.entity.QComment.comment;
+import static com.gamemoonchul.domain.entity.QMember.member;
 import static com.gamemoonchul.domain.entity.QMemberBan.memberBan;
 import static com.gamemoonchul.domain.entity.QPost.post;
 import static com.gamemoonchul.domain.entity.QPostBan.postBan;
+import static com.gamemoonchul.domain.entity.QVote.vote;
+import static com.gamemoonchul.domain.entity.QVoteOptions.voteOptions;
+import static com.gamemoonchul.domain.entity.riot.QMatchUser.matchUser;
 
 @Repository
 /*
@@ -28,6 +33,16 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
 
     public PostRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Optional<Post> searchByPostId(Long postId) {
+        Optional<Post> result = Optional.ofNullable(queryFactory.selectFrom(post)
+                .join(post.member, member).fetchJoin()
+                .join(post.voteOptions, voteOptions).fetchJoin()
+                .join(voteOptions.matchUser, matchUser).fetchJoin()
+                .where(post.id.eq(postId)).fetchOne());
+        return result;
     }
 
     @Override

@@ -54,9 +54,10 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
     }
 
     @Override
-    public List<Comment> searchByPostId(Long postId, Member member) {
-        BooleanBuilder isNotBanned = isNotBanned(member);
+    public List<Comment> searchByPostId(Long postId, Member requester) {
+        BooleanBuilder isNotBanned = isNotBanned(requester);
         List<Comment> result = queryFactory.selectFrom(comment)
+                .join(comment.member, member).fetchJoin()
                 .where(isNotBanned, comment.post.id.eq(postId))
                 .orderBy(comment.createdAt.desc())
                 .fetch();
