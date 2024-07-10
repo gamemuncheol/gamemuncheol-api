@@ -35,6 +35,10 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private List<VoteOptions> voteOptions;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private List<PostView> postViews;
+
     @Column(name = "video_url")
     private String videoUrl;
 
