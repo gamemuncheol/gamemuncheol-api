@@ -4,6 +4,7 @@ import com.gamemoonchul.domain.entity.riot.MatchUser;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,5 +28,13 @@ public class VoteOptions {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_options_id")
-    private List<Vote> votes;
+    private List<Vote> votes = new ArrayList<>();
+
+    public void addVote(Vote vote) {
+        this.votes.add(vote);
+    }
+
+    public void deleteVote(Vote vote) {
+        this.votes.remove(vote);
+    }
 }
