@@ -71,6 +71,22 @@ public class MatchGameResponse {
                     .build();
         }
 
+        /**
+         * @param matchUser "VoteOption"의 "MatchUser"
+         * @param voId      "VoteOption의 ID"
+         */
+        public static MatchUserResponse toResponseVoId(MatchUser matchUser, Long voId) {
+            String koChampName = getKoChampName(loadProperties(), matchUser);
+
+            return MatchUserResponse.builder()
+                    .id(voId)
+                    .nickname(matchUser.getNickname())
+                    .championName(koChampName)
+                    .championThumbnail(getChampThumbnail(matchUser.getChampionName()))
+                    .win(matchUser.isWin())
+                    .build();
+        }
+
         public static String getChampThumbnail(String championName) {
             return "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + championName + "_0.jpg";
         }

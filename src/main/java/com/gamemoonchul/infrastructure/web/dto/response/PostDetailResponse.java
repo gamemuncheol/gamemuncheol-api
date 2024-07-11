@@ -69,7 +69,7 @@ public class PostDetailResponse {
                 .stream()
                 .map(vo -> {
                     Double voteRatio = voteRatioMap.get(vo.getId());
-                    MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponse(vo.getMatchUser());
+                    MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponseVoId(vo.getMatchUser(), vo.getId());
                     return new VoteRatioResponse(matchUserResponse, voteRatio);
                 })
                 .toList();
