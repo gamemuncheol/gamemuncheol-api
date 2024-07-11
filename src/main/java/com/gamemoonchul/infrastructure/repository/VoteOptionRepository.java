@@ -1,14 +1,14 @@
 package com.gamemoonchul.infrastructure.repository;
 
-import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.VoteOptions;
 import com.gamemoonchul.infrastructure.repository.ifs.VoteOptionRepositoryIfs;
-import com.gamemoonchul.infrastructure.repository.impl.VoteOptionRepositoryImpl;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface VoteOptionRepository extends JpaRepository<VoteOptions, Long>, VoteOptionRepositoryIfs {
+
+    Optional<VoteOptions> findByIdAndPostId(Long id, Long postId);
 }
 
 

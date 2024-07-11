@@ -7,7 +7,9 @@ import com.gamemoonchul.infrastructure.repository.PostBanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +27,4 @@ public class PostBanService {
     public List<PostBan> bannedPost(Long id) {
         return postBanRepository.searchByMemberId(id);
     }
-
 }

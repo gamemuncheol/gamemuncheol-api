@@ -5,11 +5,9 @@ import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.repository.Lock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Getter
@@ -31,13 +29,14 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VoteOptions> voteOptions;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostView> postViews;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     @Column(name = "video_url")
     private String videoUrl;
@@ -99,6 +98,10 @@ public class Post extends BaseTimeEntity {
                 .getVotes()
                 .size() / (double) totalVoteCount * 100;
         return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
+    }
+
+    public void updateVoteRatio(double voteRatio) {
+        this.voteRatio = voteRatio;
     }
 
     public void setCommentCount(Long commentCount) {

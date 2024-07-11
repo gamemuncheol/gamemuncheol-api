@@ -25,8 +25,6 @@ public class PostDeleteService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
 
-        deleteComments(post);
-
         if (member.getId()
                 .equals(post.getMember()
                         .getId())) {
@@ -34,12 +32,5 @@ public class PostDeleteService {
             return "Delete Complete";
         }
         throw new UnauthorizedException(PostStatus.UNAUTHORIZED_REQUEST);
-    }
-
-    private void deleteComments(Post post) {
-        List<Comment> comments = commentRepository.findAllByPost(post);
-        if (!comments.isEmpty()) {
-            commentRepository.deleteAll(comments);
-        }
     }
 }

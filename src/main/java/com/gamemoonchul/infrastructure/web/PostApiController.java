@@ -7,7 +7,9 @@ import com.gamemoonchul.application.PostService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
+
 import com.gamemoonchul.domain.entity.PostBan;
+
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
