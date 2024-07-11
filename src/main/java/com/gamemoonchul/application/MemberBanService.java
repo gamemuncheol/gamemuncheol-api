@@ -30,6 +30,11 @@ public class MemberBanService {
                         .build()));
     }
 
+    public List<MemberBan> bannedMembers(Long id) {
+        List<MemberBan> bannedMember = memberBanRepository.searchByMemberId(id);
+        return bannedMember;
+    }
+
     public void deleteBan(Member member, Long banMemberId) {
         Member banMember = getBanMember(banMemberId);
 

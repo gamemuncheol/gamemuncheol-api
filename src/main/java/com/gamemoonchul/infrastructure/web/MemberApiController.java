@@ -1,13 +1,17 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.MemberBanService;
+import com.gamemoonchul.application.member.MemberConverter;
 import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.entity.MemberBan;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestControllerWithEnvelopPattern
 @RequestMapping("/api/members")
@@ -25,12 +29,22 @@ public class MemberApiController {
     }
 
 
+    @GetMapping("/ban")
+    public List<MemberResponseDto> ban(
+            @MemberSession Member member
+    ) {
+        return memberBanService.bannedMembers(member.getId()).stream()
+                .map(MemberBan::getBanMember)
+                .map(MemberConverter::toResponseDto).toList();
+    }
+
     @GetMapping("/me")
     public MemberResponseDto me(
             @MemberSession Member member
     ) {
         return memberService.me(member);
     }
+
 
     @DeleteMapping
     public void delete(
