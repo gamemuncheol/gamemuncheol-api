@@ -74,9 +74,4 @@ public class PostService {
         log.error(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
         throw new UnauthorizedException(PostStatus.UNAUTHORIZED_REQUEST);
     }
-
-    public Post findById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
-    }
 }
