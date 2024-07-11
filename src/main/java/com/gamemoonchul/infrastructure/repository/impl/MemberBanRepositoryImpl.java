@@ -1,6 +1,7 @@
 package com.gamemoonchul.infrastructure.repository.impl;
 
 import com.gamemoonchul.domain.entity.MemberBan;
+import com.gamemoonchul.domain.entity.QMember;
 import com.gamemoonchul.infrastructure.repository.ifs.MemberBanRepositoryIfs;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -21,10 +22,13 @@ public class MemberBanRepositoryImpl implements MemberBanRepositoryIfs {
 
     @Override
     public List<MemberBan> searchByMemberId(Long memberId) {
+        QMember qMember = QMember.member;
+        QMember qBanMember = new QMember("banMember");
+
         return queryFactory.selectFrom(memberBan)
-                .join(memberBan.member, member).fetchJoin()
-                .join(memberBan.banMember, member).fetchJoin()
-                .where(member.id.eq(memberId))
+                .join(memberBan.member, qMember).fetchJoin()
+                .join(memberBan.banMember, qBanMember).fetchJoin()
+                .where(memberBan.member.id.eq(memberId))
                 .fetch();
     }
 }
