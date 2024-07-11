@@ -5,6 +5,7 @@ import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
+import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.domain.status.JwtStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -85,7 +86,7 @@ public class TokenHelper {
         Map<String, String> claims = Map.of(
                 "email", tokenInfo.email(),
                 "id", tokenInfo.id().toString(),
-                "provider", tokenInfo.role().name()
+                "role", tokenInfo.role().name()
         );
         return createTokenDto(claims);
     }
@@ -137,9 +138,10 @@ public class TokenHelper {
                 .parseClaimsJws(token)
                 .getBody();
         TokenInfo tokenInfo = TokenInfo.builder().
-                email(claims.get("email", String.class)).
-                id(claims.get("id", Long.class)).
-                tokenType(TokenType.valueOf(claims.get("type", String.class)))
+                email(claims.get("email", String.class))
+                .id(Long.valueOf(claims.get("id", String.class)))
+                .tokenType(TokenType.valueOf(claims.get("type", String.class)))
+                .role(MemberRole.valueOf(claims.get("role", String.class)))
                 .iat(claims.getIssuedAt())
                 .exp(claims.getExpiration())
                 .build();
