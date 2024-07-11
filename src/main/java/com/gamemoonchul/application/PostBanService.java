@@ -7,6 +7,10 @@ import com.gamemoonchul.infrastructure.repository.PostBanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.util.List;
+
+
 @Service
 @RequiredArgsConstructor
 public class PostBanService {
@@ -18,5 +22,9 @@ public class PostBanService {
                 .member(member)
                 .build();
         postBanRepository.save(postBan);
+    }
+
+    public List<PostBan> bannedPost(Long id) {
+        return postBanRepository.searchByMemberId(id);
     }
 }
