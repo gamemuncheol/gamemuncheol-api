@@ -26,8 +26,7 @@ public class VoteOptions {
     @JoinColumn(name = "match_user_id")
     private MatchUser matchUser;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_options_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteOption", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
 
     public void addVote(Vote vote) {

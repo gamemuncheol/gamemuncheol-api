@@ -5,10 +5,7 @@ import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
-import com.gamemoonchul.infrastructure.repository.CommentRepository;
-import com.gamemoonchul.infrastructure.repository.MemberRepository;
-import com.gamemoonchul.infrastructure.repository.PostRepository;
-import com.gamemoonchul.infrastructure.repository.VoteRepository;
+import com.gamemoonchul.infrastructure.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,21 +19,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberDeactivateService {
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final VoteRepository voteRepository;
 
     public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
         Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
         if (member.isEmpty()) {
             throw new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
         }
-        postRepository.deleteAllByMember(member.get());
-        voteRepository.deleteAllByMember(member.get());
         commentRepository.deleteAll(requiredDeleteComments(member.get()));
         memberRepository.delete(member.get());
     }
 
+    // 내가 쓴 댓글에 단 대댓글들 전부 삭제
     private List<Comment> requiredDeleteComments(Member member) {
         List<Comment> comments = commentRepository.findAllByMember(member);
 
