@@ -38,8 +38,6 @@ public class TokenHelper {
 
     @Value("${jwt.secret}")
     private String secret;
-
-    private final MemberRepository memberRepository;
     private Key key;
 
     @PostConstruct
@@ -77,19 +75,8 @@ public class TokenHelper {
     public TokenDto generateToken(Member member) {
         Map<String, String> claims = Map.of(
                 "email", member.getEmail(),
-                "identifier", member.getIdentifier(),
-                "provider", member.getProvider()
-                        .toString()
-        );
-        return createTokenDto(claims);
-    }
-
-    public TokenDto generateToken(OAuth2UserInfo oAuth2UserInfo) {
-        Map<String, String> claims = Map.of(
-                "email", oAuth2UserInfo.getEmail(),
-                "identifier", oAuth2UserInfo.getIdentifier(),
-                "provider", oAuth2UserInfo.getProvider()
-                        .toString()
+                "id", member.getId().toString(),
+                "role", member.getRole().name()
         );
         return createTokenDto(claims);
     }
@@ -97,8 +84,8 @@ public class TokenHelper {
     public TokenDto generateToken(TokenInfo tokenInfo) {
         Map<String, String> claims = Map.of(
                 "email", tokenInfo.email(),
-                "identifier", tokenInfo.identifier(),
-                "provider", tokenInfo.provider()
+                "id", tokenInfo.id().toString(),
+                "provider", tokenInfo.role().name()
         );
         return createTokenDto(claims);
     }
@@ -137,13 +124,8 @@ public class TokenHelper {
     private Collection<GrantedAuthority> getAuthorities(String token) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         TokenInfo tokenInfo = getTokenInfo(token);
-        Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier());
-        if (member.isPresent()) {
-            authorities.add(new SimpleGrantedAuthority(member.get()
-                    .getRole()
-                    .getKey()));
+        authorities.add(new SimpleGrantedAuthority(tokenInfo.role().getKey()));
 
-        }
         return authorities;
     }
 
@@ -156,8 +138,7 @@ public class TokenHelper {
                 .getBody();
         TokenInfo tokenInfo = TokenInfo.builder().
                 email(claims.get("email", String.class)).
-                provider(claims.get("provider", String.class)).
-                identifier(claims.get("identifier", String.class)).
+                id(claims.get("id", Long.class)).
                 tokenType(TokenType.valueOf(claims.get("type", String.class)))
                 .iat(claims.getIssuedAt())
                 .exp(claims.getExpiration())

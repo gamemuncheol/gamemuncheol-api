@@ -1,5 +1,6 @@
 package com.gamemoonchul.config.jwt;
 
+import com.gamemoonchul.domain.enums.MemberRole;
 import lombok.Builder;
 
 import java.util.Date;
@@ -7,8 +8,8 @@ import java.util.Date;
 @Builder
 public record TokenInfo(
         String email,
-        String provider,
-        String identifier,
+        Long id,
+        MemberRole role,
         TokenType tokenType,
         Date iat,
         Date exp
