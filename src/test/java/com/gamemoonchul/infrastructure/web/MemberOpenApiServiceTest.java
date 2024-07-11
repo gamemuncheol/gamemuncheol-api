@@ -44,7 +44,7 @@ class MemberOpenApiServiceTest extends TestDataBase {
         // then
         assertThat(redisMemberRepository.findRedisMemberByUniqueKey(redisMember.getUniqueKey())
                 .isPresent()).isFalse();
-        assertThat(memberRepository.findTop1ByProviderAndIdentifier(redisMember.getProvider(), redisMember.getIdentifier())).isNotNull();
+        assertThat(memberRepository.findByProviderAndIdentifier(redisMember.getProvider(), redisMember.getIdentifier())).isNotNull();
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.gamemoonchul.infrastructure.web;
 import com.gamemoonchul.TestDataBase;
 import com.gamemoonchul.config.jwt.*;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
+import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.infrastructure.web.dto.request.RenewRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,9 +51,9 @@ class MemberOpenApiControllerTest extends TestDataBase {
         // given
         TokenInfo tokenInfo = TokenInfo.builder()
                 .email("test@gmail.com")
-                .identifier("test")
-                .provider(OAuth2Provider.GOOGLE.toString())
+                .id(1L)
                 .tokenType(TokenType.REFRESH)
+                .role(MemberRole.USER)
                 .build();
         TokenDto tokenDto = tokenHelper.generateToken(tokenInfo);
         RenewRequest renewRequest = new RenewRequest(tokenDto.getAccessToken());
