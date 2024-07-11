@@ -54,8 +54,8 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
     }
 
     private Member findMember(TokenInfo tokenInfo) {
-        return memberRepository.findTop1ByProviderAndIdentifier(
-                        OAuth2Provider.valueOf(tokenInfo.provider()), tokenInfo.identifier())
+        return memberRepository.findById(
+                        tokenInfo.id())
                 .orElseThrow(() -> {
                     log.error(MemberStatus.MEMBER_NOT_FOUND.getMessage());
                     return new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);

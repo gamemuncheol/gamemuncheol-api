@@ -21,8 +21,8 @@ public class MemberDeactivateService {
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
 
-    public void deactivateAccount(String email, OAuth2Provider provider, String identifier) {
-        Optional<Member> member = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
+    public void deactivateAccount(OAuth2Provider provider, String identifier) {
+        Optional<Member> member = memberRepository.findByProviderAndIdentifier(provider, identifier);
         if (member.isEmpty()) {
             throw new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
         }

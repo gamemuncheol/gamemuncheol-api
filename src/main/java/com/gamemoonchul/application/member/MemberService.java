@@ -30,7 +30,7 @@ public class MemberService {
     }
 
     public Optional<Member> findByProviderAndIdentifier(OAuth2Provider provider, String identifier) {
-        return memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
+        return memberRepository.findByProviderAndIdentifier(provider, identifier);
     }
 
     public void updateNickName(Member member, @Size(max = 10) String nickName) {

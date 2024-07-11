@@ -149,8 +149,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .getProvider();
 
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
-        memberDeactivateService.deactivateAccount(principal.getUserInfo()
-                .getEmail(), provider, principal.getUserInfo()
+        memberDeactivateService.deactivateAccount(provider, principal.getUserInfo()
                 .getIdentifier());
     }
 

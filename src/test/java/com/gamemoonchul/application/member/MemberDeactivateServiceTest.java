@@ -48,10 +48,10 @@ class MemberDeactivateServiceTest extends TestDataBase {
         String identifier = member.getIdentifier();
 
         // when
-        memberDeactivateService.deactivateAccount(email, provider, identifier);
+        memberDeactivateService.deactivateAccount(provider, identifier);
 
         // then
-        Optional<Member> deletedMember = memberRepository.findTop1ByProviderAndIdentifier(provider, identifier);
+        Optional<Member> deletedMember = memberRepository.findByProviderAndIdentifier(provider, identifier);
         assertThat(deletedMember).isEmpty();
 
         assertThat(voteRepository.findByMember(member)).isEmpty();
@@ -68,7 +68,7 @@ class MemberDeactivateServiceTest extends TestDataBase {
         String identifier = "nonexistent_identifier";
 
         // when & then
-        assertThatThrownBy(() -> memberDeactivateService.deactivateAccount(email, provider, identifier))
+        assertThatThrownBy(() -> memberDeactivateService.deactivateAccount(provider, identifier))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(MemberStatus.MEMBER_NOT_FOUND.getMessage());
     }
