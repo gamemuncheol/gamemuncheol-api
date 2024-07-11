@@ -28,6 +28,9 @@ public class PostService {
     private final MatchUserService matchUserService;
     private final VoteOptionRepository voteOptionRepository;
 
+    public Post findById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
+    }
 
     public PostDetailResponse upload(PostUploadRequest request, Member member) {
         Post entity = PostConverter.requestToEntity(request, member);
