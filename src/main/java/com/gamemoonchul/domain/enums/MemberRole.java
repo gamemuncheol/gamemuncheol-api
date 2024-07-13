@@ -1,7 +1,6 @@
 package com.gamemoonchul.domain.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum MemberRole {

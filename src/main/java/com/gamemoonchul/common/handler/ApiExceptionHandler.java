@@ -1,6 +1,6 @@
 package com.gamemoonchul.common.handler;
 
-import com.gamemoonchul.common.exception.*;
+import com.gamemoonchul.common.exception.ApiExceptionIfs;
 import com.gamemoonchul.common.status.ApiStatus;
 import com.gamemoonchul.infrastructure.web.common.ApiResponse;
 import jakarta.validation.ConstraintViolationException;

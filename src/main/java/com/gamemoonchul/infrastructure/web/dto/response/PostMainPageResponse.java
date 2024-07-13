@@ -6,8 +6,6 @@ import com.gamemoonchul.domain.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

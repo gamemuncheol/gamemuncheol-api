@@ -13,7 +13,7 @@ import static com.gamemoonchul.domain.entity.QPostBan.postBan;
 
 @Repository
 public class PostBanRepositoryImpl implements PostBanRepositoryIfs {
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public PostBanRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);

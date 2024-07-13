@@ -1,8 +1,6 @@
 package com.gamemoonchul.config.oauth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gamemoonchul.common.status.ApiStatus;
-import com.gamemoonchul.domain.status.JwtStatus;
 import com.gamemoonchul.domain.status.Oauth2Status;
 import com.gamemoonchul.infrastructure.web.common.ApiResponse;
 import jakarta.servlet.ServletException;

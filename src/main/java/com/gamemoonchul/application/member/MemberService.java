@@ -48,7 +48,7 @@ public class MemberService {
 
 
     public MemberResponseDto me(Member member) {
-        MemberResponseDto response = memberConverter.toResponseDto(member);
+        MemberResponseDto response = MemberConverter.toResponseDto(member);
         return response;
     }
 }

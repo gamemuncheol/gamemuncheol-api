@@ -5,7 +5,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.RequestEntity;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
@@ -13,8 +12,8 @@ import java.io.IOException;
 @Slf4j
 public class OAuthRequestEntityConverter implements Converter<OAuth2AuthorizationCodeGrantRequest, RequestEntity<?>> {
 
-    private OAuth2AuthorizationCodeGrantRequestEntityConverter defaultConverter;
     private final AppleClientSecretGenerator appleClientSecretGenerator;
+    private final OAuth2AuthorizationCodeGrantRequestEntityConverter defaultConverter;
 
     public OAuthRequestEntityConverter(AppleClientSecretGenerator appleClientSecretGenerator) {
         defaultConverter = new OAuth2AuthorizationCodeGrantRequestEntityConverter();

@@ -13,15 +13,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @RequiredArgsConstructor
 public class RedisConfig {
-  private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-  @Bean
-  RedisTemplate<String, Member> userRedisTemplate(RedisConnectionFactory connectionFactory) {
-    var template = new RedisTemplate<String, Member>();
-    template.setConnectionFactory(connectionFactory);
-    template.setKeySerializer(new StringRedisSerializer());
-    template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, Member.class));
+    @Bean
+    RedisTemplate<String, Member> userRedisTemplate(RedisConnectionFactory connectionFactory) {
+        var template = new RedisTemplate<String, Member>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, Member.class));
 
-    return template;
-  }
+        return template;
+    }
 }

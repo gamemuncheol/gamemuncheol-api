@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.application.converter.riot.MatchUserConverter;
-import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchUser;

@@ -29,16 +29,15 @@ import java.util.List;
 @Transactional
 public class YoutubeService {
     /**
-     * Define a global instance of a Youtube object, which will be used
-     * to make YouTube Data API requests.
-     */
-    private static YouTube youtube;
-
-    /**
      * Define a global variable that specifies the MIME type of the video
      * being uploaded.
      */
     private static final String VIDEO_FILE_FORMAT = "video/*";
+    /**
+     * Define a global instance of a Youtube object, which will be used
+     * to make YouTube Data API requests.
+     */
+    private static YouTube youtube;
 
     /**
      * Upload the user-selected video to the user's YouTube channel. The code

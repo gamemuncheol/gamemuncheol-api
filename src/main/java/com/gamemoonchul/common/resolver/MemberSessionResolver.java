@@ -3,7 +3,6 @@ package com.gamemoonchul.common.resolver;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.jwt.TokenInfo;
-import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
