@@ -9,8 +9,6 @@ import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,10 +32,6 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
-    private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
-    //private List<String> EXCEPTION = List.of("/test/**");
-    private List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**");
-
     private final CustomOAuth2UserService customOauth;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
@@ -45,6 +39,10 @@ public class SpringSecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final AppleClientSecretGenerator appleClientSecretGenerator;
     private final CorsConfigurationSource corsConfig;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
+    //private List<String> EXCEPTION = List.of("/test/**");
+    private List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**");
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -92,7 +90,7 @@ public class SpringSecurityConfig {
          * Exception 발생시 Redirect를 하지 않고 401을 반환
          */
         http.exceptionHandling(
-                exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(customAuthenticationEntryPoint)
         );
 
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
