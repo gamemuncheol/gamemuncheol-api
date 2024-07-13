@@ -1,5 +1,6 @@
 package com.gamemoonchul.application.member;
 
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
@@ -23,7 +24,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberConverter memberConverter;
 
     public void delete(Member member) {
         memberRepository.delete(member);

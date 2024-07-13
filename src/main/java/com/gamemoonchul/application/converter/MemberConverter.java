@@ -1,17 +1,15 @@
-package com.gamemoonchul.application.member;
+package com.gamemoonchul.application.converter;
 
 import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
 public class MemberConverter {
     private static String randomNickname() {
         return UUID.randomUUID()

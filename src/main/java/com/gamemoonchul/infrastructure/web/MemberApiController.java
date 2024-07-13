@@ -1,7 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.MemberBanService;
-import com.gamemoonchul.application.member.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;

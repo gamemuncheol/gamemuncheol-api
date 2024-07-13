@@ -1,7 +1,7 @@
 package com.gamemoonchul;
 
 import com.gamemoonchul.application.RedisMemberService;
-import com.gamemoonchul.application.member.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.config.jwt.TokenDto;

@@ -1,6 +1,6 @@
 package com.gamemoonchul.config.oauth.handler;
 
-import com.gamemoonchul.application.member.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.application.member.MemberDeactivateService;
 import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.exception.BadRequestException;
