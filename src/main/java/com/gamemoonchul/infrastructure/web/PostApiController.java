@@ -4,6 +4,7 @@ import com.gamemoonchul.application.PostBanService;
 import com.gamemoonchul.application.PostDeleteService;
 import com.gamemoonchul.application.PostOpenApiService;
 import com.gamemoonchul.application.PostService;
+import com.gamemoonchul.common.annotation.MemberId;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
@@ -40,9 +41,9 @@ public class PostApiController {
 
     @DeleteMapping("/{id}")
     public String delete(
-            @MemberSession Member member, @PathVariable("id") Long id
+            @MemberId Long requestMemberId, @PathVariable("id") Long id
     ) {
-        return postDeleteService.delete(id, member);
+        return postDeleteService.delete(id, requestMemberId);
     }
 
     @GetMapping("/ban")

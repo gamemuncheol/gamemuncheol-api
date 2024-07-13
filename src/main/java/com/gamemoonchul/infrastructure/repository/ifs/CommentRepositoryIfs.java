@@ -8,5 +8,5 @@ import java.util.List;
 public interface CommentRepositoryIfs {
     Comment searchByIdOrThrow(Long commentId);
 
-    List<Comment> searchByPostId(Long postId, Member member);
+    List<Comment> searchByPostId(Long postId, Long requestMemberId);
 }

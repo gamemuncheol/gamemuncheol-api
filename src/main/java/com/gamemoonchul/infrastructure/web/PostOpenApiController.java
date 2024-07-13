@@ -2,6 +2,7 @@ package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.CommentService;
 import com.gamemoonchul.application.PostOpenApiService;
+import com.gamemoonchul.common.annotation.MemberId;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
@@ -28,10 +29,10 @@ public class PostOpenApiController {
     @GetMapping
     public PostDetailResponse getPostDetail(
             @RequestParam(value = "id") Long id,
-            @MemberSession Member member
+            @MemberId Long requestMemberId
     ) {
         Post post = postService.getPostDetails(id);
-        List<CommentResponse> comments = commentService.searchByPostId(post.getId(), member).stream()
+        List<CommentResponse> comments = commentService.searchByPostId(post.getId(), requestMemberId).stream()
                 .map(CommentResponse::entityToResponse)
                 .toList();
         return PostDetailResponse.toResponse(post, comments);
@@ -41,26 +42,26 @@ public class PostOpenApiController {
     public Pagination<PostMainPageResponse> getLatestPosts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @MemberSession Member member
+            @MemberId Long requestMemberId
     ) {
-        return postService.getLatestPosts(member, page, size);
+        return postService.getLatestPosts(requestMemberId, page, size);
     }
 
     @GetMapping("/page/grill")
     public Pagination<PostMainPageResponse> getGrillPosts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @MemberSession Member member
+            @MemberId Long requestMemberId
     ) {
-        return postService.getGrillPosts(member, page, size);
+        return postService.getGrillPosts(requestMemberId, page, size);
     }
 
     @GetMapping("/page/hot")
     public Pagination<PostMainPageResponse> getHotPosts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @MemberSession Member member
+            @MemberId Long requestMemberId
     ) {
-        return postService.getHotPosts(page, size, member);
+        return postService.getHotPosts(page, size, requestMemberId);
     }
 }

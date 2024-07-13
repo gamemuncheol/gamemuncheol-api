@@ -27,8 +27,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
-    public List<Comment> searchByPostId(Long postId, Member member) {
-        return commentRepository.searchByPostId(postId, member);
+    public List<Comment> searchByPostId(Long postId, Long requestMemberId) {
+        return commentRepository.searchByPostId(postId, requestMemberId);
     }
 
     /**
@@ -69,18 +69,18 @@ public class CommentService {
     }
 
 
-    public Comment fix(CommentFixRequest request, Member authMember) {
+    public Comment fix(CommentFixRequest request, Long requestMemberId) {
         Comment modifiedComment = commentRepository.findById(request.commentId())
                 .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
         modifiedComment.setContent(request.contents());
         // 글 작성자
-        validateSameMemberId(modifiedComment.getMember(), authMember);
+        validateSameMemberId(modifiedComment.getMember(), requestMemberId);
         return commentRepository.save(modifiedComment);
     }
 
-    public void delete(Long commentId, Member authMember) {
+    public void delete(Long commentId, Long requestMemberId) {
         Comment savedComment = this.searchComment(commentId);
-        validateSameMemberId(savedComment.getMember(), authMember);
+        validateSameMemberId(savedComment.getMember(), requestMemberId);
 
         if (!savedComment.parentExist()) { // 대댓글이 아닐경우 자기 자신의 대댓글들 삭제
             List<Comment> children = commentRepository.findByParentId(savedComment.getId());
@@ -104,9 +104,8 @@ public class CommentService {
         postRepository.save(post);
     }
 
-    private void validateSameMemberId(Member commentWriteMember, Member currentSignInMember) {
-        if (commentWriteMember.getId()
-                .equals(currentSignInMember.getId())) {
+    private void validateSameMemberId(Member commentWriteMember, Long requestMemberId) {
+        if (commentWriteMember.getId().equals(requestMemberId)) {
             return;
         }
         throw new UnauthorizedException(MemberStatus.NOT_AUTHORIZED_MEMBER);

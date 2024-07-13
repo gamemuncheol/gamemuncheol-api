@@ -1,6 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.CommentService;
+import com.gamemoonchul.common.annotation.MemberId;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.model.dto.CommentSaveDto;
@@ -31,14 +32,13 @@ public class CommentApiController {
         commentService.save(saveDto, member);
     }
 
-
     @PatchMapping
-    public void fix(@RequestBody CommentFixRequest request, @MemberSession Member member) {
-        commentService.fix(request, member);
+    public void fix(@RequestBody CommentFixRequest request, @MemberId Long requestMemberId) {
+        commentService.fix(request, requestMemberId);
     }
 
     @DeleteMapping("/{id}")
-    public void del(@PathVariable(name = "id") Long id, @MemberSession Member member) {
-        commentService.delete(id, member);
+    public void del(@PathVariable(name = "id") Long id, @MemberId Long requestMemberId) {
+        commentService.delete(id, requestMemberId);
     }
 }

@@ -1,6 +1,6 @@
 package com.gamemoonchul.config;
 
-import com.gamemoonchul.config.jwt.MemberSessionResolver;
+import com.gamemoonchul.common.resolver.MemberSessionResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

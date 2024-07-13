@@ -1,7 +1,8 @@
-package com.gamemoonchul.config.jwt;
+package com.gamemoonchul.common.resolver;
 
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.common.exception.BadRequestException;
+import com.gamemoonchul.config.jwt.TokenInfo;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
@@ -57,7 +58,6 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
         return memberRepository.findById(
                         tokenInfo.id())
                 .orElseThrow(() -> {
-                    log.error(MemberStatus.MEMBER_NOT_FOUND.getMessage());
                     return new BadRequestException(MemberStatus.MEMBER_NOT_FOUND);
                 });
     }

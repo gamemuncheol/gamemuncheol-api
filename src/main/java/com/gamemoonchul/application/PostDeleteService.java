@@ -21,13 +21,11 @@ public class PostDeleteService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public String delete(Long postId, Member member) {
+    public String delete(Long postId, Long requestMemberId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
 
-        if (member.getId()
-                .equals(post.getMember()
-                        .getId())) {
+        if (requestMemberId.equals(post.getMember().getId())) {
             postRepository.delete(post);
             return "Delete Complete";
         }

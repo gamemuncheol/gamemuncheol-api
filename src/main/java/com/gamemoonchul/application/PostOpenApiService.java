@@ -36,10 +36,8 @@ public class PostOpenApiService {
         return post;
     }
 
-    public Pagination<PostMainPageResponse> getLatestPosts(Member member, int page, int size) {
-        Page<Post> savedPage = postRepository.searchNewPostsWithoutBanPosts(Optional.ofNullable(member)
-                .map(Member::getId)
-                .orElse(null), PageRequest.of(page, size));
+    public Pagination<PostMainPageResponse> getLatestPosts(Long requestMemberId, int page, int size) {
+        Page<Post> savedPage = postRepository.searchNewPostsWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse)
@@ -48,10 +46,8 @@ public class PostOpenApiService {
         return new Pagination<>(savedPage, responses);
     }
 
-    public Pagination<PostMainPageResponse> getGrillPosts(Member member, int page, int size) {
-        Page<Post> savedPage = postRepository.searchGrillPostsWithoutBanPosts(Optional.ofNullable(member)
-                .map(Member::getId)
-                .orElse(null), PageRequest.of(page, size));
+    public Pagination<PostMainPageResponse> getGrillPosts(Long requestMemberId, int page, int size) {
+        Page<Post> savedPage = postRepository.searchGrillPostsWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()
                 .map(PostMainPageResponse::entityToResponse)
@@ -59,10 +55,8 @@ public class PostOpenApiService {
         return new Pagination<PostMainPageResponse>(savedPage, responses);
     }
 
-    public Pagination<PostMainPageResponse> getHotPosts(int page, int size, Member member) {
-        Page<Post> savedPage = postRepository.searchHotPostWithoutBanPosts(Optional.ofNullable(member)
-                .map(Member::getId)
-                .orElse(null), PageRequest.of(page, size));
+    public Pagination<PostMainPageResponse> getHotPosts(int page, int size, Long requestMemberId) {
+        Page<Post> savedPage = postRepository.searchHotPostWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
 
         List<PostMainPageResponse> responses = savedPage.getContent()
                 .stream()

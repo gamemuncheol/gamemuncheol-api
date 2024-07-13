@@ -76,7 +76,7 @@ class CommentServiceTest extends TestDataBase {
         em.clear();
 
         // when
-        Comment fixedComment = commentService.fix(content, member);
+        Comment fixedComment = commentService.fix(content, member.getId());
 
         // then
         assertThat(savedEntity.getContent()).isNotEqualTo(fixedComment.getContent());
@@ -97,7 +97,7 @@ class CommentServiceTest extends TestDataBase {
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.fix(content, anotherMember))
+                () -> commentService.fix(content, anotherMember.getId()))
                 .isInstanceOf(UnauthorizedException.class)
                 .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
@@ -113,7 +113,7 @@ class CommentServiceTest extends TestDataBase {
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.fix(content, member))
+                () -> commentService.fix(content, member.getId()))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
@@ -127,7 +127,7 @@ class CommentServiceTest extends TestDataBase {
         Comment savedComment = commentService.save(request, member);
 
         // when
-        commentService.delete(savedComment.getId(), member);
+        commentService.delete(savedComment.getId(), member.getId());
 
         // then
         assertThatThrownBy(
@@ -148,7 +148,7 @@ class CommentServiceTest extends TestDataBase {
         Comment savedReply = commentService.save(replyRequest, member);
 
         // when
-        commentService.delete(savedComment.getId(), member);
+        commentService.delete(savedComment.getId(), member.getId());
 
         // then
         assertThatThrownBy(
@@ -169,7 +169,7 @@ class CommentServiceTest extends TestDataBase {
                 .orElseThrow();
 
         // when
-        commentService.delete(savedComment.getId(), member);
+        commentService.delete(savedComment.getId(), member.getId());
         em.clear();
         Post post2 = postRepository.findById(post.getId())
                 .orElseThrow();
@@ -192,7 +192,7 @@ class CommentServiceTest extends TestDataBase {
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.delete(content.commentId(), anotherMember))
+                () -> commentService.delete(content.commentId(), anotherMember.getId()))
                 .isInstanceOf(UnauthorizedException.class)
                 .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
@@ -208,7 +208,7 @@ class CommentServiceTest extends TestDataBase {
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.delete(content.commentId(), member))
+                () -> commentService.delete(content.commentId(), member.getId()))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }

@@ -54,7 +54,7 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
     }
 
     @Override
-    public List<Comment> searchByPostId(Long postId, Member requester) {
+    public List<Comment> searchByPostId(Long postId, Long requester) {
         BooleanBuilder isNotBanned = isNotBanned(requester);
         List<Comment> result = queryFactory.selectFrom(comment)
                 .join(comment.member, member).fetchJoin()
@@ -65,13 +65,13 @@ public class CommentRepositoryImpl implements CommentRepositoryIfs {
         return result;
     }
 
-    private BooleanBuilder isNotBanned(Member member) {
+    private BooleanBuilder isNotBanned(Long requestMemberId) {
         BooleanBuilder builder = new BooleanBuilder();
-        if (member != null) {
+        if (requestMemberId != null) {
             builder.and(comment.member.id.notIn(
                     JPAExpressions.select(memberBan.banMember.id)
                             .from(memberBan)
-                            .where(memberBan.member.id.eq(member.getId()))
+                            .where(memberBan.member.id.eq(requestMemberId))
             ));
         }
         return builder;

@@ -41,8 +41,8 @@ public class BannedCommentTest extends TestDataBase {
         commentRepository.save(comment);
 
         // when
-        List<Comment> bannedComments = commentService.searchByPostId(post.getId(), me);
-        List<Comment> comments = commentService.searchByPostId(post.getId(), anotherMember);
+        List<Comment> bannedComments = commentService.searchByPostId(post.getId(), me.getId());
+        List<Comment> comments = commentService.searchByPostId(post.getId(), anotherMember.getId());
 
         // then
         assertThat(bannedComments).isEmpty();
