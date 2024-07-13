@@ -71,6 +71,6 @@ class MemberApiControllerTest extends TestDataBase {
         ResultActions resultActions = super.mvc.perform(get("/api/members/me").header("Authorization", "Bearer " + accessToken));
 
         // then
-        resultActions.andExpect(status().isForbidden());
+        resultActions.andExpect(status().isBadRequest());
     }
 }
