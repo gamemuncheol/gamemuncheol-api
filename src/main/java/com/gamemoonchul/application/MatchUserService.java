@@ -25,24 +25,14 @@ public class MatchUserService {
 
     public List<MatchUser> saveAll(List<ParticipantRecord> participants, MatchGame matchGame) {
         List<MatchUser> matchUsers = new ArrayList<>();
-        participants.stream()
-                .map(participant ->
-                        matchUserConverter.toEntities(participant, matchGame)
-                )
-                .forEach(matchUser -> {
-                    matchUsers.add(matchUserRepository.save(matchUser));
-                });
+        participants.stream().map(participant -> matchUserConverter.toEntities(participant, matchGame)).forEach(matchUser -> {
+            matchUsers.add(matchUserRepository.save(matchUser));
+        });
         return matchUsers;
     }
 
     public MatchUser findById(Long id) {
-        return matchUserRepository.findById(id)
-                .orElseThrow(
-                        () -> {
-                            log.error(PostStatus.WRONG_MATCH_USER.getMessage());
-                            return new NotFoundException(PostStatus.WRONG_MATCH_USER);
-                        }
-                );
+        return matchUserRepository.findById(id).orElseThrow(() -> new NotFoundException(PostStatus.WRONG_MATCH_USER));
     }
 
     public List<MatchUser> findByMatchGameId(Long gameId) {

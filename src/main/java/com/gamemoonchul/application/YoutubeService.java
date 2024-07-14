@@ -59,7 +59,7 @@ public class YoutubeService {
             youtube = new YouTube.Builder(YoutubeAuth.HTTP_TRANSPORT, YoutubeAuth.JSON_FACTORY, credential).setApplicationName(
                     "gamemuncheol").build();
 
-            System.out.println("Uploading: " + filePath);
+            log.info("Uploading: {}", filePath);
 
             // Add extra information to the video before uploading.
             Video videoObjectDefiningMetadata = new Video();

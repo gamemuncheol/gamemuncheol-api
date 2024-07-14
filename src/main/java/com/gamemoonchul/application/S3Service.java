@@ -37,10 +37,8 @@ public class S3Service {
         this.bucket = bucket;
     }
 
-
     public String uploadVideo(MultipartFile file) {
         checkFileTypeOrThrow(file.getContentType(), FileType.VIDEO);
-
         try {
             String fileName = file.getOriginalFilename();
             String fileUrl = "https://gamemuncheol-s3.s3.ap-southeast-2.amazonaws.com/" + fileName;
@@ -57,7 +55,6 @@ public class S3Service {
 
     public String uploadImage(MultipartFile file) {
         checkFileTypeOrThrow(file.getContentType(), FileType.IMAGE);
-
         try {
             String fileName = file.getOriginalFilename();
             String fileUrl = "https://gamemuncheol-s3.s3.ap-southeast-2.amazonaws.com/" + fileName;
