@@ -1,6 +1,3 @@
-CREATE DATABASE gamemuncheol;
-USE gamemuncheol;
-
 CREATE TABLE if not exists member
 (
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -74,7 +71,7 @@ CREATE TABLE if not exists vote
     option_id BIGINT,
     member_id BIGINT,
     post_id   BIGINT,
-    UNIQUE (member_id, post_id) # 중복 투표 방지
+    UNIQUE (member_id, post_id) -- 중복 투표 방지
 );
 
 CREATE TABLE if not exists comment
@@ -87,12 +84,12 @@ CREATE TABLE if not exists comment
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE if not exists member_ban # 사용자 차단
+CREATE TABLE if not exists member_ban -- 사용자 차단
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id        BIGINT,
     banned_member_id BIGINT,
-    UNIQUE (member_id, banned_member_id), # 중복 차단 방지
+    UNIQUE (member_id, banned_member_id), -- 중복 차단 방지
     INDEX idx_member_ban_member_id (member_id)
 );
 
@@ -101,7 +98,7 @@ CREATE TABLE if not exists post_ban
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id   BIGINT,
     ban_post_id BIGINT,
-    UNIQUE (member_id, ban_post_id), # 중복 차단 방지
+    UNIQUE (member_id, ban_post_id), -- 중복 차단 방지
     INDEX idx_post_ban_member_id (member_id)
 );
 
@@ -112,4 +109,13 @@ CREATE TABLE if not exists post_view
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_post_view_created_at_post_id (created_at, post_id)
+);
+
+CREATE TABLE if not exists post_view
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    post_id    BIGINT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    INDEX idx_post_view_created_at_post_id (created_at DESC, post_id)
 );
