@@ -2,12 +2,6 @@ jwt:
   secret: ${JWT_SECRET}
 baseUrl: ${BASE_URL}
 
-server:
-  ssl:
-    key-store: classpath:localhost.p12
-    key-store-type: PKCS12
-    key-store-password: df159357
-
 cloud:
   aws:
     s3:

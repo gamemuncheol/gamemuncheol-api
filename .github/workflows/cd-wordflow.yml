@@ -1,41 +1,31 @@
-# 자바 프로젝트를 위한 Gradle을 사용한 지속적 배포(CD) 워크플로우 설정
 name: CD with Gradle
 
-# main 브랜치로 push될 때만 워크플로우 실행
 on:
   push:
     branches: [ "develop" ]
 
-# 워크플로우에서는 저장소 내용을 읽을 수 있는 권한만 설정
 permissions:
   contents: read
 
-# 워크플로우에서 실행될 작업들을 정의
 jobs:
   build:
-    runs-on: ubuntu-latest # 작업을 실행할 환경으로 ubuntu 최신 버전을 사용
+    runs-on: ubuntu-latest
 
     steps:
-      # 실행주체: GitHub Actions > GitHub Infra
       - uses: actions/checkout@v3
 
-      # Java Development Kit(JDK) 버전 17을 설정
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: "adopt"
 
-      # aws.build.gradle을 build.gradle로 변경
       - name: MV build.aws.gradle to build.gradle
         run: |
           rm -rf ./build.gradle
           mv ./aws.build.gradle ./build.gradle
-          touch ./src/main/resources/localhost.p12
-          echo "${{ secrets.AWS_KEYSTORE }}" | base64 --decode > ./src/main/resources/localhost.p12
         shell: bash
 
-      # main/resources/application.yml 파일에 환경변수 적용
       - name: Set Yaml
         uses: cschleiden/replace-tokens@v1
         with:
@@ -86,30 +76,29 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
 
-      # Gradle을 사용해 프로젝트 빌드
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew clean build -x test --warning-mode all
 
-      # 전송할 파일을 담을 디렉토리 생성
-      - name: Make Directory for deliver
-        run: mkdir deploy
-
-      # Jar 파일 Copy
-      - name: Copy Jar
-        run: |
-          cp ./build/libs/*.jar ./deploy/
-          cp ./appspec.yml ./deploy/
-          cp -r ./scripts ./deploy/
-
-      - name: Deliver to AWS S3
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          aws-region: ap-southeast-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: S3에 업로드
-        run: aws deploy push --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://gamemuncheol-s3/deploy.zip --source ./deploy
-      - name: EC2에 배포
-        run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }} --s3-location bucket=gamemuncheol-s3,key=deploy.zip,bundleType=zip
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_REPOSITORY }}:latest .
+          docker push ${{ secrets.DOCKER_REPOSITORY }}:latest
+
+      - name: SSH and deploy on remote server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            chmod +x ~/Documents/docker/gamemuncheol/deploy.sh
+            sudo ~/Documents/docker/gamemuncheol/deploy.sh
