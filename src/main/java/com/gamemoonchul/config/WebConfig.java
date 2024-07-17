@@ -1,5 +1,6 @@
 package com.gamemoonchul.config;
 
+import com.gamemoonchul.common.resolver.MemberIdResolver;
 import com.gamemoonchul.common.resolver.MemberSessionResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     private final MemberSessionResolver memberSessionResolver;
+    private final MemberIdResolver memberIdResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberSessionResolver);
+        resolvers.add(memberIdResolver);
     }
 
     @Override
