@@ -7,7 +7,6 @@ import com.gamemoonchul.infrastructure.repository.PostBanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 
 

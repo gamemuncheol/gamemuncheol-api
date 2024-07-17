@@ -2,12 +2,9 @@ package com.gamemoonchul.config.jwt;
 
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
-import com.gamemoonchul.config.oauth.user.OAuth2Provider;
-import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.enums.MemberRole;
 import com.gamemoonchul.domain.status.JwtStatus;
-import com.gamemoonchul.infrastructure.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

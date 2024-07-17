@@ -1,6 +1,6 @@
 package com.gamemoonchul.infrastructure.web.dto.response;
 
-import com.gamemoonchul.application.member.MemberConverter;
+import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.util.StringUtils;
 import com.gamemoonchul.domain.entity.Post;
 import lombok.Builder;

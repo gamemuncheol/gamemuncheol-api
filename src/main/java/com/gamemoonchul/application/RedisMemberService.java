@@ -13,12 +13,8 @@ public class RedisMemberService {
     private final RedisMemberRepository memberRepository;
 
     public RedisMember findByTemporaryKey(String uniqueKey) {
-        RedisMember redisMember = memberRepository.findRedisMemberByUniqueKey(uniqueKey)
-                .orElseThrow(
-                        () ->
-                                new UnauthorizedException(MemberStatus.EXPIRED_KEY)
-                );
-        return redisMember;
+        return memberRepository.findRedisMemberByUniqueKey(uniqueKey)
+                .orElseThrow(() -> new UnauthorizedException(MemberStatus.EXPIRED_KEY));
     }
 
     public void delete(RedisMember redisMember) {

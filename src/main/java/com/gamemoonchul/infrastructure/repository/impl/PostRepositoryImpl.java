@@ -20,7 +20,6 @@ import static com.gamemoonchul.domain.entity.QMember.member;
 import static com.gamemoonchul.domain.entity.QMemberBan.memberBan;
 import static com.gamemoonchul.domain.entity.QPost.post;
 import static com.gamemoonchul.domain.entity.QPostBan.postBan;
-import static com.gamemoonchul.domain.entity.QVote.vote;
 import static com.gamemoonchul.domain.entity.QVoteOptions.voteOptions;
 import static com.gamemoonchul.domain.entity.riot.QMatchUser.matchUser;
 

@@ -1,7 +1,6 @@
 package com.gamemoonchul.application;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gamemoonchul.common.exception.BadRequestException;
@@ -38,10 +37,8 @@ public class S3Service {
         this.bucket = bucket;
     }
 
-
     public String uploadVideo(MultipartFile file) {
         checkFileTypeOrThrow(file.getContentType(), FileType.VIDEO);
-
         try {
             String fileName = file.getOriginalFilename();
             String fileUrl = "https://gamemuncheol-s3.s3.ap-southeast-2.amazonaws.com/" + fileName;
@@ -58,7 +55,6 @@ public class S3Service {
 
     public String uploadImage(MultipartFile file) {
         checkFileTypeOrThrow(file.getContentType(), FileType.IMAGE);
-
         try {
             String fileName = file.getOriginalFilename();
             String fileUrl = "https://gamemuncheol-s3.s3.ap-southeast-2.amazonaws.com/" + fileName;

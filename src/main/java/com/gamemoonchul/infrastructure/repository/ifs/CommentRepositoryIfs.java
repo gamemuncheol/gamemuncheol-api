@@ -1,7 +1,6 @@
 package com.gamemoonchul.infrastructure.repository.ifs;
 
 import com.gamemoonchul.domain.entity.Comment;
-import com.gamemoonchul.domain.entity.Member;
 
 import java.util.List;
 

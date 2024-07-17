@@ -2,7 +2,10 @@ package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter

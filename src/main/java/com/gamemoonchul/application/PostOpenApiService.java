@@ -1,12 +1,8 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.common.exception.BadRequestException;
-import com.gamemoonchul.domain.entity.Comment;
-import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
-import com.gamemoonchul.domain.entity.PostView;
 import com.gamemoonchul.domain.status.PostStatus;
-import com.gamemoonchul.infrastructure.repository.CommentRepository;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
@@ -17,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 

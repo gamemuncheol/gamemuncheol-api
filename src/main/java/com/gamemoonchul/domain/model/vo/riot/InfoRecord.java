@@ -1,6 +1,6 @@
 package com.gamemoonchul.domain.model.vo.riot;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.util.List;
 

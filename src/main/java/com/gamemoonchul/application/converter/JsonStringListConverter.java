@@ -39,6 +39,4 @@ public class JsonStringListConverter implements AttributeConverter<List<String>,
             throw new RuntimeException("JSON reading error", e);
         }
     }
-
-
 }

@@ -8,7 +8,7 @@ package com.gamemoonchul.common.status;
  * 이런식으로 된다.
  */
 public interface ApiStatusIfs {
-    public Integer getStatusCode();
+    Integer getStatusCode();
 
-    public String getMessage();
+    String getMessage();
 }

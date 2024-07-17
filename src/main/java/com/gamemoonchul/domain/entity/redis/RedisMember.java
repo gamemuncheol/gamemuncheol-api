@@ -1,7 +1,7 @@
 package com.gamemoonchul.domain.entity.redis;
 
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;

@@ -9,12 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.gamemoonchul.domain.entity.QMember.member;
 import static com.gamemoonchul.domain.entity.QMemberBan.memberBan;
 
 @Repository
 public class MemberBanRepositoryImpl implements MemberBanRepositoryIfs {
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public MemberBanRepositoryImpl(EntityManager em) {
         queryFactory = new JPAQueryFactory(em);

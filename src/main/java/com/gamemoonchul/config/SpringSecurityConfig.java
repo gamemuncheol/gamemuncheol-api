@@ -3,8 +3,8 @@ package com.gamemoonchul.config;
 import com.gamemoonchul.config.apple.AppleClientSecretGenerator;
 import com.gamemoonchul.config.apple.OAuthRequestEntityConverter;
 import com.gamemoonchul.config.jwt.JwtAuthorizationFilter;
-import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.CustomAuthenticationEntryPoint;
+import com.gamemoonchul.config.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.gamemoonchul.config.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gamemoonchul.config.oauth.service.CustomOAuth2UserService;
@@ -40,9 +40,9 @@ public class SpringSecurityConfig {
     private final AppleClientSecretGenerator appleClientSecretGenerator;
     private final CorsConfigurationSource corsConfig;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
+    private final List<String> SWAGGER = List.of("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs/**");
     //private List<String> EXCEPTION = List.of("/test/**");
-    private List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**");
+    private final List<String> EXCEPTION = List.of("/open-api/**", "/actuator/**");
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -68,7 +68,6 @@ public class SpringSecurityConfig {
                             .hasAnyRole("PRIVACY_NOT_AGREED", "USER")
                             .anyRequest()
                             .authenticated();
-                    ;
                 })
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB

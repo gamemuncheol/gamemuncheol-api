@@ -68,7 +68,6 @@ public class CommentService {
         }
     }
 
-
     public Comment fix(CommentFixRequest request, Long requestMemberId) {
         Comment modifiedComment = commentRepository.findById(request.commentId())
                 .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
