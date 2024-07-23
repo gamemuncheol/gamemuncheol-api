@@ -14,8 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostBanService {
     private final PostBanRepository postBanRepository;
+    private final PostService postService;
 
-    public void ban(Member member, Post post) {
+    public void ban(Member member, Long postId) {
+        Post post = postService.findById(postId);
         PostBan postBan = PostBan.builder()
                 .banPost(post)
                 .member(member)
