@@ -30,8 +30,12 @@ public class MemberIdResolver implements HandlerMethodArgumentResolver {
 
     @Override
     @Nullable
-    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(
+            MethodParameter parameter,
+            @Nullable ModelAndViewContainer mavContainer,
+            NativeWebRequest webRequest,
+            @Nullable WebDataBinderFactory binderFactory
+    ) {
         return getTokenInfo()
                 .map(TokenInfo::id)
                 .orElse(null);
