@@ -32,7 +32,7 @@ class PostBanServiceTest extends TestDataBase {
         Post post = postRepository.save(PostDummy.createPostWithSpecificMember(member1));
 
         // when
-        postBanService.ban(member2, post);
+        postBanService.ban(member2, post.getId());
 
         // then
         List<PostBan> postBans = postBanService.bannedPost(member2.getId());
