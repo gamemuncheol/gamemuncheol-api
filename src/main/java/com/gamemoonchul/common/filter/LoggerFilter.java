@@ -45,16 +45,6 @@ public class LoggerFilter implements Filter {
         String method = req.getMethod();
         log.info(">>>>> uri : {} , method : {} , header : {} , body : {}", uri, method, headerValues, requestBody);
 
-        StringBuilder responseHeaderValues = new StringBuilder();
-
-        res.getHeaderNames().forEach((headerKey) -> {
-            String headerValue = res.getHeader(headerKey);
-            responseHeaderValues.append("[").append(headerKey).append(" : ").append(headerValue).append("]");
-        });
-
-        String responseBody = new String(res.getContentAsByteArray());
-        log.info("<<<<< uri : {} , method : {} , header : {} , body : {}", uri, method, responseHeaderValues, responseBody);
-
         res.copyBodyToResponse();
     }
 }
