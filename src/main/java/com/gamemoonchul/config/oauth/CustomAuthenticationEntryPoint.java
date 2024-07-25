@@ -29,6 +29,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType("application/json");
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        Arrays.stream(authException.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
         log.error(authException.getMessage() + "\n" + Arrays.toString(authException.getStackTrace()));
         objectMapper.writeValue(response.getWriter(), ApiResponse.ERROR(Oauth2Status.LOGIN_FAILED, authException.getMessage()));
     }
