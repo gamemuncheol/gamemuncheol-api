@@ -38,15 +38,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         }
     }
 
-    private void handleNotFoundException(HttpServletResponse response, AuthenticationException authException) throws IOException {
+    private void handleNotFoundException(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        objectMapper.writeValue(response.getWriter(), ApiResponse.ERROR(ApiStatus.NOT_FOUND, null));
+    }
+
+    private void handleAuthException(HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         Arrays.stream(authException.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
         log.error(authException.getMessage() + "\n" + Arrays.toString(authException.getStackTrace()));
         objectMapper.writeValue(response.getWriter(), ApiResponse.ERROR(Oauth2Status.LOGIN_FAILED, authException.getMessage()));
-    }
-
-    private void handleAuthException(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpStatus.NOT_FOUND.value());
-        objectMapper.writeValue(response.getWriter(), ApiResponse.ERROR(ApiStatus.NOT_FOUND, null));
     }
 }
