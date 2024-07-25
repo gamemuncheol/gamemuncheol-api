@@ -10,6 +10,7 @@ public enum ApiStatus implements ApiStatusIfs {
     BAD_REQUEST(400, "Bad Request"),
     SERVER_ERROR(500, "Server Error"),
     NULL_POINT(512, "Null Point Error"),
+    NOT_FOUND(404, "API Not Found"),
     ;
 
     private final Integer statusCode;
