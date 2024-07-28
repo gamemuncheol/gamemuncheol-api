@@ -39,7 +39,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     }
 
     private void handleNotFoundException(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpStatus.NOT_FOUND.value());
         objectMapper.writeValue(response.getWriter(), ApiResponse.ERROR(ApiStatus.NOT_FOUND, null));
     }
 
