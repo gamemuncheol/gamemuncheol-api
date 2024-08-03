@@ -40,6 +40,11 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000 # 30 seconds
+
   data:
     redis:
       host: ${REDIS_HOST}
@@ -74,6 +79,16 @@ spring:
             authorization-uri: https://appleid.apple.com/auth/authorize?response_mode=form_post
             token-uri: https://appleid.apple.com/auth/token
             jwk-set-uri: https://appleid.apple.com/auth/keys
+
+server:
+  tomcat:
+    threads:
+      max: 500 # 최대 동시 요청수, 기본 200
+      min-spare: 20 # 최소한 유지하는 스레드 수, 기본 10
+    max-connections: 8192
+    #  대기 중인 연결 큐의 최대 크기
+    # 대기열이 꽉 차면 추가 요청은 거절됨 (기본값 100)
+    accept-count: 1000 # 대기 중인 연결 큐의 최대 크기,
 
 apple:
   clientId: ${APPLE_CLIENT_ID}
