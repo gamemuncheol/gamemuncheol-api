@@ -1,5 +1,6 @@
-package com.gamemoonchul.application;
+package com.gamemoonchul.application.post;
 
+import com.gamemoonchul.application.MatchUserService;
 import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;

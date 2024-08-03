@@ -1,6 +1,7 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
+import com.gamemoonchul.application.post.PostOpenApiService;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.entity.Post;

@@ -1,4 +1,4 @@
-package com.gamemoonchul.application;
+package com.gamemoonchul.application.post;
 
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;

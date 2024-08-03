@@ -1,7 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
-import com.gamemoonchul.application.PostDeleteService;
-import com.gamemoonchul.application.PostService;
+import com.gamemoonchul.application.post.PostDeleteService;
+import com.gamemoonchul.application.post.PostService;
 import com.gamemoonchul.common.annotation.MemberId;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;

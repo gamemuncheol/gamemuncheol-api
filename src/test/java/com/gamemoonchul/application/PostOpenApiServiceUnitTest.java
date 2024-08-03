@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.application.post.PostOpenApiService;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.repository.VoteOptionRepository;
 import org.junit.jupiter.api.DisplayName;

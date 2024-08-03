@@ -1,7 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.CommentService;
-import com.gamemoonchul.application.PostOpenApiService;
+import com.gamemoonchul.application.post.PostOpenApiService;
 import com.gamemoonchul.common.annotation.MemberId;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.web.common.Pagination;

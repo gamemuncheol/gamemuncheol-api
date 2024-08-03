@@ -1,6 +1,8 @@
 package com.gamemoonchul.application;
 
 import com.gamemoonchul.TestDataBase;
+import com.gamemoonchul.application.post.PostDeleteService;
+import com.gamemoonchul.application.post.PostService;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.*;

@@ -1,5 +1,6 @@
-package com.gamemoonchul.application;
+package com.gamemoonchul.application.post;
 
+import com.gamemoonchul.application.PostViewService;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.status.PostStatus;
