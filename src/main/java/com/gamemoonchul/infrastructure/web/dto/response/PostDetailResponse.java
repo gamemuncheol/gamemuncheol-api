@@ -25,6 +25,21 @@ public class PostDetailResponse {
     private List<CommentResponse> comments;
     private List<VoteRatioResponse> voteDetail;
 
+    public static PostDetailResponse toResponse(Post post) {
+        return PostDetailResponse.builder()
+                .id(post.getId())
+                .author(MemberConverter.toResponseDto(post.getMember()))
+                .videoUrl(post.getVideoUrl())
+                .thumbnailUrl(post.getThumbnailUrl())
+                .commentCount(post.getCommentCount())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
+                .viewCount(post.getViewCount())
+                .voteDetail(getVoteDetail(post))
+                .build();
+    }
+
     public static PostDetailResponse toResponse(Post post, List<CommentResponse> comments) {
         return PostDetailResponse.builder()
                 .id(post.getId())
@@ -75,5 +90,9 @@ public class PostDetailResponse {
                 .toList();
 
         return result;
+    }
+
+    public void setComments(List<CommentResponse> comments) {
+        this.comments = comments;
     }
 }
