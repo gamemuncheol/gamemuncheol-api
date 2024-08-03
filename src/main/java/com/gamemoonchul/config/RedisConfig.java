@@ -2,7 +2,7 @@ package com.gamemoonchul.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +28,11 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisTemplate<Long, Post> postDetailRedisTemplate(RedisConnectionFactory connectionFactory) {
-        var template = new RedisTemplate<Long, Post>();
+    RedisTemplate<Long, PostDetailResponse> postDetailRedisTemplate(RedisConnectionFactory connectionFactory) {
+        var template = new RedisTemplate<Long, PostDetailResponse>();
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, Post.class));
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, PostDetailResponse.class));
         return template;
     }
 }
