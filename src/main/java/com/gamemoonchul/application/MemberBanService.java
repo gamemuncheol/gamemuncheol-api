@@ -49,4 +49,8 @@ public class MemberBanService {
                 );
         return banMember;
     }
+
+    public Integer countByMemberId(Long memberId) {
+        return memberBanRepository.countByMemberId(memberId);
+    }
 }
