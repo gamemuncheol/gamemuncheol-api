@@ -1,12 +1,9 @@
 package com.gamemoonchul.infrastructure.web;
 
-import com.gamemoonchul.application.CommentService;
 import com.gamemoonchul.application.post.PostOpenApiService;
 import com.gamemoonchul.common.annotation.MemberId;
-import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,25 +11,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @RequestMapping("/open-api/posts")
 @RestControllerWithEnvelopPattern
 @RequiredArgsConstructor
 public class PostOpenApiController {
     private final PostOpenApiService postService;
-    private final CommentService commentService;
 
     @GetMapping
     public PostDetailResponse getPostDetail(
             @RequestParam(value = "id") Long id,
             @MemberId Long requestMemberId
     ) {
-        Post post = postService.getPostDetails(id);
-        List<CommentResponse> comments = commentService.searchByPostId(post.getId(), requestMemberId).stream()
-                .map(CommentResponse::entityToResponse)
-                .toList();
-        return PostDetailResponse.toResponse(post, comments);
+        PostDetailResponse response = postService.getPostDetails(id, requestMemberId);
+
+        return response;
     }
 
     @GetMapping("/page/new")
