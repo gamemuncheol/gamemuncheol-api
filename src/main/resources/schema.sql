@@ -77,6 +77,7 @@ CREATE TABLE if not exists vote
 CREATE TABLE if not exists comment
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    parent_id  BIGINT,
     post_id    BIGINT NOT NULL,
     member_id  BIGINT NOT NULL,
     content    TEXT,
