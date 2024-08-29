@@ -55,7 +55,12 @@ spring:
       password: ${REDIS_PW}
   sql:
     init:
-      mode: always
+      mode: never
+
+  # Dotenv
+  config:
+    import: optional:file:.env[.properties]
+
 
   security:
     oauth2:

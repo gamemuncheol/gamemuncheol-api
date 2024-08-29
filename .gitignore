@@ -47,4 +47,4 @@ src/main/resources/client_secrets.json
 src/main/resources/static/video/**
 
 ### env ###
-.dev.env
+.env
