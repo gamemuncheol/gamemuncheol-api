@@ -25,6 +25,10 @@ spring:
       enabled: true
       max-file-size: 500MB #10GB
       max-request-size: 500MB # 10GB
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
   jpa:
     show-sql: true
     properties:
@@ -37,7 +41,7 @@ spring:
   datasource:
     # jdbc:mysql://localhost:3306/[TABLE NAME]?userSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
     url: ${DB_URL}
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
@@ -53,9 +57,11 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
       password: ${REDIS_PW}
-  sql:
-    init:
-      mode: always
+
+  # Dotenv
+  config:
+    import: optional:file:.env[.properties]
+
 
   security:
     oauth2:

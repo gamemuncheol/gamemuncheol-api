@@ -92,6 +92,8 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:5.4.0")
     // test container
 
+    // dotenv 프로젝트 최상단에 .env 파일 넣으면 환경변수 자동 주입
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -101,6 +103,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 tasks.named('test') {
