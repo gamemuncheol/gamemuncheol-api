@@ -48,3 +48,4 @@ src/main/resources/static/video/**
 
 ### env ###
 .env
+src/main/generated/
