@@ -8,9 +8,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.1'
     id 'io.spring.dependency-management' version '1.1.4'
-
-    //querydsl 추가
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com'
@@ -57,8 +54,8 @@ dependencies {
     // spring security end
 
     //querydsl 추가
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
@@ -92,8 +89,6 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:5.4.0")
     // test container
 
-    // dotenv 프로젝트 최상단에 .env 파일 넣으면 환경변수 자동 주입
-    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -102,7 +97,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // flyway
     implementation 'org.flywaydb:flyway-core'
@@ -113,11 +107,14 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// QueryDSL Plugins 쓰는 버전
-def querydslSrcDir = 'src/main/generated'
-clean {
-    delete file(querydslSrcDir)
+// === ⭐ QueryDsl 빌드 옵션 (선택) ===
+def querydslDir = "$buildDir/generated/querydsl"
+sourceSets {
+    main.java.srcDirs += [querydslDir]
 }
 tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
