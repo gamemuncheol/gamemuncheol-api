@@ -27,50 +27,51 @@ public class PostDetailResponse {
 
     public static PostDetailResponse toResponse(Post post) {
         return PostDetailResponse.builder()
-                .id(post.getId())
-                .author(MemberConverter.toResponseDto(post.getMember()))
-                .videoUrl(post.getVideoUrl())
-                .thumbnailUrl(post.getThumbnailUrl())
-                .commentCount(post.getCommentCount())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
-                .viewCount(post.getViewCount())
-                .voteDetail(getVoteDetail(post))
-                .build();
+            .id(post.getId())
+            .author(MemberConverter.toResponseDto(post.getMember()))
+            .videoUrl(post.getVideoUrl())
+            .thumbnailUrl(post.getThumbnailUrl())
+            .commentCount(post.getCommentCount())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
+            .viewCount(post.getViewCount())
+            .voteDetail(getVoteDetail(post))
+            .build();
     }
 
     public static PostDetailResponse toResponse(Post post, List<CommentResponse> comments) {
         return PostDetailResponse.builder()
-                .id(post.getId())
-                .author(MemberConverter.toResponseDto(post.getMember()))
-                .videoUrl(post.getVideoUrl())
-                .thumbnailUrl(post.getThumbnailUrl())
-                .commentCount(post.getCommentCount())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
-                .viewCount(post.getViewCount())
-                .comments(comments)
-                .voteDetail(getVoteDetail(post))
-                .build();
+            .id(post.getId())
+            .author(MemberConverter.toResponseDto(post.getMember()))
+            .videoUrl(post.getVideoUrl())
+            .thumbnailUrl(post.getThumbnailUrl())
+            .commentCount(post.getCommentCount())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
+            .viewCount(post.getViewCount())
+            .comments(comments)
+            .voteDetail(getVoteDetail(post))
+            .build();
     }
+
 
     public static List<VoteRatioResponse> getVoteDetail(Post post) {
         HashMap<Long, Double> voteRatioMap = new HashMap<>();
         post.getVoteOptions()
-                .forEach(vo -> {
-                    voteRatioMap.put(vo.getId(), 0.0);
-                    Optional.ofNullable(vo.getVotes())
-                            .ifPresent(votes -> {
-                                votes.forEach(v -> voteRatioMap.put(v.getId(), 0.0));
-                            });
-                });
+            .forEach(vo -> {
+                voteRatioMap.put(vo.getId(), 0.0);
+                Optional.ofNullable(vo.getVotes())
+                    .ifPresent(votes -> {
+                        votes.forEach(v -> voteRatioMap.put(v.getId(), 0.0));
+                    });
+            });
 
         Double totalVoteCnt = voteRatioMap.values()
-                .stream()
-                .mapToDouble(Double::doubleValue)
-                .sum();
+            .stream()
+            .mapToDouble(Double::doubleValue)
+            .sum();
 
         voteRatioMap.forEach((k, v) -> {
             if (totalVoteCnt == 0) {
@@ -81,13 +82,13 @@ public class PostDetailResponse {
         });
 
         List<VoteRatioResponse> result = post.getVoteOptions()
-                .stream()
-                .map(vo -> {
-                    Double voteRatio = voteRatioMap.get(vo.getId());
-                    MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponseVoId(vo.getMatchUser(), vo.getId());
-                    return new VoteRatioResponse(matchUserResponse, voteRatio);
-                })
-                .toList();
+            .stream()
+            .map(vo -> {
+                Double voteRatio = voteRatioMap.get(vo.getId());
+                MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponseVoId(vo.getMatchUser(), vo.getId());
+                return new VoteRatioResponse(matchUserResponse, voteRatio);
+            })
+            .toList();
 
         return result;
     }

@@ -21,9 +21,9 @@ public class PostApiController {
 
     @PostMapping
     public PostDetailResponse upload(
-            @Valid
-            @RequestBody PostUploadRequest request,
-            @MemberSession Member member
+        @Valid
+        @RequestBody PostUploadRequest request,
+        @MemberSession Member member
     ) {
         PostDetailResponse response = postService.upload(request, member);
         return response;
@@ -31,7 +31,7 @@ public class PostApiController {
 
     @DeleteMapping("/{id}")
     public String delete(
-            @MemberId Long requestMemberId, @PathVariable("id") Long id
+        @MemberId Long requestMemberId, @PathVariable("id") Long id
     ) {
         return postDeleteService.delete(id, requestMemberId);
     }
