@@ -15,9 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post", indexes = {
-        @Index(name = "idx_vote_ratio_vote_count", columnList = "vote_ratio DESC, vote_count DESC"),
-        @Index(name = "idx_post_created_at_desc", columnList = "created_at DESC"),
-        @Index(name = "idx_view_count", columnList = "view_count DESC")
+    @Index(name = "idx_vote_ratio_vote_count", columnList = "vote_ratio DESC, vote_count DESC"),
+    @Index(name = "idx_post_created_at_desc", columnList = "created_at DESC"),
+    @Index(name = "idx_view_count", columnList = "view_count DESC")
 })
 public class Post extends BaseTimeEntity {
     @Id
@@ -31,9 +31,6 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VoteOptions> voteOptions;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostView> postViews;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
@@ -88,15 +85,15 @@ public class Post extends BaseTimeEntity {
 
     public Double getMinVoteRatio() {
         int totalVoteCount = voteOptions.stream()
-                .mapToInt(voteOption -> voteOption.getVotes()
-                        .size())
-                .sum();
+            .mapToInt(voteOption -> voteOption.getVotes()
+                .size())
+            .sum();
         if (totalVoteCount == 0) {
             return 0.0;
         }
         double firstIndexVoteRatio = (double) voteOptions.get(0)
-                .getVotes()
-                .size() / (double) totalVoteCount * 100;
+            .getVotes()
+            .size() / (double) totalVoteCount * 100;
         return Math.min(100.0 - firstIndexVoteRatio, firstIndexVoteRatio);
     }
 
