@@ -64,6 +64,9 @@ public class Post extends BaseTimeEntity {
     @Column(name = "vote_ratio")
     private Double voteRatio = 0.0;
 
+    @Version
+    private Integer version;
+
     public void commentCountDown() {
         this.commentCount--;
     }
