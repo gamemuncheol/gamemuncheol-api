@@ -20,12 +20,6 @@ jobs:
           java-version: '17'
           distribution: "adopt"
 
-      - name: MV build.aws.gradle to build.gradle
-        run: |
-          rm -rf ./build.gradle
-          mv ./aws.build.gradle ./build.gradle
-        shell: bash
-
       - name: Set Yaml
         uses: cschleiden/replace-tokens@v1
         with:

@@ -37,4 +37,20 @@ class MemberBanServiceTest extends TestDataBase {
         assertEquals(bannedMember.get(0).getBanMember().getName(), banMember.getName());
     }
 
+    @Test
+    @DisplayName("Member Ban 후 Ban 갯수 늘어났는지 테스트")
+    void banCountTest() {
+        // given
+        Member member = MemberDummy.createWithId("홍길동");
+        Member banMember = MemberDummy.createWithId("김철수");
+        member = memberRepository.save(member);
+        banMember = memberRepository.save(banMember);
+
+        // when
+        memberBanService.ban(member, banMember.getId());
+
+        // then
+        Integer banCnt = memberBanService.countByMemberId(member.getId());
+        assertEquals(1, banCnt);
+    }
 }

@@ -44,16 +44,16 @@ public class PostService {
 
     private void saveVoteOptions(List<Long> matchUserIds, Post post) {
         List<VoteOptions> voteOptions = matchUserIds.stream()
-                .map(matchUserService::findById)
-                .map(
-                        matchUser -> {
-                            return VoteOptions.builder()
-                                    .matchUser(matchUser)
-                                    .post(post)
-                                    .build();
-                        }
-                )
-                .toList();
+            .map(matchUserService::findById)
+            .map(
+                matchUser -> {
+                    return VoteOptions.builder()
+                        .matchUser(matchUser)
+                        .post(post)
+                        .build();
+                }
+            )
+            .toList();
         List<VoteOptions> savedVoteOptions = voteOptionRepository.saveAll(voteOptions);
         post.addVoteOptions(voteOptions);
     }
@@ -61,10 +61,10 @@ public class PostService {
     @Transactional
     public String delete(Long postId, Member member) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
         if (member.getId()
-                .equals(post.getMember()
-                        .getId())) {
+            .equals(post.getMember()
+                .getId())) {
             postRepository.delete(post);
             return "Delete Complete";
         }

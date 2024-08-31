@@ -44,8 +44,8 @@ class PostServiceTest extends TestDataBase {
         List<MatchUser> savedMatchUsers = matchUserRepository.saveAll(matchUsers);
         // request 생성
         PostUploadRequest request = PostDummy.createRequest(savedMatchUsers.stream()
-                .map(MatchUser::getId)
-                .collect(Collectors.toList()));
+            .map(MatchUser::getId)
+            .collect(Collectors.toList()));
 
         // when
         PostDetailResponse response = postService.upload(request, member);
@@ -56,7 +56,7 @@ class PostServiceTest extends TestDataBase {
         assertThat(response.getTimesAgo()).isNotNull();
         assertThat(response).isNotNull();
         assertThat(response.getVoteDetail()
-                .size()).isEqualTo(2);
+            .size()).isEqualTo(2);
         assertThat(response.getViewCount()).isEqualTo(0);
     }
 }

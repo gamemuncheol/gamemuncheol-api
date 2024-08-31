@@ -1,10 +1,21 @@
-package com.gamemoonchul.infrastructure.web.dto.response;
+package com.gamemoonchul.domain.entity.redis;
 
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.util.StringUtils;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.VoteRatioResponse;
+import jakarta.persistence.Id;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +23,12 @@ import java.util.Optional;
 
 @Getter
 @Builder
-public class PostDetailResponse {
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RedisHash(value = "post-detail", timeToLive = 600L) // 10분간 살아 있음
+public class RedisPostDetail {
+    @Id
+    @Indexed
     private Long id;
     private MemberResponseDto author;
     private String videoUrl;
@@ -25,8 +41,24 @@ public class PostDetailResponse {
     private List<CommentResponse> comments;
     private List<VoteRatioResponse> voteDetail;
 
-    public static PostDetailResponse toResponse(Post post) {
-        return PostDetailResponse.builder()
+    public static RedisPostDetail fromResponse(PostDetailResponse postDetailResponse) {
+        return RedisPostDetail.builder()
+            .id(postDetailResponse.getId())
+            .author(postDetailResponse.getAuthor())
+            .videoUrl(postDetailResponse.getVideoUrl())
+            .thumbnailUrl(postDetailResponse.getThumbnailUrl())
+            .title(postDetailResponse.getTitle())
+            .content(postDetailResponse.getContent())
+            .timesAgo(postDetailResponse.getTimesAgo())
+            .viewCount(postDetailResponse.getViewCount())
+            .commentCount(postDetailResponse.getCommentCount())
+            .comments(postDetailResponse.getComments())
+            .voteDetail(postDetailResponse.getVoteDetail())
+            .build();
+    }
+
+    public static RedisPostDetail toCache(Post post) {
+        return RedisPostDetail.builder()
             .id(post.getId())
             .author(MemberConverter.toResponseDto(post.getMember()))
             .videoUrl(post.getVideoUrl())
@@ -39,23 +71,6 @@ public class PostDetailResponse {
             .voteDetail(getVoteDetail(post))
             .build();
     }
-
-    public static PostDetailResponse toResponse(Post post, List<CommentResponse> comments) {
-        return PostDetailResponse.builder()
-            .id(post.getId())
-            .author(MemberConverter.toResponseDto(post.getMember()))
-            .videoUrl(post.getVideoUrl())
-            .thumbnailUrl(post.getThumbnailUrl())
-            .commentCount(post.getCommentCount())
-            .title(post.getTitle())
-            .content(post.getContent())
-            .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
-            .viewCount(post.getViewCount())
-            .comments(comments)
-            .voteDetail(getVoteDetail(post))
-            .build();
-    }
-
 
     public static List<VoteRatioResponse> getVoteDetail(Post post) {
         HashMap<Long, Double> voteRatioMap = new HashMap<>();

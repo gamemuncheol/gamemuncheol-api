@@ -1,11 +1,15 @@
 package com.gamemoonchul.application.post;
 
+import com.gamemoonchul.application.CommentService;
 import com.gamemoonchul.application.PostViewService;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Post;
+import com.gamemoonchul.domain.entity.redis.RedisPostDetail;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.PostRepository;
+import com.gamemoonchul.infrastructure.repository.redis.RedisPostDetailRepository;
 import com.gamemoonchul.infrastructure.web.common.Pagination;
+import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -23,13 +28,28 @@ import java.util.stream.Collectors;
 public class PostOpenApiService {
     private final PostRepository postRepository;
     private final PostViewService postViewService;
+    private final CommentService commentService;
+    private final RedisPostDetailRepository redisPostDetailRepository;
 
-    public Post getPostDetails(Long postId) {
-        Post post = postRepository.searchByPostId(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
-        post.viewCountUp();
-        postViewService.save(post);
+    public RedisPostDetail getPostDetails(Long postId, Long requestMemberId) {
+        Optional<RedisPostDetail> optionalPostDetail = redisPostDetailRepository.findRedisPostDetailById(postId);
+        RedisPostDetail redisPostDetail;
 
-        return post;
+        if (optionalPostDetail.isEmpty()) {
+            Post post = postRepository.searchByPostId(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
+            post.viewCountUp();
+            postViewService.save(post);
+
+            redisPostDetail = redisPostDetailRepository.save(RedisPostDetail.toCache(post));
+        } else {
+            redisPostDetail = optionalPostDetail.get();
+        }
+
+        List<CommentResponse> comments = commentService.searchByPostId(optionalPostDetail.get().getId(), requestMemberId).stream()
+            .map(CommentResponse::entityToResponse).toList(); // 변경 자주 일어남, 캐싱 X
+        redisPostDetail.setComments(comments);
+
+        return redisPostDetail;
     }
 
     public Pagination<PostMainPageResponse> getLatestPosts(Long requestMemberId, int page, int size) {

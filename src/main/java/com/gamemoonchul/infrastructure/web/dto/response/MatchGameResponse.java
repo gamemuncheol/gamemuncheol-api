@@ -27,22 +27,22 @@ public class MatchGameResponse {
     public static MatchGameResponse toResponse(MatchGame matchGame) {
         Properties properties = loadProperties();
         return MatchGameResponse.builder()
-                .gameId(matchGame.getGameId())
-                .gameCreation(matchGame.getGameCreation())
-                .gameDuration(matchGame.getGameDuration())
-                .gameMode(matchGame.getGameMode())
-                .matchUsers(matchGame.getMatchUsers()
-                        .stream()
-                        .map(MatchUserResponse::toResponse)
-                        .toList())
-                .build();
+            .gameId(matchGame.getGameId())
+            .gameCreation(matchGame.getGameCreation())
+            .gameDuration(matchGame.getGameDuration())
+            .gameMode(matchGame.getGameMode())
+            .matchUsers(matchGame.getMatchUsers()
+                .stream()
+                .map(MatchUserResponse::toResponse)
+                .toList())
+            .build();
     }
 
     public static Properties loadProperties() {
         Properties properties = new Properties();
         try {
             InputStream inputStream = MatchUserResponse.class.getClassLoader()
-                    .getResourceAsStream("lolchampion.properties");
+                .getResourceAsStream("lolchampion.properties");
             InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             properties = new Properties();
             properties.load(reader);
@@ -54,7 +54,9 @@ public class MatchGameResponse {
 
     @Getter
     @Builder
-    static class MatchUserResponse {
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MatchUserResponse {
         private Long id;
         private String nickname;
         private String championName;
@@ -65,12 +67,12 @@ public class MatchGameResponse {
             String koChampName = getKoChampName(loadProperties(), matchUser);
 
             return MatchUserResponse.builder()
-                    .id(matchUser.getId())
-                    .nickname(matchUser.getNickname())
-                    .championName(koChampName)
-                    .championThumbnail(getChampThumbnail(matchUser.getChampionName()))
-                    .win(matchUser.isWin())
-                    .build();
+                .id(matchUser.getId())
+                .nickname(matchUser.getNickname())
+                .championName(koChampName)
+                .championThumbnail(getChampThumbnail(matchUser.getChampionName()))
+                .win(matchUser.isWin())
+                .build();
         }
 
         /**
@@ -81,12 +83,12 @@ public class MatchGameResponse {
             String koChampName = getKoChampName(loadProperties(), matchUser);
 
             return MatchUserResponse.builder()
-                    .id(voId)
-                    .nickname(matchUser.getNickname())
-                    .championName(koChampName)
-                    .championThumbnail(getChampThumbnail(matchUser.getChampionName()))
-                    .win(matchUser.isWin())
-                    .build();
+                .id(voId)
+                .nickname(matchUser.getNickname())
+                .championName(koChampName)
+                .championThumbnail(getChampThumbnail(matchUser.getChampionName()))
+                .win(matchUser.isWin())
+                .build();
         }
 
         public static String getChampThumbnail(String championName) {

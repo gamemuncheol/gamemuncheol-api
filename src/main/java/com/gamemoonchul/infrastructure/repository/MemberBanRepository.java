@@ -12,4 +12,6 @@ public interface MemberBanRepository extends JpaRepository<MemberBan, Long>, Mem
     List<MemberBan> findAllByMember(Member member);
 
     Optional<MemberBan> findByMemberAndBanMember(Member member, Member banMember);
+
+    Integer countByMemberId(Long memberId);
 }
