@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class PostOpenApiService {
     private final PostRepository postRepository;
@@ -35,9 +35,9 @@ public class PostOpenApiService {
     public Pagination<PostMainPageResponse> getLatestPosts(Long requestMemberId, int page, int size) {
         Page<Post> savedPage = postRepository.searchNewPostsWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
-                .stream()
-                .map(PostMainPageResponse::entityToResponse)
-                .collect(Collectors.toList());
+            .stream()
+            .map(PostMainPageResponse::entityToResponse)
+            .collect(Collectors.toList());
 
         return new Pagination<>(savedPage, responses);
     }
@@ -45,9 +45,9 @@ public class PostOpenApiService {
     public Pagination<PostMainPageResponse> getGrillPosts(Long requestMemberId, int page, int size) {
         Page<Post> savedPage = postRepository.searchGrillPostsWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
-                .stream()
-                .map(PostMainPageResponse::entityToResponse)
-                .toList();
+            .stream()
+            .map(PostMainPageResponse::entityToResponse)
+            .toList();
         return new Pagination<PostMainPageResponse>(savedPage, responses);
     }
 
@@ -55,9 +55,9 @@ public class PostOpenApiService {
         Page<Post> savedPage = postRepository.searchHotPostWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
 
         List<PostMainPageResponse> responses = savedPage.getContent()
-                .stream()
-                .map(PostMainPageResponse::entityToResponse)
-                .toList();
+            .stream()
+            .map(PostMainPageResponse::entityToResponse)
+            .toList();
         return new Pagination<>(savedPage, responses);
     }
 }
