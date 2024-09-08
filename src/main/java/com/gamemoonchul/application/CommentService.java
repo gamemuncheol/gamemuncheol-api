@@ -42,15 +42,16 @@ public class CommentService {
         retryFor = {
             StaleObjectStateException.class,
             ObjectOptimisticLockingFailureException.class},
-        maxAttempts = 3, // 최대 시도 횟수
+        maxAttempts = 5, // 최대 시도 횟수
         backoff = @Backoff(
+            delay = 0,
             random = true,
-            maxDelay = 200
+            maxDelay = 10000
         ) // 재시도 간의 대기 시간 (1000ms)
     )
     public Comment save(CommentSaveDto request, Member member) {
         validatePostNotReplied(request);
-        Post post = postRepository.findByIdForUpdate(request.postId())
+        Post post = postRepository.findById(request.postId())
             .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
         Comment comment = Comment.builder()
             .parentId(request.parentId())
