@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS member_ban
 )
     engine = InnoDB;
 
-CREATE INDEX IF NOT EXISTS idx_member_ban_banned_member_id
+CREATE INDEX idx_member_ban_banned_member_id
     ON member_ban (member_id);
 
 CREATE TABLE IF NOT EXISTS post
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS post_ban
 )
     engine = InnoDB;
 
-CREATE INDEX IF NOT EXISTS idx_post_ban_banned_member_id
+CREATE INDEX idx_post_ban_banned_member_id
     ON post_ban (member_id);
 
 CREATE TABLE IF NOT EXISTS post_view
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS post_view
 )
     engine = InnoDB;
 
-CREATE INDEX IF NOT EXISTS idx_post_view_created_at_post_id
+CREATE INDEX idx_post_view_created_at_post_id
     ON post_view (created_at, post_id);
 
 CREATE TABLE IF NOT EXISTS test
@@ -149,10 +149,10 @@ CREATE TABLE IF NOT EXISTS vote
 )
     engine = InnoDB;
 
-CREATE INDEX IF NOT EXISTS idx_created_at
+CREATE INDEX idx_created_at
     ON vote (created_at);
 
-CREATE INDEX IF NOT EXISTS idx_updated_at
+CREATE INDEX idx_updated_at
     ON vote (updated_at);
 
 CREATE TABLE IF NOT EXISTS vote_option
