@@ -42,7 +42,7 @@ public class PostOpenApiService {
             redisPostDetail = optionalPostDetail.get();
         }
 
-        List<CommentResponse> comments = commentService.searchByPostId(optionalPostDetail.get().getId(), requestMemberId).stream()
+        List<CommentResponse> comments = commentService.searchByPostId(redisPostDetail.getId(), requestMemberId).stream()
             .map(CommentResponse::entityToResponse).toList(); // 변경 자주 일어남, 캐싱 X
         redisPostDetail.setComments(comments);
 
