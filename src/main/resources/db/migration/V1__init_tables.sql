@@ -1,4 +1,4 @@
-create table comment
+CREATE TABLE IF NOT EXISTS comment
 (
     id         bigint auto_increment
         primary key,
@@ -11,7 +11,7 @@ create table comment
 )
     engine = InnoDB;
 
-create table match_game
+CREATE TABLE IF NOT EXISTS match_game
 (
     id            bigint auto_increment
         primary key,
@@ -24,7 +24,7 @@ create table match_game
 )
     engine = InnoDB;
 
-create table match_user
+CREATE TABLE IF NOT EXISTS match_user
 (
     id            bigint auto_increment
         primary key,
@@ -36,7 +36,7 @@ create table match_user
 )
     engine = InnoDB;
 
-create table member
+CREATE TABLE IF NOT EXISTS member
 (
     id                bigint auto_increment
         primary key,
@@ -60,7 +60,7 @@ create table member
 )
     engine = InnoDB;
 
-create table member_ban
+CREATE TABLE IF NOT EXISTS member_ban
 (
     id            bigint auto_increment
         primary key,
@@ -71,10 +71,10 @@ create table member_ban
 )
     engine = InnoDB;
 
-create index idx_member_ban_banned_member_id
-    on member_ban (member_id);
+CREATE INDEX IF NOT EXISTS idx_member_ban_banned_member_id
+    ON member_ban (member_id);
 
-create table post
+CREATE TABLE IF NOT EXISTS post
 (
     id            bigint auto_increment
         primary key,
@@ -93,7 +93,7 @@ create table post
 )
     engine = InnoDB;
 
-create table post_ban
+CREATE TABLE IF NOT EXISTS post_ban
 (
     id          bigint auto_increment
         primary key,
@@ -104,10 +104,10 @@ create table post_ban
 )
     engine = InnoDB;
 
-create index idx_post_ban_banned_member_id
-    on post_ban (member_id);
+CREATE INDEX IF NOT EXISTS idx_post_ban_banned_member_id
+    ON post_ban (member_id);
 
-create table post_view
+CREATE TABLE IF NOT EXISTS post_view
 (
     id         bigint auto_increment
         primary key,
@@ -117,17 +117,17 @@ create table post_view
 )
     engine = InnoDB;
 
-create index idx_post_view_created_at_post_id
-    on post_view (created_at, post_id);
+CREATE INDEX IF NOT EXISTS idx_post_view_created_at_post_id
+    ON post_view (created_at, post_id);
 
-create table test
+CREATE TABLE IF NOT EXISTS test
 (
     id   int         null,
     name varchar(50) null
 )
     engine = InnoDB;
 
-create table user_test
+CREATE TABLE IF NOT EXISTS user_test
 (
     id   int          not null
         primary key,
@@ -135,7 +135,7 @@ create table user_test
 )
     engine = InnoDB;
 
-create table vote
+CREATE TABLE IF NOT EXISTS vote
 (
     id              bigint auto_increment
         primary key,
@@ -149,13 +149,13 @@ create table vote
 )
     engine = InnoDB;
 
-create index idx_created_at
-    on vote (created_at);
+CREATE INDEX IF NOT EXISTS idx_created_at
+    ON vote (created_at);
 
-create index idx_updated_at
-    on vote (updated_at);
+CREATE INDEX IF NOT EXISTS idx_updated_at
+    ON vote (updated_at);
 
-create table vote_option
+CREATE TABLE IF NOT EXISTS vote_option
 (
     id            bigint auto_increment
         primary key,
@@ -163,4 +163,3 @@ create table vote_option
     match_user_id bigint null
 )
     engine = InnoDB;
-
