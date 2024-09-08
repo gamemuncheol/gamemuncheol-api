@@ -14,6 +14,10 @@ import com.gamemoonchul.infrastructure.repository.PostRepository;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.StaleObjectStateException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,16 +38,27 @@ public class CommentService {
     /**
      * 테스트를 하기 위해서 실제 Post, Member가 객체맵핑 되있어야 합니다.
      */
+    @Retryable(
+        retryFor = {
+            StaleObjectStateException.class,
+            ObjectOptimisticLockingFailureException.class},
+        maxAttempts = 5, // 최대 시도 횟수
+        backoff = @Backoff(
+            delay = 0,
+            random = true,
+            maxDelay = 10000
+        ) // 재시도 간의 대기 시간 (1000ms)
+    )
     public Comment save(CommentSaveDto request, Member member) {
         validatePostNotReplied(request);
-        Post post = postRepository.findByIdForUpdate(request.postId())
-                .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
+        Post post = postRepository.findById(request.postId())
+            .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
         Comment comment = Comment.builder()
-                .parentId(request.parentId())
-                .member(member)
-                .post(post)
-                .content(request.content())
-                .build();
+            .parentId(request.parentId())
+            .member(member)
+            .post(post)
+            .content(request.content())
+            .build();
 
         post.commentCountUp();
         postRepository.save(post);
@@ -57,12 +72,12 @@ public class CommentService {
     private void validatePostNotReplied(CommentSaveDto request) {
         if (request.parentId() != null) {
             Comment parentComment = commentRepository.findById(request.parentId())
-                    .orElseThrow(() -> new BadRequestException(PostStatus.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new BadRequestException(PostStatus.COMMENT_NOT_FOUND));
             if (parentComment.getParentId() != null) {
                 throw new BadRequestException(PostStatus.COMMENT_CANT_HAVE_GRANDMOTHER);
             } else if (!parentComment.getPost()
-                    .getId()
-                    .equals(request.postId())) {
+                .getId()
+                .equals(request.postId())) {
                 throw new BadRequestException(PostStatus.INVALID_REPLY);
             }
         }
@@ -70,7 +85,7 @@ public class CommentService {
 
     public Comment fix(CommentFixRequest request, Long requestMemberId) {
         Comment modifiedComment = commentRepository.findById(request.commentId())
-                .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
         modifiedComment.setContent(request.contents());
         // 글 작성자
         validateSameMemberId(modifiedComment.getMember(), requestMemberId);
@@ -94,7 +109,7 @@ public class CommentService {
      */
     public Comment searchComment(Long commentId) {
         Comment comment = commentRepository.findByIdForUpdate(commentId)
-                .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(PostStatus.COMMENT_NOT_FOUND));
         return comment;
     }
 
