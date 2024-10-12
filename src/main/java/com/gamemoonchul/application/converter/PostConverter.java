@@ -8,6 +8,7 @@ import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
 import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.MatchUserResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.VoteRatioResponse;
 
 import java.util.HashMap;
@@ -95,4 +96,18 @@ public class PostConverter {
         return result;
     }
 
+    public static PostMainPageResponse entityToResponse(Post entity) {
+        List<Double> voteRatio = List.of(100 - entity.getVoteRatio(), entity.getVoteRatio());
+        return PostMainPageResponse.builder()
+            .id(entity.getId())
+            .member(MemberConverter.toResponseDto(entity.getMember()))
+            .videoUrl(entity.getVideoUrl())
+            .thumbnailUrl(entity.getThumbnailUrl())
+            .title(entity.getTitle())
+            .content(entity.getContent())
+            .viewCount(entity.getViewCount())
+            .timesAgo(StringUtils.getTimeAgo(entity.getCreatedAt()))
+            .voteRatio(voteRatio)
+            .build();
+    }
 }

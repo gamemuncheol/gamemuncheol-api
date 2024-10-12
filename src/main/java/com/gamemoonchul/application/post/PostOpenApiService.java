@@ -55,7 +55,7 @@ public class PostOpenApiService {
         Page<Post> savedPage = postRepository.searchNewPostsWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
             .stream()
-            .map(PostMainPageResponse::entityToResponse)
+            .map(PostConverter::entityToResponse)
             .collect(Collectors.toList());
 
         return new Pagination<>(savedPage, responses);
@@ -65,7 +65,7 @@ public class PostOpenApiService {
         Page<Post> savedPage = postRepository.searchGrillPostsWithoutBanPosts(requestMemberId, PageRequest.of(page, size));
         List<PostMainPageResponse> responses = savedPage.getContent()
             .stream()
-            .map(PostMainPageResponse::entityToResponse)
+            .map(PostConverter::entityToResponse)
             .toList();
         return new Pagination<PostMainPageResponse>(savedPage, responses);
     }
@@ -75,7 +75,7 @@ public class PostOpenApiService {
 
         List<PostMainPageResponse> responses = savedPage.getContent()
             .stream()
-            .map(PostMainPageResponse::entityToResponse)
+            .map(PostConverter::entityToResponse)
             .toList();
         return new Pagination<>(savedPage, responses);
     }
