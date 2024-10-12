@@ -2,6 +2,7 @@ package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
+import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,8 +23,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "member", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "nickname"
-        ), @UniqueConstraint(columnNames = {"provider", "identifier"})
+    @UniqueConstraint(columnNames = "nickname"
+    ), @UniqueConstraint(columnNames = {"provider", "identifier"})
 })
 public class Member extends BaseTimeEntity {
     @Id
@@ -78,6 +81,19 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> votes;
 
+    public Member(RedisMember redisMember) {
+        this.role = MemberRole.USER;
+        this.name = redisMember.getName();
+        this.identifier = redisMember.getIdentifier();
+        this.provider = redisMember.getProvider();
+        this.nickname = ifNicknameNotExistGetRandom(redisMember.getNickname());
+        this.privacyAgreed = true;
+        this.score = 0.0;
+        this.email = redisMember.getEmail();
+        this.picture = redisMember.getPicture();
+        this.birth = null;
+    }
+
     public Member update(String name, String nickname) {
         this.name = name;
         this.picture = picture;
@@ -89,7 +105,17 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
-    public String getRoleKey() {
-        return this.role.getKey();
+    private String ifNicknameNotExistGetRandom(String currentNickname) {
+        Optional<String> nickname = Optional.ofNullable(currentNickname);
+        if (nickname.isEmpty()) {
+            nickname = Optional.of(randomNickname());
+        }
+        return nickname.get();
+    }
+
+    private String randomNickname() {
+        return UUID.randomUUID()
+            .toString()
+            .substring(0, 30);
     }
 }

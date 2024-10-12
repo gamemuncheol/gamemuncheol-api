@@ -1,7 +1,6 @@
 package com.gamemoonchul;
 
 import com.gamemoonchul.application.RedisMemberService;
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.config.jwt.TokenDto;
@@ -54,7 +53,7 @@ public class MemberOpenApiService {
         redisMember.setNickname(request.nickname());
 
 
-        Member member = MemberConverter.redisMemberToEntity(redisMember);
+        Member member = new Member(redisMember);
         memberRepository.save(member);
         redisMemberService.delete(redisMember);
 
