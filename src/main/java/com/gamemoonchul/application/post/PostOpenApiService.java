@@ -1,6 +1,7 @@
 package com.gamemoonchul.application.post;
 
 import com.gamemoonchul.application.CommentService;
+import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.redis.RedisPostDetail;
@@ -37,7 +38,7 @@ public class PostOpenApiService {
             Post post = postRepository.searchByPostId(postId).orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
             post.viewCountUp();
 
-            redisPostDetail = redisPostDetailRepository.save(RedisPostDetail.toCache(post));
+            redisPostDetail = redisPostDetailRepository.save(PostConverter.toCache(post));
         } else {
             redisPostDetail = optionalPostDetail.get();
         }
