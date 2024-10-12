@@ -18,16 +18,13 @@ class MatchUserConverterTest extends TestDataBase {
     @Autowired
     private MatchUserConverter matchUserConverter;
 
-    @Autowired
-    private MatchGameConverter matchConverter;
-
     @Test
     @DisplayName("MatchUserConverter 객체 생성 테스트")
     void createMatchUserConverter() {
         // given
         MatchRecord matchVO = MatchDummy.create();
         ParticipantRecord participantVO = matchVO.info().participants().get(0);
-        MatchGame matchGame = matchConverter.toMatchGame(matchVO);
+        MatchGame matchGame = MatchGameConverter.toMatchGame(matchVO);
 
         // when
         MatchUser matchUser = matchUserConverter.toEntities(participantVO, matchGame);
