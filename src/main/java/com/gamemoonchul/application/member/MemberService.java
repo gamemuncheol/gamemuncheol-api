@@ -1,6 +1,5 @@
 package com.gamemoonchul.application.member;
 
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
@@ -48,7 +47,7 @@ public class MemberService {
 
 
     public MemberResponseDto me(Member member) {
-        MemberResponseDto response = MemberConverter.toResponseDto(member);
+        MemberResponseDto response = new MemberResponseDto(member);
         return response;
     }
 }

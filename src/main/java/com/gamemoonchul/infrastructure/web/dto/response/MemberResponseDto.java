@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.web.dto.response;
 
+import com.gamemoonchul.domain.entity.Member;
 import lombok.*;
 
 @Getter
@@ -15,4 +16,14 @@ public class MemberResponseDto {
     private String picture;
     private boolean privacyAgreed;
     private Double score;
+
+    public MemberResponseDto(Member entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.nickname = entity.getNickname();
+        this.email = entity.getEmail();
+        this.privacyAgreed = entity.isPrivacyAgreed();
+        this.picture = entity.getPicture();
+        this.score = entity.getScore();
+    }
 }
