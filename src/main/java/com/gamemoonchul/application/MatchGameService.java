@@ -17,14 +17,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MatchGameService {
     private final MatchGameRepository matchGameRepository;
-    private final MatchGameConverter matchConverter;
 
     public Optional<MatchGame> findByGameId(String gameId) {
         return matchGameRepository.findByGameId(gameId);
     }
 
     public MatchGame save(MatchRecord vo) {
-        MatchGame matchGame = matchConverter.toMatchGame(vo);
+        MatchGame matchGame = MatchGameConverter.toMatchGame(vo);
         return matchGameRepository.save(matchGame);
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostMainPageResponse {
     private Long id;
-    private MemberResponseDto member;
+    private MemberResponse member;
     private String videoUrl;
     private String thumbnailUrl;
     private String title;

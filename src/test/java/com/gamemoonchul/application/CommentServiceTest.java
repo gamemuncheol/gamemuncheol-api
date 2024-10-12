@@ -5,7 +5,7 @@ import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.*;
-import com.gamemoonchul.domain.model.dto.CommentSaveDto;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentSaveRequest;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
@@ -47,21 +47,21 @@ class CommentServiceTest extends TestDataBase {
     @DisplayName("코트 저장이 잘 되는지, post의 comment 개수가 정상적으로 업데이트 되는지 테스트")
     void saveTest() {
         // given
-        CommentSaveDto request = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest request = CommentDummy.createSaveDto(post.getId());
         em.clear(); // 1차 캐쉬 제거
 
         // when
         Comment savedEntity = commentService.save(request, member);
         Post searchedPost = postRepository.findById(post.getId())
-                .orElseThrow(
-                        () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
-                );
+            .orElseThrow(
+                () -> new NotFoundException(PostStatus.POST_NOT_FOUND)
+            );
 
         // then
         assertThat(searchedPost.getCommentCount()).isEqualTo(post.getCommentCount() + 1);
         assertThat(savedEntity.getContent()).isEqualTo(request.content());
         assertThat(savedEntity.getPost()
-                .getId()).isEqualTo(request.postId());
+            .getId()).isEqualTo(request.postId());
     }
 
     @Test
@@ -70,9 +70,9 @@ class CommentServiceTest extends TestDataBase {
         // given
         Comment savedEntity = commentRepository.save(CommentDummy.create(post, member));
         CommentFixRequest content = CommentFixRequest.builder()
-                .contents("new contents")
-                .commentId(savedEntity.getId())
-                .build();
+            .contents("new contents")
+            .commentId(savedEntity.getId())
+            .build();
         em.clear();
 
         // when
@@ -90,16 +90,16 @@ class CommentServiceTest extends TestDataBase {
         Comment savedEntity = commentRepository.save(CommentDummy.create(post, member));
         Member anotherMember = memberRepository.save(MemberDummy.createWithId("rookedsysc"));
         CommentFixRequest content = CommentFixRequest.builder()
-                .contents("new contents")
-                .commentId(savedEntity.getId())
-                .build();
+            .contents("new contents")
+            .commentId(savedEntity.getId())
+            .build();
         em.clear();
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.fix(content, anotherMember.getId()))
-                .isInstanceOf(UnauthorizedException.class)
-                .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
+            () -> commentService.fix(content, anotherMember.getId()))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
 
     @Test
@@ -107,15 +107,15 @@ class CommentServiceTest extends TestDataBase {
     void canNotFixNotExistComment() throws InterruptedException {
         // given
         CommentFixRequest content = CommentFixRequest.builder()
-                .contents("new contents")
-                .commentId(12L)
-                .build();
+            .contents("new contents")
+            .commentId(12L)
+            .build();
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.fix(content, member.getId()))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
+            () -> commentService.fix(content, member.getId()))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -123,7 +123,7 @@ class CommentServiceTest extends TestDataBase {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void delTest() throws InterruptedException {
         // given
-        CommentSaveDto request = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest request = CommentDummy.createSaveDto(post.getId());
         Comment savedComment = commentService.save(request, member);
 
         // when
@@ -131,9 +131,9 @@ class CommentServiceTest extends TestDataBase {
 
         // then
         assertThatThrownBy(
-                () -> commentService.searchComment(savedComment.getId()))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
+            () -> commentService.searchComment(savedComment.getId()))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
 
     }
 
@@ -142,9 +142,9 @@ class CommentServiceTest extends TestDataBase {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void replyDeleteTest() throws InterruptedException {
         // given
-        CommentSaveDto request = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest request = CommentDummy.createSaveDto(post.getId());
         Comment savedComment = commentService.save(request, member);
-        CommentSaveDto replyRequest = CommentDummy.createSaveDto(savedComment.getId(), post.getId());
+        CommentSaveRequest replyRequest = CommentDummy.createSaveDto(savedComment.getId(), post.getId());
         Comment savedReply = commentService.save(replyRequest, member);
 
         // when
@@ -152,9 +152,9 @@ class CommentServiceTest extends TestDataBase {
 
         // then
         assertThatThrownBy(
-                () -> commentService.searchComment(savedReply.getId()))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
+            () -> commentService.searchComment(savedReply.getId()))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 
 
@@ -163,16 +163,16 @@ class CommentServiceTest extends TestDataBase {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void shouldDecreaseCommentCountWhenCommentIsDeleted() throws InterruptedException {
         // given
-        CommentSaveDto request = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest request = CommentDummy.createSaveDto(post.getId());
         Comment savedComment = commentService.save(request, member);
         post = postRepository.findById(post.getId())
-                .orElseThrow();
+            .orElseThrow();
 
         // when
         commentService.delete(savedComment.getId(), member.getId());
         em.clear();
         Post post2 = postRepository.findById(post.getId())
-                .orElseThrow();
+            .orElseThrow();
 
         // then
         assertThat(post.getCommentCount() - 1).isEqualTo(post2.getCommentCount());
@@ -185,16 +185,16 @@ class CommentServiceTest extends TestDataBase {
         Comment savedEntity = commentRepository.save(CommentDummy.create(post, member));
         Member anotherMember = memberRepository.save(MemberDummy.createWithId("rookedsysc"));
         CommentFixRequest content = CommentFixRequest.builder()
-                .contents("new contents")
-                .commentId(savedEntity.getId())
-                .build();
+            .contents("new contents")
+            .commentId(savedEntity.getId())
+            .build();
         em.clear();
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.delete(content.commentId(), anotherMember.getId()))
-                .isInstanceOf(UnauthorizedException.class)
-                .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
+            () -> commentService.delete(content.commentId(), anotherMember.getId()))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessageContaining(MemberStatus.NOT_AUTHORIZED_MEMBER.getMessage());
     }
 
     @Test
@@ -202,15 +202,15 @@ class CommentServiceTest extends TestDataBase {
     void canNotDelNotExistComment() throws InterruptedException {
         // given
         CommentFixRequest content = CommentFixRequest.builder()
-                .contents("new contents")
-                .commentId(12L)
-                .build();
+            .contents("new contents")
+            .commentId(12L)
+            .build();
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.delete(content.commentId(), member.getId()))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
+            () -> commentService.delete(content.commentId(), member.getId()))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessageContaining(PostStatus.COMMENT_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -218,9 +218,9 @@ class CommentServiceTest extends TestDataBase {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void replyCommentTest() {
         // given
-        CommentSaveDto parentComment = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest parentComment = CommentDummy.createSaveDto(post.getId());
         Comment savedParentComment = commentService.save(parentComment, member);
-        CommentSaveDto request = CommentDummy.createSaveDto(savedParentComment.getId(), post.getId());
+        CommentSaveRequest request = CommentDummy.createSaveDto(savedParentComment.getId(), post.getId());
 
         // when
         Comment savedChildComment = commentService.save(request, member);
@@ -235,15 +235,15 @@ class CommentServiceTest extends TestDataBase {
     void replyAnotherPostExceptionTest() {
         // given
         Post anotherPost = postRepository.save(PostDummy.createPost("byebye"));
-        CommentSaveDto parentComment = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest parentComment = CommentDummy.createSaveDto(post.getId());
         Comment savedParentComment = commentService.save(parentComment, member);
-        CommentSaveDto request = CommentDummy.createSaveDto(savedParentComment.getId(), anotherPost.getId());
+        CommentSaveRequest request = CommentDummy.createSaveDto(savedParentComment.getId(), anotherPost.getId());
 
         // when // then
         assertThatThrownBy(
-                () -> commentService.save(request, member))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining(PostStatus.INVALID_REPLY.getMessage());
+            () -> commentService.save(request, member))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessageContaining(PostStatus.INVALID_REPLY.getMessage());
     }
 
     @Test
@@ -251,15 +251,15 @@ class CommentServiceTest extends TestDataBase {
     @DisplayName("대댓글에 대댓글을 다는 행위가 허용되지 않는지 테스트")
     void replyingToReplyIsNotAllowed() {
         // given
-        CommentSaveDto parentComment = CommentDummy.createSaveDto(post.getId());
+        CommentSaveRequest parentComment = CommentDummy.createSaveDto(post.getId());
         Comment savedParrentComment = commentService.save(parentComment, member);
-        CommentSaveDto childComment = CommentDummy.createSaveDto(savedParrentComment.getId(), post.getId());
+        CommentSaveRequest childComment = CommentDummy.createSaveDto(savedParrentComment.getId(), post.getId());
         Comment savedChildComment = commentService.save(childComment, member);
-        CommentSaveDto wrongComment = CommentDummy.createSaveDto(savedChildComment.getId(), post.getId());
+        CommentSaveRequest wrongComment = CommentDummy.createSaveDto(savedChildComment.getId(), post.getId());
         // when // then
         assertThatThrownBy(
-                () -> commentService.save(wrongComment, member))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining(PostStatus.COMMENT_CANT_HAVE_GRANDMOTHER.getMessage());
+            () -> commentService.save(wrongComment, member))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessageContaining(PostStatus.COMMENT_CANT_HAVE_GRANDMOTHER.getMessage());
     }
 }

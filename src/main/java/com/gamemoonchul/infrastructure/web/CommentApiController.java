@@ -4,7 +4,7 @@ import com.gamemoonchul.application.CommentService;
 import com.gamemoonchul.common.annotation.MemberId;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
-import com.gamemoonchul.domain.model.dto.CommentSaveDto;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentSaveRequest;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentFixRequest;
 import com.gamemoonchul.infrastructure.web.dto.request.CommentRequest;
@@ -19,16 +19,16 @@ public class CommentApiController {
 
     @PostMapping
     public void save(@RequestBody CommentRequest request, @MemberSession Member member) {
-        CommentSaveDto saveDto = new CommentSaveDto(null, request.content(), request.postId());
+        CommentSaveRequest saveDto = new CommentSaveRequest(null, request.content(), request.postId());
         commentService.save(saveDto, member);
     }
 
     @PostMapping("/{parentId}")
     public void save(
-            @PathVariable(name = "parentId") Long parentId,
-            @RequestBody CommentRequest request,
-            @MemberSession Member member) {
-        CommentSaveDto saveDto = new CommentSaveDto(parentId, request.content(), request.postId());
+        @PathVariable(name = "parentId") Long parentId,
+        @RequestBody CommentRequest request,
+        @MemberSession Member member) {
+        CommentSaveRequest saveDto = new CommentSaveRequest(parentId, request.content(), request.postId());
         commentService.save(saveDto, member);
     }
 

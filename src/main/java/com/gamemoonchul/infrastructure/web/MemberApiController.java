@@ -7,7 +7,7 @@ import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberBan;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
-import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,25 +22,25 @@ public class MemberApiController {
 
     @PatchMapping("/nickname/{nickname}")
     public void changeNickname(
-            @MemberSession Member member,
-            @PathVariable(name = "nickname") String nickname
+        @MemberSession Member member,
+        @PathVariable(name = "nickname") String nickname
     ) {
         memberService.updateNickName(member, nickname);
     }
 
 
     @GetMapping("/ban")
-    public List<MemberResponseDto> ban(
-            @MemberSession Member member
+    public List<MemberResponse> ban(
+        @MemberSession Member member
     ) {
         return memberBanService.bannedMembers(member.getId()).stream()
-                .map(MemberBan::getBanMember)
-                .map(MemberConverter::toResponseDto).toList();
+            .map(MemberBan::getBanMember)
+            .map(MemberConverter::toResponseDto).toList();
     }
 
     @GetMapping("/me")
-    public MemberResponseDto me(
-            @MemberSession Member member
+    public MemberResponse me(
+        @MemberSession Member member
     ) {
         return memberService.me(member);
     }
@@ -48,23 +48,23 @@ public class MemberApiController {
 
     @DeleteMapping
     public void delete(
-            @MemberSession Member member
+        @MemberSession Member member
     ) {
         memberService.delete(member);
     }
 
     @PostMapping("/ban/{banMemberId}")
     public void ban(
-            @MemberSession Member member,
-            @PathVariable(name = "banMemberId") Long banMemberId
+        @MemberSession Member member,
+        @PathVariable(name = "banMemberId") Long banMemberId
     ) {
         memberBanService.ban(member, banMemberId);
     }
 
     @DeleteMapping("/ban/{banMemberId}")
     public void deleteBan(
-            @MemberSession Member member,
-            @PathVariable(name = "banMemberId") Long banMemberId
+        @MemberSession Member member,
+        @PathVariable(name = "banMemberId") Long banMemberId
     ) {
         memberBanService.deleteBan(member, banMemberId);
     }
