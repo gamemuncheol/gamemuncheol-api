@@ -1,6 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.VoteService;
+import com.gamemoonchul.application.converter.VoteConverter;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Vote;
@@ -23,10 +24,10 @@ public class VoteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VoteResponse save(
-            @RequestBody VoteCreateRequest voteCreateRequest,
-            @MemberSession Member member
+        @RequestBody VoteCreateRequest voteCreateRequest,
+        @MemberSession Member member
     ) {
         Vote vote = voteService.createVote(voteCreateRequest, member);
-        return VoteResponse.entityToResponse(vote);
+        return VoteConverter.entityToResponse(vote);
     }
 }
