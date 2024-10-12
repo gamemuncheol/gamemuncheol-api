@@ -74,6 +74,7 @@ public class Post extends BaseTimeEntity {
         this.thumbnailUrl = uploadRequest.thumbnailUrl();
         this.content = uploadRequest.content();
         this.tags = uploadRequest.tags();
+        this.viewCount = 0L;
         this.member = member;
     }
 
