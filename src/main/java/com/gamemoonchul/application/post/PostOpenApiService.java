@@ -1,6 +1,7 @@
 package com.gamemoonchul.application.post;
 
 import com.gamemoonchul.application.CommentService;
+import com.gamemoonchul.application.converter.CommentConverter;
 import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.common.exception.BadRequestException;
 import com.gamemoonchul.domain.entity.Post;
@@ -44,7 +45,7 @@ public class PostOpenApiService {
         }
 
         List<CommentResponse> comments = commentService.searchByPostId(redisPostDetail.getId(), requestMemberId).stream()
-            .map(CommentResponse::entityToResponse).toList(); // 변경 자주 일어남, 캐싱 X
+            .map(CommentConverter::toResponse).toList(); // 변경 자주 일어남, 캐싱 X
         redisPostDetail.setComments(comments);
 
         return redisPostDetail;
