@@ -1,6 +1,7 @@
 package com.gamemoonchul.infrastructure.web;
 
 import com.gamemoonchul.application.PostBanService;
+import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.PostBan;
@@ -22,18 +23,18 @@ public class PostBanApiController {
 
     @GetMapping("/ban")
     public List<PostMainPageResponse> getBannedPosts(
-            @MemberSession Member member
+        @MemberSession Member member
     ) {
         return postBanService.bannedPost(member.getId()).stream()
-                .map(PostBan::getBanPost)
-                .map(PostMainPageResponse::entityToResponse)
-                .toList();
+            .map(PostBan::getBanPost)
+            .map(PostConverter::entityToResponse)
+            .toList();
     }
 
     @PostMapping("/ban/{postId}")
     public void ban(
-            @MemberSession Member member,
-            @PathVariable(name = "postId") Long postId
+        @MemberSession Member member,
+        @PathVariable(name = "postId") Long postId
     ) {
         postBanService.ban(member, postId);
     }

@@ -31,8 +31,7 @@ class PostOpenApiServiceTest extends TestDataBase {
         memberRepository.save(member);
         ArrayList<Post> posts = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            Post dummy = PostDummy.createPost("value" + i);
-            dummy.setMember(member);
+            Post dummy = PostDummy.createPost("value" + 1, member);
             posts.add(dummy);
         }
         postRepository.saveAll(posts);

@@ -5,7 +5,10 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.redis.RedisPostDetail;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
-import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MatchUserResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.PostMainPageResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.VoteRatioResponse;
 
 import java.util.HashMap;
@@ -40,7 +43,24 @@ public class PostConverter {
             .build();
     }
 
-    private static List<VoteRatioResponse> getVoteDetail(Post post) {
+    public static PostDetailResponse toResponse(Post post, List<CommentResponse> comments) {
+        return PostDetailResponse.builder()
+            .id(post.getId())
+            .author(MemberConverter.toResponseDto(post.getMember()))
+            .videoUrl(post.getVideoUrl())
+            .thumbnailUrl(post.getThumbnailUrl())
+            .commentCount(post.getCommentCount())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
+            .viewCount(post.getViewCount())
+            .comments(comments)
+            .voteDetail(getVoteDetail(post))
+            .build();
+    }
+
+
+    public static List<VoteRatioResponse> getVoteDetail(Post post) {
         HashMap<Long, Double> voteRatioMap = new HashMap<>();
         post.getVoteOptions()
             .forEach(vo -> {
@@ -68,7 +88,7 @@ public class PostConverter {
             .stream()
             .map(vo -> {
                 Double voteRatio = voteRatioMap.get(vo.getId());
-                MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponseVoId(vo.getMatchUser(), vo.getId());
+                MatchUserResponse matchUserResponse = MatchUserConverter.toResponseVoId(vo.getMatchUser(), vo.getId());
                 return new VoteRatioResponse(matchUserResponse, voteRatio);
             })
             .toList();
@@ -76,4 +96,18 @@ public class PostConverter {
         return result;
     }
 
+    public static PostMainPageResponse entityToResponse(Post entity) {
+        List<Double> voteRatio = List.of(100 - entity.getVoteRatio(), entity.getVoteRatio());
+        return PostMainPageResponse.builder()
+            .id(entity.getId())
+            .member(MemberConverter.toResponseDto(entity.getMember()))
+            .videoUrl(entity.getVideoUrl())
+            .thumbnailUrl(entity.getThumbnailUrl())
+            .title(entity.getTitle())
+            .content(entity.getContent())
+            .viewCount(entity.getViewCount())
+            .timesAgo(StringUtils.getTimeAgo(entity.getCreatedAt()))
+            .voteRatio(voteRatio)
+            .build();
+    }
 }
