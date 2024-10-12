@@ -6,7 +6,7 @@ import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Comment;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
-import com.gamemoonchul.domain.model.dto.CommentSaveDto;
+import com.gamemoonchul.infrastructure.web.dto.request.CommentSaveRequest;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.domain.status.PostStatus;
 import com.gamemoonchul.infrastructure.repository.CommentRepository;
@@ -49,7 +49,7 @@ public class CommentService {
             maxDelay = 10000
         ) // 재시도 간의 대기 시간 (1000ms)
     )
-    public Comment save(CommentSaveDto request, Member member) {
+    public Comment save(CommentSaveRequest request, Member member) {
         validatePostNotReplied(request);
         Post post = postRepository.findById(request.postId())
             .orElseThrow(() -> new NotFoundException(PostStatus.POST_NOT_FOUND));
@@ -69,7 +69,7 @@ public class CommentService {
     /**
      * 부모의 Comment가 또 부모를 가지지 않는지 검증
      */
-    private void validatePostNotReplied(CommentSaveDto request) {
+    private void validatePostNotReplied(CommentSaveRequest request) {
         if (request.parentId() != null) {
             Comment parentComment = commentRepository.findById(request.parentId())
                 .orElseThrow(() -> new BadRequestException(PostStatus.COMMENT_NOT_FOUND));
