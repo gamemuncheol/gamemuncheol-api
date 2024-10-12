@@ -1,20 +1,14 @@
 package com.gamemoonchul.domain.converter.riot;
 
 import com.gamemoonchul.TestDataBase;
-import com.gamemoonchul.application.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchDummy;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MatchConverterTest extends TestDataBase {
-
-    @Autowired
-    private MatchGameConverter matchConverter;
 
     @Test
     void convertMatchGameToMatchVO() {
@@ -22,7 +16,7 @@ class MatchConverterTest extends TestDataBase {
         MatchRecord matchVO = MatchDummy.create();
 
         // when
-        MatchGame matchGame = matchConverter.toMatchGame(matchVO);
+        MatchGame matchGame = new MatchGame(matchVO);
 
         // then
         assertEquals(matchVO.metadata().matchId(), matchGame.getGameId());
