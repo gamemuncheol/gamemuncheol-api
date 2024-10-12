@@ -25,7 +25,6 @@ public class Post extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Setter
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -102,9 +101,5 @@ public class Post extends BaseTimeEntity {
 
     public void updateVoteRatio(double voteRatio) {
         this.voteRatio = voteRatio;
-    }
-
-    public void setCommentCount(Long commentCount) {
-        this.commentCount = commentCount;
     }
 }
