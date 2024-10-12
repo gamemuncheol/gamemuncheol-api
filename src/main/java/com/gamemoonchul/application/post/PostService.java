@@ -39,7 +39,7 @@ public class PostService {
 
         saveVoteOptions(request.matchUserIds(), savedPost);
 
-        return PostDetailResponse.toResponse(savedPost, Collections.emptyList());
+        return PostConverter.toResponse(savedPost, Collections.emptyList());
     }
 
     private void saveVoteOptions(List<Long> matchUserIds, Post post) {

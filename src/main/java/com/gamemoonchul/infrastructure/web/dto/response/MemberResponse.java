@@ -1,18 +1,16 @@
 package com.gamemoonchul.infrastructure.web.dto.response;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class MemberResponse {
-    private Long id;
-    private String name;
-    private String nickname;
-    private String email;
-    private String picture;
-    private boolean privacyAgreed;
-    private Double score;
+public record MemberResponse(
+    Long id,
+    String name,
+    String nickname,
+    String email,
+    String picture,
+    boolean privacyAgreed,
+    Double score
+) {
+
 }

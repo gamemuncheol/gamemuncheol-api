@@ -5,7 +5,9 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.redis.RedisPostDetail;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
+import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.MatchUserResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.PostDetailResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.VoteRatioResponse;
 
 import java.util.HashMap;
@@ -40,7 +42,24 @@ public class PostConverter {
             .build();
     }
 
-    private static List<VoteRatioResponse> getVoteDetail(Post post) {
+    public static PostDetailResponse toResponse(Post post, List<CommentResponse> comments) {
+        return PostDetailResponse.builder()
+            .id(post.getId())
+            .author(MemberConverter.toResponseDto(post.getMember()))
+            .videoUrl(post.getVideoUrl())
+            .thumbnailUrl(post.getThumbnailUrl())
+            .commentCount(post.getCommentCount())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
+            .viewCount(post.getViewCount())
+            .comments(comments)
+            .voteDetail(getVoteDetail(post))
+            .build();
+    }
+
+
+    public static List<VoteRatioResponse> getVoteDetail(Post post) {
         HashMap<Long, Double> voteRatioMap = new HashMap<>();
         post.getVoteOptions()
             .forEach(vo -> {
