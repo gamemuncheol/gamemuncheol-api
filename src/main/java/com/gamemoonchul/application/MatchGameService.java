@@ -1,6 +1,5 @@
 package com.gamemoonchul.application;
 
-import com.gamemoonchul.application.converter.riot.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.infrastructure.repository.MatchGameRepository;
@@ -17,14 +16,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MatchGameService {
     private final MatchGameRepository matchGameRepository;
-    private final MatchGameConverter matchConverter;
 
     public Optional<MatchGame> findByGameId(String gameId) {
         return matchGameRepository.findByGameId(gameId);
     }
 
     public MatchGame save(MatchRecord vo) {
-        MatchGame matchGame = matchConverter.toMatchGame(vo);
+        MatchGame matchGame = new MatchGame(vo);
         return matchGameRepository.save(matchGame);
     }
 }
