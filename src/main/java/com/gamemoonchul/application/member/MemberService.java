@@ -6,9 +6,9 @@ import com.gamemoonchul.config.oauth.user.OAuth2Provider;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
+import com.gamemoonchul.infrastructure.web.dto.request.NicknameChangeRequest;
 import com.gamemoonchul.infrastructure.web.dto.response.MemberResponse;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,11 +33,11 @@ public class MemberService {
         return memberRepository.findByProviderAndIdentifier(provider, identifier);
     }
 
-    public void updateNickName(Member member, @Size(max = 10) String nickName) {
-        if (isExistNickname(nickName)) {
+    public void updateNickName(Member member, NicknameChangeRequest request) {
+        if (isExistNickname(request.nickname())) {
             throw new BadRequestException(MemberStatus.ALREADY_EXIST_NICKNAME);
         }
-        Member updatedMember = member.updateNickname(nickName);
+        Member updatedMember = member.updateNickname(request.nickname());
         memberRepository.save(updatedMember);
     }
 

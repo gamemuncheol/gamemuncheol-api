@@ -7,6 +7,7 @@ import com.gamemoonchul.common.annotation.MemberSession;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberBan;
 import com.gamemoonchul.infrastructure.web.common.RestControllerWithEnvelopPattern;
+import com.gamemoonchul.infrastructure.web.dto.request.NicknameChangeRequest;
 import com.gamemoonchul.infrastructure.web.dto.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +21,12 @@ public class MemberApiController {
     private final MemberService memberService;
     private final MemberBanService memberBanService;
 
-    @PatchMapping("/nickname/{nickname}")
+    @PatchMapping("/nickname")
     public void changeNickname(
         @MemberSession Member member,
-        @PathVariable(name = "nickname") String nickname
+        @RequestBody NicknameChangeRequest request
     ) {
-        memberService.updateNickName(member, nickname);
+        memberService.updateNickName(member, request);
     }
 
 

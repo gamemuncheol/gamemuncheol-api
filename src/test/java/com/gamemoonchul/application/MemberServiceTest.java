@@ -7,6 +7,7 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.domain.status.MemberStatus;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
+import com.gamemoonchul.infrastructure.web.dto.request.NicknameChangeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,15 @@ class MemberServiceTest extends TestDataBase {
         // given
         Member member = MemberDummy.create();
         memberRepository.save(member);
-        String nickname = "우하하";
+        NicknameChangeRequest request = new NicknameChangeRequest("우하하");
 
         // when
-        memberService.updateNickName(member, nickname);
-        Optional<Member> savedMember = memberRepository.findByNickname(nickname);
+        memberService.updateNickName(member, request);
+        Optional<Member> savedMember = memberRepository.findByNickname(request.nickname());
 
         // then
         assertThat(savedMember.get()
-                .getNickname()).isEqualTo(nickname);
+            .getNickname()).isEqualTo(request.nickname());
     }
 
     @Test
@@ -48,14 +49,14 @@ class MemberServiceTest extends TestDataBase {
         // given
         Member member = MemberDummy.create();
         memberRepository.save(member);
-        String nickname = "우하하";
+        NicknameChangeRequest request = new NicknameChangeRequest("우하하");
 
         // when
-        memberService.updateNickName(member, nickname);
+        memberService.updateNickName(member, request);
 
         // then
-        assertThatThrownBy(() -> memberService.updateNickName(member, nickname))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
+        assertThatThrownBy(() -> memberService.updateNickName(member, request))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessageContaining(MemberStatus.ALREADY_EXIST_NICKNAME.getMessage());
     }
 }
