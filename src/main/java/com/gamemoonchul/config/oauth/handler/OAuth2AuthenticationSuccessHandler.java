@@ -1,6 +1,5 @@
 package com.gamemoonchul.config.oauth.handler;
 
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.application.member.MemberDeactivateService;
 import com.gamemoonchul.application.member.MemberService;
 import com.gamemoonchul.common.exception.BadRequestException;
@@ -91,8 +90,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2UserInfo oAuth2UserInfo = principal.getUserInfo();
 
         String mode = CookieUtils.getCookie(request, MODE_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue)
-                .orElse("");
+            .map(Cookie::getValue)
+            .orElse("");
 
         if ("login".equalsIgnoreCase(mode)) {
             Optional<Member> savedMember = memberService.findByProviderAndIdentifier(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getIdentifier());
@@ -115,42 +114,42 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private void signUp(HttpServletRequest request, OAuth2UserInfo oAuth2UserInfo) {
-        RedisMember redisMember = redisMemberRepository.save(MemberConverter.toRedisMember(oAuth2UserInfo));
+        RedisMember redisMember = redisMemberRepository.save(new RedisMember(oAuth2UserInfo));
         request.setAttribute(TEMPORARY_USER_KEY, redisMember.getUniqueKey());
     }
 
     // 리다이렉트될 대상 URL을 결정
     protected String determineTargetUrl(HttpServletRequest request) {
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue);
+            .map(Cookie::getValue);
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         TokenDto tokenDto = (TokenDto) request.getAttribute(TOKEN_DTO);
         String tempKey = (String) request.getAttribute(TEMPORARY_USER_KEY);
         if (tokenDto != null) {
             targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("accessToken", tokenDto.getAccessToken())
-                    .queryParam("refreshToken", tokenDto.getRefreshToken())
-                    .build()
-                    .toUriString();
+                .queryParam("accessToken", tokenDto.getAccessToken())
+                .queryParam("refreshToken", tokenDto.getRefreshToken())
+                .build()
+                .toUriString();
         } else if (tempKey != null) {
             targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam(TEMPORARY_USER_KEY, tempKey)
-                    .build()
-                    .toUriString();
+                .queryParam(TEMPORARY_USER_KEY, tempKey)
+                .build()
+                .toUriString();
         }
         return targetUrl;
     }
 
     private void unlink(OAuth2UserPrincipal principal) {
         String accessToken = principal.getUserInfo()
-                .getAccessToken();
+            .getAccessToken();
         OAuth2Provider provider = principal.getUserInfo()
-                .getProvider();
+            .getProvider();
 
         oAuth2UserUnlinkManager.unlink(provider, accessToken);
         memberDeactivateService.deactivateAccount(provider, principal.getUserInfo()
-                .getIdentifier());
+            .getIdentifier());
     }
 
     private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {

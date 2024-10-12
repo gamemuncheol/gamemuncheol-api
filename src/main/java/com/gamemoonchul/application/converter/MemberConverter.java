@@ -1,6 +1,5 @@
 package com.gamemoonchul.application.converter;
 
-import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.redis.RedisMember;
 import com.gamemoonchul.domain.enums.MemberRole;
@@ -13,39 +12,27 @@ import java.util.UUID;
 public class MemberConverter {
     private static String randomNickname() {
         return UUID.randomUUID()
-                .toString()
-                .substring(0, 30);
-    }
-
-    public static RedisMember toRedisMember(OAuth2UserInfo userInfo) {
-        return RedisMember.builder()
-                .name(userInfo.getName())
-                .provider(userInfo.getProvider())
-                .identifier(userInfo.getIdentifier())
-                .nickname(userInfo.getNickname())
-                .email(userInfo.getEmail())
-                .picture(userInfo.getProfileImageUrl())
-                .birth(null)
-                .build();
+            .toString()
+            .substring(0, 30);
     }
 
     public static Member redisMemberToEntity(RedisMember redisMember) {
         String nickname = ifNicknameNotExistGetRandom(redisMember
-                .getNickname());
+            .getNickname());
 
         Member member = Member.builder()
-                .role(MemberRole.USER)
-                .name(redisMember.getName())
-                .identifier(redisMember.getIdentifier())
-                .provider(redisMember.getProvider())
-                .nickname(nickname)
-                .privacyAgreed(true)
-                .privacyAgreedAt(LocalDateTime.now())
-                .score(0.0)
-                .email(redisMember.getEmail())
-                .picture(redisMember.getPicture())
-                .birth(null)
-                .build();
+            .role(MemberRole.USER)
+            .name(redisMember.getName())
+            .identifier(redisMember.getIdentifier())
+            .provider(redisMember.getProvider())
+            .nickname(nickname)
+            .privacyAgreed(true)
+            .privacyAgreedAt(LocalDateTime.now())
+            .score(0.0)
+            .email(redisMember.getEmail())
+            .picture(redisMember.getPicture())
+            .birth(null)
+            .build();
         return member;
     }
 
@@ -59,13 +46,13 @@ public class MemberConverter {
 
     public static MemberResponseDto toResponseDto(Member entity) {
         return MemberResponseDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .nickname(entity.getNickname())
-                .email(entity.getEmail())
-                .privacyAgreed(entity.isPrivacyAgreed())
-                .picture(entity.getPicture())
-                .score(entity.getScore())
-                .build();
+            .id(entity.getId())
+            .name(entity.getName())
+            .nickname(entity.getNickname())
+            .email(entity.getEmail())
+            .privacyAgreed(entity.isPrivacyAgreed())
+            .picture(entity.getPicture())
+            .score(entity.getScore())
+            .build();
     }
 }

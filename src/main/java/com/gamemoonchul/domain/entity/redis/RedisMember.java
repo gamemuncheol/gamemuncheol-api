@@ -1,8 +1,13 @@
 package com.gamemoonchul.domain.entity.redis;
 
 import com.gamemoonchul.config.oauth.user.OAuth2Provider;
+import com.gamemoonchul.config.oauth.user.OAuth2UserInfo;
 import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
@@ -27,6 +32,14 @@ public class RedisMember {
     private String email;
     private String picture;
     private LocalDateTime birth;
+
+    public RedisMember(OAuth2UserInfo userInfo) {
+        this.name = userInfo.getName();
+        this.provider = userInfo.getProvider();
+        this.identifier = userInfo.getIdentifier();
+        this.nickname = userInfo.getNickname();
+        this.birth = userInfo.getBirth();
+    }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;

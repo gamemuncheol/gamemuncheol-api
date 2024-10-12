@@ -59,7 +59,6 @@ public class MemberOpenApiService {
         redisMemberService.delete(redisMember);
 
         TokenDto token = tokenHelper.generateToken(member);
-
         return token;
     }
 }
