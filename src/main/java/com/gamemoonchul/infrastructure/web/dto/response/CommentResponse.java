@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentResponse {
-    private MemberResponseDto author;
+    private MemberResponse author;
     private String content;
     private String timesAgo;
 

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Builder
 public class PostDetailResponse {
     private Long id;
-    private MemberResponseDto author;
+    private MemberResponse author;
     private String videoUrl;
     private String thumbnailUrl;
     private String title;

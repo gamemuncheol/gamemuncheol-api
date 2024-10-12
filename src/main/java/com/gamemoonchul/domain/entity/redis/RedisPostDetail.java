@@ -1,7 +1,7 @@
 package com.gamemoonchul.domain.entity.redis;
 
 import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
-import com.gamemoonchul.infrastructure.web.dto.response.MemberResponseDto;
+import com.gamemoonchul.infrastructure.web.dto.response.MemberResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.VoteRatioResponse;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ public class RedisPostDetail {
     @Id
     @Indexed
     private Long id;
-    private MemberResponseDto author;
+    private MemberResponse author;
     private String videoUrl;
     private String thumbnailUrl;
     private String title;
