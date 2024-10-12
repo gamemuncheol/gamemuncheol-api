@@ -1,6 +1,5 @@
 package com.gamemoonchul.domain.entity.redis;
 
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.util.StringUtils;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.infrastructure.web.dto.response.CommentResponse;
@@ -60,7 +59,7 @@ public class RedisPostDetail {
     public static RedisPostDetail toCache(Post post) {
         return RedisPostDetail.builder()
             .id(post.getId())
-            .author(MemberConverter.toResponseDto(post.getMember()))
+            .author(new MemberResponseDto(post.getMember()))
             .videoUrl(post.getVideoUrl())
             .thumbnailUrl(post.getThumbnailUrl())
             .commentCount(post.getCommentCount())

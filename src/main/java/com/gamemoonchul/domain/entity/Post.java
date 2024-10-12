@@ -2,6 +2,7 @@ package com.gamemoonchul.domain.entity;
 
 import com.gamemoonchul.application.converter.JsonStringListConverter;
 import com.gamemoonchul.domain.entity.base.BaseTimeEntity;
+import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -67,6 +68,15 @@ public class Post extends BaseTimeEntity {
     @Version
     private Integer version;
 
+    public Post(PostUploadRequest uploadRequest, Member member) {
+        this.title = uploadRequest.title();
+        this.videoUrl = uploadRequest.videoUrl();
+        this.thumbnailUrl = uploadRequest.thumbnailUrl();
+        this.content = uploadRequest.content();
+        this.tags = uploadRequest.tags();
+        this.member = member;
+    }
+
     public void commentCountDown() {
         this.commentCount--;
     }
@@ -102,9 +112,5 @@ public class Post extends BaseTimeEntity {
 
     public void updateVoteRatio(double voteRatio) {
         this.voteRatio = voteRatio;
-    }
-
-    public void setCommentCount(Long commentCount) {
-        this.commentCount = commentCount;
     }
 }

@@ -1,6 +1,5 @@
 package com.gamemoonchul.infrastructure.web.dto.response;
 
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.util.StringUtils;
 import com.gamemoonchul.domain.entity.Post;
 import lombok.Builder;
@@ -25,25 +24,10 @@ public class PostDetailResponse {
     private List<CommentResponse> comments;
     private List<VoteRatioResponse> voteDetail;
 
-    public static PostDetailResponse toResponse(Post post) {
-        return PostDetailResponse.builder()
-            .id(post.getId())
-            .author(MemberConverter.toResponseDto(post.getMember()))
-            .videoUrl(post.getVideoUrl())
-            .thumbnailUrl(post.getThumbnailUrl())
-            .commentCount(post.getCommentCount())
-            .title(post.getTitle())
-            .content(post.getContent())
-            .timesAgo(StringUtils.getTimeAgo(post.getCreatedAt()))
-            .viewCount(post.getViewCount())
-            .voteDetail(getVoteDetail(post))
-            .build();
-    }
-
     public static PostDetailResponse toResponse(Post post, List<CommentResponse> comments) {
         return PostDetailResponse.builder()
             .id(post.getId())
-            .author(MemberConverter.toResponseDto(post.getMember()))
+            .author(new MemberResponseDto(post.getMember()))
             .videoUrl(post.getVideoUrl())
             .thumbnailUrl(post.getThumbnailUrl())
             .commentCount(post.getCommentCount())

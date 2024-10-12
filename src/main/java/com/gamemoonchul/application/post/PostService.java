@@ -1,7 +1,6 @@
 package com.gamemoonchul.application.post;
 
 import com.gamemoonchul.application.MatchUserService;
-import com.gamemoonchul.application.converter.PostConverter;
 import com.gamemoonchul.common.exception.NotFoundException;
 import com.gamemoonchul.common.exception.UnauthorizedException;
 import com.gamemoonchul.domain.entity.Member;
@@ -34,7 +33,7 @@ public class PostService {
     }
 
     public PostDetailResponse upload(PostUploadRequest request, Member member) {
-        Post entity = PostConverter.requestToEntity(request, member);
+        Post entity = new Post(request, member);
         Post savedPost = postRepository.save(entity);
 
         saveVoteOptions(request.matchUserIds(), savedPost);

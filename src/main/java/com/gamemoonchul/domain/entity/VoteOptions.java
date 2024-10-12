@@ -27,7 +27,7 @@ public class VoteOptions {
     private MatchUser matchUser;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteOption", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vote> votes = new ArrayList<>();
+    private List<Vote> votes;
 
     public void addVote(Vote vote) {
         this.votes.add(vote);

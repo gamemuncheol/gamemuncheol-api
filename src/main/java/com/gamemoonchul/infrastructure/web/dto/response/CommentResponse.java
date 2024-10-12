@@ -1,6 +1,5 @@
 package com.gamemoonchul.infrastructure.web.dto.response;
 
-import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.util.StringUtils;
 import com.gamemoonchul.domain.entity.Comment;
 import lombok.AccessLevel;
@@ -20,7 +19,7 @@ public class CommentResponse {
 
     public static CommentResponse entityToResponse(Comment entity) {
         return CommentResponse.builder()
-            .author(MemberConverter.toResponseDto(entity.getMember()))
+            .author(new MemberResponseDto(entity.getMember()))
             .content(entity.getContent())
             .timesAgo(StringUtils.getTimeAgo(entity.getCreatedAt()))
             .build();
