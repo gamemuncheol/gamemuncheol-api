@@ -1,6 +1,7 @@
 package com.gamemoonchul.infrastructure.web.dto;
 
 import com.gamemoonchul.TestDataBase;
+import com.gamemoonchul.application.converter.MatchGameConverter;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.entity.riot.MatchGameDummy;
 import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
@@ -17,15 +18,15 @@ class MatchGameResponseTest extends TestDataBase {
         MatchGame matchGame = MatchGameDummy.create();
 
         // when
-        MatchGameResponse matchGameResponse = MatchGameResponse.toResponse(matchGame);
+        MatchGameResponse matchGameResponse = MatchGameConverter.toResponse(matchGame);
 
         // then
-        assertEquals(matchGame.getGameCreation(), matchGameResponse.getGameCreation());
-        assertEquals(matchGame.getGameMode(), matchGameResponse.getGameMode());
-        assertEquals(matchGame.getGameDuration(), matchGameResponse.getGameDuration());
+        assertEquals(matchGame.getGameCreation(), matchGameResponse.gameCreation());
+        assertEquals(matchGame.getGameMode(), matchGameResponse.gameMode());
+        assertEquals(matchGame.getGameDuration(), matchGameResponse.gameDuration());
         assertEquals(matchGame.getMatchUsers()
-                .size(), matchGameResponse.getMatchUsers()
-                .size());
+            .size(), matchGameResponse.matchUsers()
+            .size());
     }
 
 }

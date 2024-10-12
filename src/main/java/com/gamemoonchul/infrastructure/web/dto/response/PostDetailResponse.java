@@ -1,5 +1,6 @@
 package com.gamemoonchul.infrastructure.web.dto.response;
 
+import com.gamemoonchul.application.converter.MatchUserConverter;
 import com.gamemoonchul.application.converter.MemberConverter;
 import com.gamemoonchul.common.util.StringUtils;
 import com.gamemoonchul.domain.entity.Post;
@@ -85,7 +86,7 @@ public class PostDetailResponse {
             .stream()
             .map(vo -> {
                 Double voteRatio = voteRatioMap.get(vo.getId());
-                MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponseVoId(vo.getMatchUser(), vo.getId());
+                MatchUserResponse matchUserResponse = MatchUserConverter.toResponseVoId(vo.getMatchUser(), vo.getId());
                 return new VoteRatioResponse(matchUserResponse, voteRatio);
             })
             .toList();

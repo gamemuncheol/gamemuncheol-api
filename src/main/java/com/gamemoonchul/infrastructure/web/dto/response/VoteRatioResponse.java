@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VoteRatioResponse {
-    private MatchGameResponse.MatchUserResponse matchUserResponse;
+    private MatchUserResponse matchUserResponse;
     private Double voteRatio;
 }

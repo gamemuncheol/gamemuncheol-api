@@ -5,7 +5,7 @@ import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.Post;
 import com.gamemoonchul.domain.entity.redis.RedisPostDetail;
 import com.gamemoonchul.infrastructure.web.dto.request.PostUploadRequest;
-import com.gamemoonchul.infrastructure.web.dto.response.MatchGameResponse;
+import com.gamemoonchul.infrastructure.web.dto.response.MatchUserResponse;
 import com.gamemoonchul.infrastructure.web.dto.response.VoteRatioResponse;
 
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class PostConverter {
             .stream()
             .map(vo -> {
                 Double voteRatio = voteRatioMap.get(vo.getId());
-                MatchGameResponse.MatchUserResponse matchUserResponse = MatchGameResponse.MatchUserResponse.toResponseVoId(vo.getMatchUser(), vo.getId());
+                MatchUserResponse matchUserResponse = MatchUserConverter.toResponseVoId(vo.getMatchUser(), vo.getId());
                 return new VoteRatioResponse(matchUserResponse, voteRatio);
             })
             .toList();

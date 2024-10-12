@@ -1,5 +1,6 @@
 package com.gamemoonchul.application;
 
+import com.gamemoonchul.application.converter.MatchGameConverter;
 import com.gamemoonchul.application.ports.output.RiotApiPort;
 import com.gamemoonchul.domain.entity.riot.MatchGame;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
@@ -29,9 +30,9 @@ public class RiotApiService {
             MatchRecord vo = riotApi.searchMatch(gameId);
             matchGame = matchGameService.save(vo);
             matchUserService.saveAll(vo.info()
-                    .participants(), matchGame);
+                .participants(), matchGame);
         }
-        MatchGameResponse response = MatchGameResponse.toResponse(matchGame);
+        MatchGameResponse response = MatchGameConverter.toResponse(matchGame);
         return response;
     }
 }
