@@ -112,13 +112,10 @@ tasks.named('test') {
 }
 
 // === ⭐ QueryDsl 빌드 옵션 (선택) ===
-def querydslDir = "$buildDir/generated/querydsl"
-sourceSets {
-    main.java.srcDirs += [querydslDir]
+def querydslSrcDir = 'src/main/generated'
+clean {
+    delete file(querydslSrcDir)
 }
 tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-}
-clean.doLast {
-    file(querydslDir).deleteDir()
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
