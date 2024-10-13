@@ -19,9 +19,9 @@ public class MemberOpenApiController {
         return memberOpenApiService.renew(request.refreshToken());
     }
 
-    @GetMapping("/nickname/{nickname}")
+    @GetMapping("/duplicated/nicknames")
     public boolean checkNicknameDuplicated(
-            @PathVariable(name = "nickname") String nickname
+        @RequestParam(name = "nickname") String nickname
     ) {
         return memberOpenApiService.isExistNickname(nickname);
     }
