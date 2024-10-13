@@ -5,6 +5,7 @@ import com.gamemoonchul.config.jwt.*;
 import com.gamemoonchul.domain.entity.Member;
 import com.gamemoonchul.domain.entity.MemberDummy;
 import com.gamemoonchul.infrastructure.repository.MemberRepository;
+import com.gamemoonchul.infrastructure.web.dto.request.NicknameChangeRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,10 +40,10 @@ class MemberApiControllerTest extends TestDataBase {
     @DisplayName("닉네임 변경 테스트")
     void nicknameChangeTest() throws Exception {
         // given
-        String nickname = UUID.randomUUID().toString().substring(0, 8);
+        NicknameChangeRequest request = new NicknameChangeRequest(UUID.randomUUID().toString().substring(0, 8));
 
         // when
-        ResultActions resultActions = super.mvc.perform(patch("/api/members/nickname/" + nickname).header("Authorization", "Bearer " + tokenDto.getAccessToken()));
+        ResultActions resultActions = super.mvc.perform(patch("/api/members/nickname").header("Authorization", "Bearer " + tokenDto.getAccessToken()).content(super.objectMapper.writeValueAsString(request)).contentType("application/json"));
 
         // then
         resultActions.andExpect(status().isOk());
