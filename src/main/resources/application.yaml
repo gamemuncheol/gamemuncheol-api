@@ -20,6 +20,10 @@ lol:
     key: ${RIOT_API}
 
 spring:
+  profiles:
+    include:
+      - resilience4j
+
   servlet:
     multipart:
       enabled: true
@@ -115,3 +119,5 @@ management:
 logging:
   level:
     root: info
+
+
