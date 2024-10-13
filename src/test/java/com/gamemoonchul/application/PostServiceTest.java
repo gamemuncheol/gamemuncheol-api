@@ -53,10 +53,10 @@ class PostServiceTest extends TestDataBase {
 
         // then
         assertThat(allSavedPost.size()).isEqualTo(1);
-        assertThat(response.getTimesAgo()).isNotNull();
+        assertThat(response.timesAgo()).isNotNull();
         assertThat(response).isNotNull();
-        assertThat(response.getVoteDetail()
+        assertThat(response.voteDetail()
             .size()).isEqualTo(2);
-        assertThat(response.getViewCount()).isEqualTo(0);
+        assertThat(response.viewCount()).isEqualTo(0);
     }
 }

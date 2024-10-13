@@ -48,7 +48,7 @@ class PostDeleteServiceTest extends TestDataBase {
         PostDetailResponse response = postService.upload(PostDummy.createRequest(), member1);
 
         // then
-        assertThatThrownBy(() -> postDeleteService.delete(response.getId(), member2.getId())).isInstanceOf(UnauthorizedException.class)
+        assertThatThrownBy(() -> postDeleteService.delete(response.id(), member2.getId())).isInstanceOf(UnauthorizedException.class)
             .hasMessageContaining(PostStatus.UNAUTHORIZED_REQUEST.getMessage());
     }
 
@@ -59,13 +59,13 @@ class PostDeleteServiceTest extends TestDataBase {
         // given
         Member member = memberRepository.save(MemberDummy.create());
         PostDetailResponse response = postService.upload(PostDummy.createRequest(), member);
-        Post savedPost = postRepository.findById(response.getId())
+        Post savedPost = postRepository.findById(response.id())
             .orElseThrow(() -> new BadRequestException(PostStatus.POST_NOT_FOUND));
         Comment comment = CommentDummy.create(savedPost, member);
         commentRepository.save(comment);
 
         // when
-        postDeleteService.delete(response.getId(), member.getId());
+        postDeleteService.delete(response.id(), member.getId());
 
         // then
         assertThat(commentRepository.findAllByPost(savedPost)
