@@ -37,10 +37,10 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
     @Override
     public Optional<Post> searchByPostId(Long postId) {
         Optional<Post> result = Optional.ofNullable(queryFactory.selectFrom(post)
-                .join(post.member, member).fetchJoin()
-                .join(post.voteOptions, voteOptions).fetchJoin()
-                .join(voteOptions.matchUser, matchUser).fetchJoin()
-                .where(post.id.eq(postId)).fetchOne());
+            .join(post.member, member).fetchJoin()
+            .join(post.voteOptions, voteOptions).fetchJoin()
+            .join(voteOptions.matchUser, matchUser).fetchJoin()
+            .where(post.id.eq(postId)).fetchOne());
         return result;
     }
 
@@ -49,14 +49,14 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(isNotBanned, post.voteRatio.goe(45.0))
-                .orderBy(post.voteCount.desc());
+            .where(isNotBanned, post.voteRatio.goe(45.0))
+            .orderBy(post.voteCount.desc());
 
         long total = query.stream()
-                .count();
+            .count();
         List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .limit(pageable.getPageSize())
+            .fetch();
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -66,24 +66,28 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(isNotBanned)
-                .orderBy(post.createdAt.desc());
+            .where(isNotBanned)
+            .join(post.member, member).fetchJoin()
+            .orderBy(post.createdAt.desc());
 
-        long total = query.stream()
-                .count();
+        long total = Optional.ofNullable(queryFactory.select(post.count())
+            .from(post)
+            .where(isNotBanned)
+            .fetchOne()).orElseGet(() -> 0L);
+
         List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .limit(pageable.getPageSize())
+            .fetch();
 
         return new PageImpl<>(content, pageable, total);
     }
 
     public List<Post> searchByPostIdWithComment(Long postId) {
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(post.id.eq(postId))
-                .leftJoin(post, comment.post)
-                .on(post.id.eq(comment.post.id))
-                .fetchJoin();
+            .where(post.id.eq(postId))
+            .leftJoin(post, comment.post)
+            .on(post.id.eq(comment.post.id))
+            .fetchJoin();
         return query.fetch();
     }
 
@@ -92,14 +96,14 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(isNotBanned)
-                .orderBy(post.viewCount.desc());
+            .where(isNotBanned)
+            .orderBy(post.viewCount.desc());
 
         long total = query.stream()
-                .count();
+            .count();
         List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .limit(pageable.getPageSize())
+            .fetch();
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -108,14 +112,14 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
         BooleanBuilder builder = new BooleanBuilder();
         if (memberId != null) {
             builder.and(post.id.notIn(
-                    JPAExpressions.select(postBan.banPost.id)
-                            .from(postBan)
-                            .where(postBan.member.id.eq(memberId))
+                JPAExpressions.select(postBan.banPost.id)
+                    .from(postBan)
+                    .where(postBan.member.id.eq(memberId))
             ));
             builder.and(post.member.id.notIn(
-                    JPAExpressions.select(memberBan.banMember.id)
-                            .from(memberBan)
-                            .where(memberBan.member.id.eq(memberId))
+                JPAExpressions.select(memberBan.banMember.id)
+                    .from(memberBan)
+                    .where(memberBan.member.id.eq(memberId))
             ));
         }
         return builder;
