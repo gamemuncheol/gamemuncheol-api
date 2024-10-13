@@ -95,15 +95,17 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
     public Page<Post> searchHotPostWithoutBanPosts(Long memberId, Pageable pageable) {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
+        List<Post> content = queryFactory.selectFrom(post)
             .where(isNotBanned)
-            .orderBy(post.viewCount.desc());
-
-        long total = query.stream()
-            .count();
-        List<Post> content = query.offset(pageable.getOffset())
+            .join(post.member, member).fetchJoin()
+            .orderBy(post.viewCount.desc()).offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
+
+        long total = Optional.ofNullable(queryFactory.select(post.count())
+            .from(post)
+            .where(isNotBanned)
+            .fetchOne()).orElseGet(() -> 0L);
 
         return new PageImpl<>(content, pageable, total);
     }
