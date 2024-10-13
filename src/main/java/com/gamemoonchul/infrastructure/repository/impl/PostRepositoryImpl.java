@@ -48,15 +48,15 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
     public Page<Post> searchGrillPostsWithoutBanPosts(Long memberId, Pageable pageable) {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
+        List<Post> content = queryFactory.selectFrom(post)
             .where(isNotBanned, post.voteRatio.goe(45.0))
-            .orderBy(post.voteCount.desc());
-
-        long total = query.stream()
-            .count();
-        List<Post> content = query.offset(pageable.getOffset())
+            .join(post.member, member).fetchJoin()
+            .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .orderBy(post.voteCount.desc()).fetch();
+
+        long total = Optional.ofNullable(queryFactory.select(post.count()).from(post)
+            .where(isNotBanned, post.voteRatio.goe(45.0)).fetchOne()).orElseGet(() -> 0L);
 
         return new PageImpl<>(content, pageable, total);
     }
