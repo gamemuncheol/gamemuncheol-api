@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gamemoonchul.domain.entity.QComment.comment;
 import static com.gamemoonchul.domain.entity.QMember.member;
 import static com.gamemoonchul.domain.entity.QMemberBan.memberBan;
 import static com.gamemoonchul.domain.entity.QPost.post;
@@ -37,10 +36,10 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
     @Override
     public Optional<Post> searchByPostId(Long postId) {
         Optional<Post> result = Optional.ofNullable(queryFactory.selectFrom(post)
-                .join(post.member, member).fetchJoin()
-                .join(post.voteOptions, voteOptions).fetchJoin()
-                .join(voteOptions.matchUser, matchUser).fetchJoin()
-                .where(post.id.eq(postId)).fetchOne());
+            .join(post.member, member).fetchJoin()
+            .join(post.voteOptions, voteOptions).fetchJoin()
+            .join(voteOptions.matchUser, matchUser).fetchJoin()
+            .where(post.id.eq(postId)).fetchOne());
         return result;
     }
 
@@ -48,15 +47,15 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
     public Page<Post> searchGrillPostsWithoutBanPosts(Long memberId, Pageable pageable) {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(isNotBanned, post.voteRatio.goe(45.0))
-                .orderBy(post.voteCount.desc());
+        List<Post> content = queryFactory.selectFrom(post)
+            .where(isNotBanned, post.voteRatio.goe(45.0))
+            .join(post.member, member).fetchJoin()
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .orderBy(post.voteCount.desc()).fetch();
 
-        long total = query.stream()
-                .count();
-        List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+        long total = Optional.ofNullable(queryFactory.select(post.count()).from(post)
+            .where(isNotBanned, post.voteRatio.goe(45.0)).fetchOne()).orElseGet(() -> 0L);
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -66,40 +65,37 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
         JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(isNotBanned)
-                .orderBy(post.createdAt.desc());
+            .where(isNotBanned)
+            .join(post.member, member).fetchJoin()
+            .orderBy(post.createdAt.desc());
 
-        long total = query.stream()
-                .count();
+        long total = Optional.ofNullable(queryFactory.select(post.count())
+            .from(post)
+            .where(isNotBanned)
+            .fetchOne()).orElseGet(() -> 0L);
+
         List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .limit(pageable.getPageSize())
+            .fetch();
 
         return new PageImpl<>(content, pageable, total);
-    }
-
-    public List<Post> searchByPostIdWithComment(Long postId) {
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(post.id.eq(postId))
-                .leftJoin(post, comment.post)
-                .on(post.id.eq(comment.post.id))
-                .fetchJoin();
-        return query.fetch();
     }
 
     @Override
     public Page<Post> searchHotPostWithoutBanPosts(Long memberId, Pageable pageable) {
         BooleanBuilder isNotBanned = isNotBanned(memberId);
 
-        JPAQuery<Post> query = queryFactory.selectFrom(post)
-                .where(isNotBanned)
-                .orderBy(post.viewCount.desc());
+        List<Post> content = queryFactory.selectFrom(post)
+            .where(isNotBanned)
+            .join(post.member, member).fetchJoin()
+            .orderBy(post.viewCount.desc()).offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
-        long total = query.stream()
-                .count();
-        List<Post> content = query.offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+        long total = Optional.ofNullable(queryFactory.select(post.count())
+            .from(post)
+            .where(isNotBanned)
+            .fetchOne()).orElseGet(() -> 0L);
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -108,14 +104,14 @@ public class PostRepositoryImpl implements PostRepositoryIfs {
         BooleanBuilder builder = new BooleanBuilder();
         if (memberId != null) {
             builder.and(post.id.notIn(
-                    JPAExpressions.select(postBan.banPost.id)
-                            .from(postBan)
-                            .where(postBan.member.id.eq(memberId))
+                JPAExpressions.select(postBan.banPost.id)
+                    .from(postBan)
+                    .where(postBan.member.id.eq(memberId))
             ));
             builder.and(post.member.id.notIn(
-                    JPAExpressions.select(memberBan.banMember.id)
-                            .from(memberBan)
-                            .where(memberBan.member.id.eq(memberId))
+                JPAExpressions.select(memberBan.banMember.id)
+                    .from(memberBan)
+                    .where(memberBan.member.id.eq(memberId))
             ));
         }
         return builder;
