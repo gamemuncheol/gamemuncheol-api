@@ -1,0 +1,8 @@
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      multiline: true
+      logging: slf4j
+      # 실제값 한 줄만 출력됨 이거 안하면 ? 쿼리하는 거까지 총 두 줄뜸
+      log-format: "%(sql)"
