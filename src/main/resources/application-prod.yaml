@@ -1,0 +1,6 @@
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+      multiline: false
+      logging: slf4j
