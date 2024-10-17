@@ -1,11 +1,13 @@
 package com.gamemoonchul.infrastructure.adapter;
 
 import com.gamemoonchul.application.ports.output.RiotApiPort;
+import com.gamemoonchul.common.constants.Resilience4jConstants;
 import com.gamemoonchul.common.exception.InternalServerException;
 import com.gamemoonchul.domain.model.vo.riot.AccountRecord;
 import com.gamemoonchul.domain.model.vo.riot.MatchRecord;
 import com.gamemoonchul.domain.status.SearchStatus;
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,11 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.function.Supplier;
+
 @Slf4j
 @Service
 public class RiotApiAdapter implements RiotApiPort {
-    private final CircuitBreaker shortTermBreaker;
-    private final CircuitBreaker longTermBreaker;
+    private final RateLimiter shortTermLiminiter;
+    private final RateLimiter longTermLimiter;
 
     private final RestTemplate restTemplate;
 
@@ -26,23 +30,16 @@ public class RiotApiAdapter implements RiotApiPort {
 
 
     @Autowired
-    public RiotApiAdapter(
-        @Qualifier("shortTermCircuitBreaker") CircuitBreaker shortTermBreaker,
-        @Qualifier("longTermCircuitBreaker") CircuitBreaker longTermBreaker,
-        RestTemplate restTemplate
-    ) {
+    public RiotApiAdapter(@Qualifier(Resilience4jConstants.SHORT_TERM_RIOT_API_RATE_LIMITER) RateLimiter shortTermLimiter, @Qualifier(Resilience4jConstants.LONG_TERM_RIOT_API_RATE_LIMITER) RateLimiter longTermBreaker, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.shortTermBreaker = shortTermBreaker;
-        this.longTermBreaker = longTermBreaker;
+        this.shortTermLiminiter = shortTermLimiter;
+        this.longTermLimiter = longTermBreaker;
     }
 
     // 유저 검색 API
     @Deprecated
     public AccountRecord searchUser(String gameName, String tagLine) {
-        AccountRecord result = restTemplate.getForObject(
-            "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + gameName + "/" + tagLine + "?api_key=" + apiKey,
-            AccountRecord.class
-        );
+        AccountRecord result = restTemplate.getForObject("https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + gameName + "/" + tagLine + "?api_key=" + apiKey, AccountRecord.class);
 
         return result;
     }
@@ -56,24 +53,21 @@ public class RiotApiAdapter implements RiotApiPort {
     @Override
     public MatchRecord searchMatch(String matchId) {
         try {
-            // CircuitBreaker로 보호된 호출
-            return CircuitBreaker.decorateSupplier(shortTermBreaker,
-                () -> CircuitBreaker.decorateSupplier(longTermBreaker,
-                    () -> restTemplate.getForObject(
-                        "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey,
-                        MatchRecord.class
-                    )
-                ).get()
-            ).get();
+            Supplier<MatchRecord> restrictedCall = RateLimiter.decorateSupplier(this.shortTermLiminiter, RateLimiter.decorateSupplier(this.longTermLimiter, () -> {
+                String url = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey;
+                return restTemplate.getForObject(url, MatchRecord.class);
+            }));
+
+            return restrictedCall.get(); // 여기서 한 번만 get() 호출
+        } catch (RequestNotPermitted e) {
+            return rateLimiterFallback(e, SearchStatus.RIOT_API_RATE_LIMIT_EXCEED);
         } catch (Exception e) {
-            // 예외 발생 시 Fallback 처리
-            return circuitFallBack(matchId, e);
+            log.error("Riot API 호출 실패: {}", e.getMessage());
+            return rateLimiterFallback(e, SearchStatus.RIOT_API_UNKNOWN_EXCEPTION);
         }
     }
 
-    // Fallback 메서드
-    public MatchRecord circuitFallBack(String matchId, Throwable throwable) {
-        log.error("Riot API 호출 실패: {}", throwable.getMessage());
-        throw new InternalServerException(SearchStatus.RIOT_API_RATE_LIMIT_EXCEED);
+    private MatchRecord rateLimiterFallback(Exception e, SearchStatus status) {
+        throw new InternalServerException(status);
     }
 }
