@@ -1,8 +1,9 @@
 package com.gamemoonchul.config;
 
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import com.gamemoonchul.common.constants.Resilience4jConstants;
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,28 +12,24 @@ import java.time.Duration;
 @Configuration
 public class Resilience4jConfig {
 
-    @Bean(name = "shortTermCircuitBreaker")
-    public CircuitBreaker shortTermCircuitBreaker(CircuitBreakerRegistry registry) {
-        return registry.circuitBreaker("shortTermBreaker",
-            CircuitBreakerConfig.custom()
-                .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.TIME_BASED)
-                .failureRateThreshold(1) // 몇 %의 요청이 실패하면 circuit open으로 전환할지
-                .slidingWindowSize(1)
-                .waitDurationInOpenState(Duration.ofSeconds(1)) // open -> half open까지 기다리는 시간
-                .automaticTransitionFromOpenToHalfOpenEnabled(true) // open 상태에서 자동으로 half open으로 전환
+    @Bean(name = Resilience4jConstants.SHORT_TERM_RIOT_API_RATE_LIMITER)
+    public RateLimiter shortTermRateLimiter(RateLimiterRegistry registry) {
+        return registry.rateLimiter(Resilience4jConstants.SHORT_TERM_RIOT_API_RATE_LIMITER,
+            RateLimiterConfig.custom()
+                .limitForPeriod(20) // 20회
+                .limitRefreshPeriod(Duration.ofSeconds(1)) // 1초간
+                .timeoutDuration(Duration.ofMillis(10)) // 10ms 후 즉시 예외 발생
                 .build()
         );
     }
 
-    @Bean(name = "longTermCircuitBreaker")
-    public CircuitBreaker longTermCircuitBreaker(CircuitBreakerRegistry registry) {
-        return registry.circuitBreaker("longTermBreaker",
-            CircuitBreakerConfig.custom()
-                .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.TIME_BASED)
-                .failureRateThreshold(1) // 몇 %의 요청이 실패하면 circuit open으로 전환할지
-                .slidingWindowSize(120)
-                .waitDurationInOpenState(Duration.ofMinutes(2)) // open -> half open까지 기다리는 시간
-                .automaticTransitionFromOpenToHalfOpenEnabled(true) // open 상태에서 자동으로 half open으로 전환
+    @Bean(name = Resilience4jConstants.LONG_TERM_RIOT_API_RATE_LIMITER)
+    public RateLimiter longTermRateLimiter(RateLimiterRegistry registry) {
+        return registry.rateLimiter(Resilience4jConstants.LONG_TERM_RIOT_API_RATE_LIMITER,
+            RateLimiterConfig.custom()
+                .limitForPeriod(100) // 100회
+                .limitRefreshPeriod(Duration.ofMinutes(2)) // 2분간
+                .timeoutDuration(Duration.ofMillis(10)) // 10ms 후 즉시 예외 발생
                 .build()
         );
     }
