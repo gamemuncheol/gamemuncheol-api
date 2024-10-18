@@ -14,9 +14,11 @@ import java.util.Enumeration;
 @Slf4j
 @Component
 public class LoggerFilter implements Filter {
+    private final String EXCLUDE_PATH = "/actuator/prometheus";
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
 
         ContentCachingRequestWrapper req = new ContentCachingRequestWrapper((HttpServletRequest) request);
         ContentCachingResponseWrapper res = new ContentCachingResponseWrapper((HttpServletResponse) response);
@@ -34,16 +36,19 @@ public class LoggerFilter implements Filter {
             String headerValue = req.getHeader(headerKey);
             // authorization-token : ??? , user-agent : ???
             headerValues
-                    .append("[")
-                    .append(headerKey)
-                    .append(" : ")
-                    .append(headerValue).append("]");
+                .append("[")
+                .append(headerKey)
+                .append(" : ")
+                .append(headerValue).append("]");
         });
 
         String requestBody = new String(req.getContentAsByteArray());
         String uri = req.getRequestURI();
         String method = req.getMethod();
-        log.info(">>>>> uri : {} , method : {} , header : {} , body : {}", uri, method, headerValues, requestBody);
+
+        if (!uri.contains(EXCLUDE_PATH)) {
+            log.info("Request: [{} {}] - Headers: {} - Body: {}", method, uri, headerValues, requestBody);
+        }
 
         res.copyBodyToResponse();
     }
