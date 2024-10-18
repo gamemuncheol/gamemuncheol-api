@@ -10,7 +10,8 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
-    private static final List<String> serverUrls = List.of("https://api.gamemuncheol.com", "http://localhost:8080");
+    // yaml에서 관리해도 될만두
+    private static final List<String> serverUrls = List.of("http://localhost:8080", "https://api.gamemuncheol.com");
 
 
     @Bean
