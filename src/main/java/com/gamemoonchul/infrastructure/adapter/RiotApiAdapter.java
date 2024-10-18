@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Service
 public class RiotApiAdapter implements RiotApiPort {
-    private final RateLimiter shortTermLiminiter;
+    private final RateLimiter shortTermLimiter;
     private final RateLimiter longTermLimiter;
 
     private final RestTemplate restTemplate;
@@ -32,7 +32,7 @@ public class RiotApiAdapter implements RiotApiPort {
     @Autowired
     public RiotApiAdapter(@Qualifier(Resilience4jConstants.SHORT_TERM_RIOT_API_RATE_LIMITER) RateLimiter shortTermLimiter, @Qualifier(Resilience4jConstants.LONG_TERM_RIOT_API_RATE_LIMITER) RateLimiter longTermBreaker, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.shortTermLiminiter = shortTermLimiter;
+        this.shortTermLimiter = shortTermLimiter;
         this.longTermLimiter = longTermBreaker;
     }
 
@@ -53,18 +53,30 @@ public class RiotApiAdapter implements RiotApiPort {
     @Override
     public MatchRecord searchMatch(String matchId) {
         try {
-            Supplier<MatchRecord> restrictedCall = RateLimiter.decorateSupplier(this.shortTermLiminiter, RateLimiter.decorateSupplier(this.longTermLimiter, () -> {
+            return executeWithRateLimiting(() -> {
                 String url = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey;
+                log.info("요청 보낸시간 : " + System.currentTimeMillis());
                 return restTemplate.getForObject(url, MatchRecord.class);
-            }));
-
-            return restrictedCall.get(); // 여기서 한 번만 get() 호출
+            });
         } catch (RequestNotPermitted e) {
+            log.warn("Rate limit exceeded: {}", e.getMessage());
             return rateLimiterFallback(e, SearchStatus.RIOT_API_RATE_LIMIT_EXCEED);
         } catch (Exception e) {
             log.error("Riot API 호출 실패: {}", e.getMessage());
             return rateLimiterFallback(e, SearchStatus.RIOT_API_UNKNOWN_EXCEPTION);
         }
+    }
+
+    private <T> T executeWithRateLimiting(Supplier<T> supplier) throws Exception {
+        if (!this.shortTermLimiter.acquirePermission()) {
+            log.warn("Short-term rate limit reached");
+            throw RequestNotPermitted.createRequestNotPermitted(shortTermLimiter);
+        }
+        if (!longTermLimiter.acquirePermission()) {
+            log.warn("Long-term rate limit reached");
+            throw RequestNotPermitted.createRequestNotPermitted(longTermLimiter);
+        }
+        return supplier.get();
     }
 
     private MatchRecord rateLimiterFallback(Exception e, SearchStatus status) {
