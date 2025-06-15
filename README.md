@@ -1,7 +1,10 @@
 # Table of Contents
 
 1. [💁‍♂️ Introduce](#-introduce)
-2. [🏢 Architecture](#-architecture)
+2. [፨ Diagram](#-diagram)
+  - [🏗️ Architecture](#-architecture)
+  - [፨ ERD](#-erd)
+3. [🏢 Architecture](#-architecture)
 3. [💼 Portfolio](#-portfolio)
    - [⚡️ Optimization](#️-optimization)
      - [Redis를 활용한 댓글 개수 동시성 문제 해결](#성능개선-redis를-활용한-댓글-개수-동시성-문제-해결)
@@ -20,9 +23,123 @@
 
 한문철 변호사님의 유튜브를 모티브로 하여 **게임 유저들간의 분쟁 조정을 위한 SNS 서비스** 입니다.
 
-# 🏢 Architecture
+# ፨ Diagram
+
+## 🏗️ Architecture
 
 ![](./img/infra-architecture.png)
+
+## ፨ ERD
+
+```mermaid
+erDiagram
+    member {
+        bigint id PK
+        varchar(30) name
+        varchar(30) provider
+        varchar(500) identifier
+        varchar(10) nickname UK
+        varchar(50) email
+        varchar(255) picture
+        tinyint privacy_agreed
+        datetime privacy_agreed_at
+        double score
+        datetime birth
+        varchar(20) role
+        datetime created_at
+        datetime updated_at
+    }
+    
+    post {
+        bigint id PK
+        bigint member_id FK
+        varchar(255) video_url
+        varchar(255) thumbnail_url
+        varchar(50) title
+        text content
+        bigint view_count
+        bigint comment_count
+        datetime created_at
+        datetime updated_at
+        bigint vote_count
+        json tags
+        double vote_ratio
+        int version
+    }
+    
+    comment {
+        bigint id PK
+        bigint post_id FK
+        bigint member_id FK
+        text content
+        datetime created_at
+        datetime updated_at
+        bigint parent_id FK
+    }
+    
+    match_game {
+        bigint id PK
+        varchar(255) game_id UK
+        varchar(255) game_creation
+        bigint game_duration
+        varchar(255) game_mode
+    }
+    
+    match_user {
+        bigint id PK
+        varchar(255) game_id FK
+        varchar(255) puuid
+        varchar(255) nickname
+        varchar(255) champion_name
+        tinyint win
+    }
+    
+    vote {
+        bigint id PK
+        bigint vote_options_id FK
+        bigint post_id FK
+        bigint member_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    vote_option {
+        bigint id PK
+        bigint post_id FK
+        bigint match_user_id FK
+    }
+    
+    member_ban {
+        bigint id PK
+        bigint member_id FK
+        bigint ban_member_id FK
+    }
+    
+    post_ban {
+        bigint id PK
+        bigint member_id FK
+        bigint ban_post_id FK
+    }
+
+    %% Relationships
+    member ||--o{ post : "creates"
+    member ||--o{ comment : "writes"
+    member ||--o{ vote : "casts"
+    member ||--o{ member_ban : "bans/banned_by"
+    member ||--o{ post_ban : "bans_posts"
+    
+    post ||--o{ comment : "has"
+    post ||--o{ vote : "receives"
+    post ||--o{ vote_option : "has_options"
+    post ||--o{ post_ban : "can_be_banned"
+    
+    comment ||--o{ comment : "replies_to"
+    
+    match_game ||--o{ match_user : "contains"
+    match_user ||--o{ vote_option : "represents"
+    
+    vote_option ||--o{ vote : "receives"
+```
 
 # 💼 Portfolio 
 
