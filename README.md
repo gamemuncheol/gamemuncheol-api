@@ -2,8 +2,10 @@
 
 1. [💁‍♂️ Introduce](#-introduce)
 2. [፨ Diagram](#-diagram)
-  - [🏗️ Architecture](#-architecture)
-  - [፨ ERD](#-erd)
+
+   - [🏗️ Architecture](#-architecture)
+   - [፨ ERD](#-erd)
+
 3. [🏢 Architecture](#-architecture)
 3. [💼 Portfolio](#-portfolio)
    - [⚡️ Optimization](#️-optimization)
