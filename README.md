@@ -6,8 +6,8 @@
    - [🏗️ Architecture](#-architecture)
    - [፨ ERD](#-erd)
 
-3. [🏢 Architecture](#-architecture)
-3. [💼 Portfolio](#-portfolio)
+3. [🎨 Design](#-design)
+4. [💼 Portfolio](#-portfolio)
    - [⚡️ Optimization](#️-optimization)
      - [Redis를 활용한 댓글 개수 동시성 문제 해결](#성능개선-redis를-활용한-댓글-개수-동시성-문제-해결)
      - [쿼리 분석과 캐싱 적용을 통한 메인 페이지 조회 성능 개선](#성능개선-쿼리-분석과-캐싱-적용을-통한-메인-페이지-조회-성능-개선)
@@ -17,7 +17,6 @@
      - [OAuth Client Apple Login 구현](#구현-리소스가-적은-oauth-client-apple-login-구현)
    - [🛠️ ErrorFix](#️-errorfix)
      - [OneToOne Lazy Loading 오류 해결](#수정-onetoone-lazy-loading-오류-해결-불필요-쿼리-삭제)
-4. [🎨 Design](#-design)
 5. [📚 로컬에서 실행하는 방법](#-로컬에서-실행하는-방법)
 6. [🚨 주요 이슈](#-주요-이슈)
 
@@ -142,6 +141,29 @@ erDiagram
     
     vote_option ||--o{ vote : "receives"
 ```
+
+# 🎨 Design
+
+<details>
+<summary>상세보기</summary>
+
+- 메인 화면 
+
+<img src="./img/main.png" width="100%" />
+
+- 회원가입 화면 
+
+<img src="./img/signup.png" width="100%" />
+
+- 게시물 업로드 화면
+
+<img src="./img/post-upload.png" width="100%" />
+
+- 게시물 상세 화면
+
+<img src="./img/post-detail-page.png" width="100%" />
+  
+</details>
 
 # 💼 Portfolio 
 
@@ -465,28 +487,6 @@ public class MemberSessionResolver implements HandlerMethodArgumentResolver {
 
 </details>
 
-# 🎨 Design
-
-<details>
-<summary>상세보기</summary>
-
-- 메인 화면 
-
-<img src="./img/main.png" width="100%" />
-
-- 회원가입 화면 
-
-<img src="./img/signup.png" width="100%" />
-
-- 게시물 업로드 화면
-
-<img src="./img/post-upload.png" width="100%" />
-
-- 게시물 상세 화면
-
-<img src="./img/post-detail-page.png" width="100%" />
-  
-</details>
 
 # 📚 로컬에서 실행하는 방법
 
